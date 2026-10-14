@@ -1,0 +1,368 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-racing.local/specs/replay.schema.json",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "enum": [
+            "header"
+          ]
+        },
+        "seq": {
+          "const": 0
+        },
+        "schema_version": {
+          "enum": [
+            "replay-v1"
+          ]
+        },
+        "fixture_only": {
+          "type": "boolean"
+        },
+        "physics_config": {
+          "$ref": "https://ai-racing.local/specs/common.schema.json#/$defs/physics_config"
+        },
+        "race_config": {
+          "type": "object",
+          "properties": {
+            "target_laps": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "countdown_seconds": {
+              "type": "number",
+              "minimum": 0
+            },
+            "race_max_steps": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "no_progress_steps": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "progress_threshold_m": {
+              "type": "number",
+              "minimum": 0
+            },
+            "ghost": {
+              "const": true
+            }
+          },
+          "required": [
+            "target_laps",
+            "countdown_seconds",
+            "race_max_steps",
+            "no_progress_steps",
+            "progress_threshold_m",
+            "ghost"
+          ],
+          "additionalProperties": false
+        },
+        "versions": {
+          "$ref": "https://ai-racing.local/specs/common.schema.json#/$defs/versions"
+        },
+        "config_hashes": {
+          "type": "object",
+          "properties": {
+            "physics": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "race": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "physics",
+            "race"
+          ],
+          "additionalProperties": false
+        },
+        "track": {
+          "$ref": "https://ai-racing.local/specs/track.schema.json"
+        },
+        "track_geometry_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "simulator_seed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "spawns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "car_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "spawn_id": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "car_id",
+              "spawn_id"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 2
+        },
+        "model_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "model_label": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "dependencies": {
+          "$ref": "https://ai-racing.local/specs/common.schema.json#/$defs/dependencies"
+        },
+        "hash_interval": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "initial_state": {
+          "$ref": "https://ai-racing.local/specs/common.schema.json#/$defs/verification_state"
+        },
+        "initial_state_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "record_type",
+        "seq",
+        "schema_version",
+        "fixture_only",
+        "physics_config",
+        "race_config",
+        "versions",
+        "config_hashes",
+        "track",
+        "track_geometry_sha256",
+        "simulator_seed",
+        "spawns",
+        "model_sha256",
+        "model_label",
+        "dependencies",
+        "hash_interval",
+        "initial_state",
+        "initial_state_sha256"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "enum": [
+            "tick"
+          ]
+        },
+        "seq": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "controls": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "steering": {
+                "type": "number",
+                "minimum": -1,
+                "maximum": 1
+              },
+              "longitudinal": {
+                "type": "number",
+                "minimum": -1,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "steering",
+              "longitudinal"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "verification_state": {
+          "$ref": "https://ai-racing.local/specs/common.schema.json#/$defs/verification_state"
+        },
+        "state_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "record_type",
+        "seq",
+        "tick",
+        "controls"
+      ],
+      "additionalProperties": false,
+      "dependentRequired": {
+        "verification_state": [
+          "state_sha256"
+        ],
+        "state_sha256": [
+          "verification_state"
+        ]
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "enum": [
+            "session_event"
+          ]
+        },
+        "seq": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "after_tick": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "event": {
+          "enum": [
+            "abort",
+            "pause",
+            "resume"
+          ]
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "inference_error",
+                "user_exit",
+                "restart"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "verification_state": {
+          "$ref": "https://ai-racing.local/specs/common.schema.json#/$defs/verification_state"
+        },
+        "state_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "record_type",
+        "seq",
+        "after_tick",
+        "event",
+        "reason"
+      ],
+      "additionalProperties": false,
+      "dependentRequired": {
+        "verification_state": [
+          "state_sha256"
+        ],
+        "state_sha256": [
+          "verification_state"
+        ]
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "enum": [
+            "footer"
+          ]
+        },
+        "seq": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "status": {
+          "enum": [
+            "completed",
+            "aborted"
+          ]
+        },
+        "tick_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "winner": {
+          "enum": [
+            "human",
+            "ai",
+            "draw",
+            "no_winner"
+          ]
+        },
+        "abort_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "inference_error",
+                "user_exit",
+                "restart"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "final_state": {
+          "$ref": "https://ai-racing.local/specs/common.schema.json#/$defs/verification_state"
+        },
+        "final_state_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "record_type",
+        "seq",
+        "status",
+        "tick_count",
+        "winner",
+        "abort_reason",
+        "final_state",
+        "final_state_sha256"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+width_px: 1280
+height_px: 720
+render_fps: 60
+pixels_per_metre: 18.0
+follow_camera: true
+debug: false
+catch_up_limit: 5
+bindings:
+  left: [a, left]
+  right: [d, right]
+  accelerate: [w, up]
+  brake: [s, down]
+  brake_override: [space]
+  pause: [escape]
+  reset: [r]
+  debug: [tab]

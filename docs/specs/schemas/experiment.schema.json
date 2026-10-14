@@ -1,0 +1,224 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-racing.local/specs/experiment.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "experiment-v1"
+      ]
+    },
+    "fixture_only": {
+      "type": "boolean"
+    },
+    "protocol": {
+      "enum": [
+        "full",
+        "reduced",
+        "smoke"
+      ]
+    },
+    "training_seeds": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 4294967295
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "requested_final_timesteps": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "n_envs": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "split_manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "conditions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "condition_id": {
+            "enum": [
+              "ppo_multi_7",
+              "sac_multi_7",
+              "ppo_multi_3",
+              "ppo_multi_15",
+              "ppo_multi_no_steer_penalty",
+              "ppo_single_7"
+            ]
+          },
+          "algorithm": {
+            "enum": [
+              "ppo",
+              "sac"
+            ]
+          },
+          "track_sampling": {
+            "enum": [
+              "fixed_demo",
+              "uniform_train"
+            ]
+          },
+          "observation_version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reward_version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "config_path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "config_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "condition_id",
+          "algorithm",
+          "track_sampling",
+          "observation_version",
+          "reward_version",
+          "config_path",
+          "config_sha256"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 6,
+      "maxItems": 6
+    },
+    "evaluation": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "enum": [
+            "evaluation-v1"
+          ]
+        },
+        "selection_version": {
+          "enum": [
+            "selection-v1"
+          ]
+        },
+        "eval_every_steps": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "base_reset_seed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "episodes_per_track": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "deterministic": {
+          "const": true
+        },
+        "evaluator_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "config_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "version",
+        "selection_version",
+        "eval_every_steps",
+        "base_reset_seed",
+        "episodes_per_track",
+        "deterministic",
+        "evaluator_sha256",
+        "config_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "baselines": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "agent_id": {
+            "enum": [
+              "random",
+              "scripted"
+            ]
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "config_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "agent_id",
+          "config",
+          "config_sha256"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "runs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "condition_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "training_seed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4294967295
+          },
+          "run_path": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "condition_id",
+          "training_seed",
+          "run_path"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 6
+    }
+  },
+  "required": [
+    "schema_version",
+    "fixture_only",
+    "protocol",
+    "training_seeds",
+    "requested_final_timesteps",
+    "n_envs",
+    "split_manifest_sha256",
+    "conditions",
+    "evaluation",
+    "baselines",
+    "runs"
+  ],
+  "additionalProperties": false
+}

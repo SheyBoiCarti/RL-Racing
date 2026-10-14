@@ -1,0 +1,845 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-racing.local/specs/common.schema.json",
+  "$defs": {
+    "physics_config": {
+      "type": "object",
+      "properties": {
+        "dt_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "max_speed_mps": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "max_steer_rad": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "wheelbase_m": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "acceleration_mps2": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "braking_mps2": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "rolling_drag_mps2": {
+          "type": "number",
+          "minimum": 0
+        },
+        "steering_slew_radps": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "car_radius_m": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "dt_s",
+        "max_speed_mps",
+        "max_steer_rad",
+        "wheelbase_m",
+        "acceleration_mps2",
+        "braking_mps2",
+        "rolling_drag_mps2",
+        "steering_slew_radps",
+        "car_radius_m"
+      ],
+      "additionalProperties": false
+    },
+    "observation_config": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "enum": [
+            "obs-rays3-v1",
+            "obs-rays7-v1",
+            "obs-rays15-v1"
+          ]
+        },
+        "ray_angles_deg": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3
+        },
+        "ray_range_m": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "dtype": {
+          "enum": [
+            "float32"
+          ]
+        },
+        "dimension": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "version",
+        "ray_angles_deg",
+        "ray_range_m",
+        "dtype",
+        "dimension"
+      ],
+      "additionalProperties": false
+    },
+    "action_config": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "enum": [
+            "action-v1"
+          ]
+        },
+        "dimension": {
+          "const": 2
+        },
+        "dtype": {
+          "enum": [
+            "float32"
+          ]
+        },
+        "order": {
+          "const": [
+            "steering",
+            "longitudinal"
+          ]
+        }
+      },
+      "required": [
+        "version",
+        "dimension",
+        "dtype",
+        "order"
+      ],
+      "additionalProperties": false
+    },
+    "env_config": {
+      "type": "object",
+      "properties": {
+        "target_laps": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_steps": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "no_progress_steps": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "progress_threshold_m": {
+          "type": "number",
+          "minimum": 0
+        },
+        "reward_version": {
+          "enum": [
+            "reward-v1",
+            "reward-no-steer-v1"
+          ]
+        },
+        "steering_penalty": {
+          "type": "number",
+          "minimum": 0
+        },
+        "progress_coefficient": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "step_cost": {
+          "type": "number",
+          "minimum": 0
+        },
+        "off_track_penalty": {
+          "type": "number",
+          "maximum": 0
+        },
+        "lap_bonus": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "target_laps",
+        "max_steps",
+        "no_progress_steps",
+        "progress_threshold_m",
+        "reward_version",
+        "steering_penalty",
+        "progress_coefficient",
+        "step_cost",
+        "off_track_penalty",
+        "lap_bonus"
+      ],
+      "additionalProperties": false
+    },
+    "dependencies": {
+      "type": "object",
+      "properties": {
+        "python": {
+          "type": "string",
+          "minLength": 1
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1
+        },
+        "packages": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "git_commit": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "python",
+        "platform",
+        "packages",
+        "git_commit"
+      ],
+      "additionalProperties": false
+    },
+    "versions": {
+      "type": "object",
+      "properties": {
+        "physics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "track": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reward": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evaluation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selection": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "physics",
+        "track",
+        "observation",
+        "action",
+        "reward",
+        "evaluation",
+        "selection"
+      ],
+      "additionalProperties": false
+    },
+    "selection_metrics": {
+      "type": "object",
+      "properties": {
+        "macro_completion": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "macro_progress": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "all_success": {
+          "type": "boolean"
+        },
+        "macro_mean_lap_time_s": {
+          "anyOf": [
+            {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "checkpoint_step": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "update_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "macro_completion",
+        "macro_progress",
+        "all_success",
+        "macro_mean_lap_time_s",
+        "checkpoint_step",
+        "update_count"
+      ],
+      "additionalProperties": false
+    },
+    "car_state": {
+      "type": "object",
+      "properties": {
+        "x_m": {
+          "type": "number"
+        },
+        "y_m": {
+          "type": "number"
+        },
+        "heading_rad": {
+          "type": "number"
+        },
+        "speed_mps": {
+          "type": "number",
+          "minimum": 0
+        },
+        "steering_rad": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "x_m",
+        "y_m",
+        "heading_rad",
+        "speed_mps",
+        "steering_rad"
+      ],
+      "additionalProperties": false
+    },
+    "projection": {
+      "type": "object",
+      "properties": {
+        "segment_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "segment_t": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "s_m": {
+          "type": "number",
+          "minimum": 0
+        },
+        "lateral_m": {
+          "type": "number"
+        },
+        "tangent_heading": {
+          "type": "number"
+        },
+        "distance_m": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "segment_index",
+        "segment_t",
+        "s_m",
+        "lateral_m",
+        "tangent_heading",
+        "distance_m"
+      ],
+      "additionalProperties": false
+    },
+    "car_snapshot": {
+      "type": "object",
+      "properties": {
+        "car_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "state": {
+          "$ref": "https://ai-racing.local/specs/common.schema.json#/$defs/car_state"
+        },
+        "status": {
+          "enum": [
+            "active",
+            "finished",
+            "disqualified",
+            "timed_out",
+            "aborted"
+          ]
+        },
+        "projection": {
+          "$ref": "https://ai-racing.local/specs/common.schema.json#/$defs/projection"
+        },
+        "projection_discontinuity": {
+          "type": "boolean"
+        },
+        "signed_delta_m": {
+          "type": "number"
+        },
+        "rewardable_delta_m": {
+          "type": "number",
+          "minimum": 0
+        },
+        "net_travel_m": {
+          "type": "number"
+        },
+        "high_water_m": {
+          "type": "number",
+          "minimum": 0
+        },
+        "approach_distance_m": {
+          "type": "number",
+          "minimum": 0
+        },
+        "completed_laps": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "finish_armed": {
+          "type": "boolean"
+        },
+        "next_checkpoint": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "lap_start_tick": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "completed_lap_times_s": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "car_id",
+        "state",
+        "status",
+        "projection",
+        "projection_discontinuity",
+        "signed_delta_m",
+        "rewardable_delta_m",
+        "net_travel_m",
+        "high_water_m",
+        "approach_distance_m",
+        "completed_laps",
+        "finish_armed",
+        "next_checkpoint",
+        "lap_start_tick",
+        "completed_lap_times_s"
+      ],
+      "additionalProperties": false
+    },
+    "world_snapshot": {
+      "type": "object",
+      "properties": {
+        "tick": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "time_s": {
+          "type": "number",
+          "minimum": 0
+        },
+        "track_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cars": {
+          "type": "array",
+          "items": {
+            "$ref": "https://ai-racing.local/specs/common.schema.json#/$defs/car_snapshot"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "tick",
+        "time_s",
+        "track_id",
+        "cars"
+      ],
+      "additionalProperties": false
+    },
+    "session_state": {
+      "type": "object",
+      "properties": {
+        "no_progress_by_car": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "finish_tick_by_car": {
+          "type": "object",
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "session_state": {
+          "enum": [
+            "RUNNING",
+            "PAUSED",
+            "RESULTS"
+          ]
+        },
+        "winner": {
+          "anyOf": [
+            {
+              "enum": [
+                "human",
+                "ai",
+                "draw",
+                "no_winner"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "abort_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "inference_error",
+                "user_exit",
+                "restart"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "no_progress_by_car",
+        "finish_tick_by_car",
+        "session_state",
+        "winner",
+        "abort_reason"
+      ],
+      "additionalProperties": false
+    },
+    "verification_state": {
+      "type": "object",
+      "properties": {
+        "world": {
+          "type": "object",
+          "properties": {
+            "tick": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "time_s": {
+              "type": "string",
+              "pattern": "^-?0x[0-9a-f]+\\.[0-9a-f]+p[+-][0-9]+$"
+            },
+            "track_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "cars": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "car_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "state": {
+                    "type": "object",
+                    "properties": {
+                      "x_m": {
+                        "type": "string",
+                        "pattern": "^-?0x[0-9a-f]+\\.[0-9a-f]+p[+-][0-9]+$"
+                      },
+                      "y_m": {
+                        "type": "string",
+                        "pattern": "^-?0x[0-9a-f]+\\.[0-9a-f]+p[+-][0-9]+$"
+                      },
+                      "heading_rad": {
+                        "type": "string",
+                        "pattern": "^-?0x[0-9a-f]+\\.[0-9a-f]+p[+-][0-9]+$"
+                      },
+                      "speed_mps": {
+                        "type": "string",
+                        "pattern": "^-?0x[0-9a-f]+\\.[0-9a-f]+p[+-][0-9]+$"
+                      },
+                      "steering_rad": {
+                        "type": "string",
+                        "pattern": "^-?0x[0-9a-f]+\\.[0-9a-f]+p[+-][0-9]+$"
+                      }
+                    },
+                    "required": [
+                      "x_m",
+                      "y_m",
+                      "heading_rad",
+                      "speed_mps",
+                      "steering_rad"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "status": {
+                    "enum": [
+                      "active",
+                      "finished",
+                      "disqualified",
+                      "timed_out",
+                      "aborted"
+                    ]
+                  },
+                  "projection": {
+                    "type": "object",
+                    "properties": {
+                      "segment_index": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "segment_t": {
+                        "type": "string",
+                        "pattern": "^-?0x[0-9a-f]+\\.[0-9a-f]+p[+-][0-9]+$"
+                      },
+                      "s_m": {
+                        "type": "string",
+                        "pattern": "^-?0x[0-9a-f]+\\.[0-9a-f]+p[+-][0-9]+$"
+                      },
+                      "lateral_m": {
+                        "type": "string",
+                        "pattern": "^-?0x[0-9a-f]+\\.[0-9a-f]+p[+-][0-9]+$"
+                      },
+                      "tangent_heading": {
+                        "type": "string",
+                        "pattern": "^-?0x[0-9a-f]+\\.[0-9a-f]+p[+-][0-9]+$"
+                      },
+                      "distance_m": {
+                        "type": "string",
+                        "pattern": "^-?0x[0-9a-f]+\\.[0-9a-f]+p[+-][0-9]+$"
+                      }
+                    },
+                    "required": [
+                      "segment_index",
+                      "segment_t",
+                      "s_m",
+                      "lateral_m",
+                      "tangent_heading",
+                      "distance_m"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "projection_discontinuity": {
+                    "type": "boolean"
+                  },
+                  "signed_delta_m": {
+                    "type": "string",
+                    "pattern": "^-?0x[0-9a-f]+\\.[0-9a-f]+p[+-][0-9]+$"
+                  },
+                  "rewardable_delta_m": {
+                    "type": "string",
+                    "pattern": "^-?0x[0-9a-f]+\\.[0-9a-f]+p[+-][0-9]+$"
+                  },
+                  "net_travel_m": {
+                    "type": "string",
+                    "pattern": "^-?0x[0-9a-f]+\\.[0-9a-f]+p[+-][0-9]+$"
+                  },
+                  "high_water_m": {
+                    "type": "string",
+                    "pattern": "^-?0x[0-9a-f]+\\.[0-9a-f]+p[+-][0-9]+$"
+                  },
+                  "approach_distance_m": {
+                    "type": "string",
+                    "pattern": "^-?0x[0-9a-f]+\\.[0-9a-f]+p[+-][0-9]+$"
+                  },
+                  "completed_laps": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "finish_armed": {
+                    "type": "boolean"
+                  },
+                  "next_checkpoint": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "lap_start_tick": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "completed_lap_times_s": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^-?0x[0-9a-f]+\\.[0-9a-f]+p[+-][0-9]+$"
+                    },
+                    "minItems": 0
+                  }
+                },
+                "required": [
+                  "car_id",
+                  "state",
+                  "status",
+                  "projection",
+                  "projection_discontinuity",
+                  "signed_delta_m",
+                  "rewardable_delta_m",
+                  "net_travel_m",
+                  "high_water_m",
+                  "approach_distance_m",
+                  "completed_laps",
+                  "finish_armed",
+                  "next_checkpoint",
+                  "lap_start_tick",
+                  "completed_lap_times_s"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "tick",
+            "time_s",
+            "track_id",
+            "cars"
+          ],
+          "additionalProperties": false
+        },
+        "session": {
+          "type": "object",
+          "properties": {
+            "no_progress_by_car": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "finish_tick_by_car": {
+              "type": "object",
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "session_state": {
+              "enum": [
+                "RUNNING",
+                "PAUSED",
+                "RESULTS"
+              ]
+            },
+            "winner": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "human",
+                    "ai",
+                    "draw",
+                    "no_winner"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "abort_reason": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "inference_error",
+                    "user_exit",
+                    "restart"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "no_progress_by_car",
+            "finish_tick_by_car",
+            "session_state",
+            "winner",
+            "abort_reason"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "world",
+        "session"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

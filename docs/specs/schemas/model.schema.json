@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-racing.local/specs/model.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "model-v1"
+      ]
+    },
+    "fixture_only": {
+      "type": "boolean"
+    },
+    "model_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "algorithm": {
+      "enum": [
+        "ppo",
+        "sac"
+      ]
+    },
+    "policy": {
+      "enum": [
+        "MlpPolicy"
+      ]
+    },
+    "checkpoint_step": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "update_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "training_seed": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4294967295
+    },
+    "versions": {
+      "$ref": "https://ai-racing.local/specs/common.schema.json#/$defs/versions"
+    },
+    "physics_config": {
+      "$ref": "https://ai-racing.local/specs/common.schema.json#/$defs/physics_config"
+    },
+    "observation_config": {
+      "$ref": "https://ai-racing.local/specs/common.schema.json#/$defs/observation_config"
+    },
+    "action_config": {
+      "$ref": "https://ai-racing.local/specs/common.schema.json#/$defs/action_config"
+    },
+    "env_config": {
+      "$ref": "https://ai-racing.local/specs/common.schema.json#/$defs/env_config"
+    },
+    "normalization": {
+      "enum": [
+        "none"
+      ]
+    },
+    "config_hashes": {
+      "type": "object",
+      "properties": {
+        "physics": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "observation": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "action": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "env": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "training": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "physics",
+        "observation",
+        "action",
+        "env",
+        "training"
+      ],
+      "additionalProperties": false
+    },
+    "hyperparameters": {
+      "type": "object",
+      "additionalProperties": {}
+    },
+    "train_track_hashes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "minItems": 1
+    },
+    "dependencies": {
+      "$ref": "https://ai-racing.local/specs/common.schema.json#/$defs/dependencies"
+    },
+    "selection_metrics": {
+      "$ref": "https://ai-racing.local/specs/common.schema.json#/$defs/selection_metrics"
+    }
+  },
+  "required": [
+    "schema_version",
+    "fixture_only",
+    "model_sha256",
+    "algorithm",
+    "policy",
+    "checkpoint_step",
+    "update_count",
+    "training_seed",
+    "versions",
+    "physics_config",
+    "observation_config",
+    "action_config",
+    "env_config",
+    "normalization",
+    "config_hashes",
+    "hyperparameters",
+    "train_track_hashes",
+    "dependencies",
+    "selection_metrics"
+  ],
+  "additionalProperties": false
+}

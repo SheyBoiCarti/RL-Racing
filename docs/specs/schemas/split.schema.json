@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-racing.local/specs/split.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "split-v1"
+      ]
+    },
+    "fixture_only": {
+      "type": "boolean"
+    },
+    "generator_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generator_config": {
+      "type": "object",
+      "additionalProperties": {}
+    },
+    "generator_config_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "counts": {
+      "type": "object",
+      "properties": {
+        "train": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "validation": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "test": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "train",
+        "validation",
+        "test"
+      ],
+      "additionalProperties": false
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "track_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "split": {
+            "enum": [
+              "train",
+              "validation",
+              "test"
+            ]
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4294967295
+          },
+          "attempt": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "geometry_hash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "length_m": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "max_curvature": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "track_id",
+          "split",
+          "seed",
+          "attempt",
+          "path",
+          "geometry_hash",
+          "length_m",
+          "max_curvature"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 3
+    },
+    "manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "fixture_only",
+    "generator_version",
+    "generator_config",
+    "generator_config_hash",
+    "counts",
+    "entries",
+    "manifest_sha256"
+  ],
+  "additionalProperties": false
+}

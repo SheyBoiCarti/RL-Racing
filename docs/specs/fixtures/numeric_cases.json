@@ -1,0 +1,100 @@
+{
+  "projection_switch": {
+    "previous": [
+      -2.08,
+      5.0
+    ],
+    "next": [
+      -2.06,
+      5.0
+    ],
+    "segments": [
+      [
+        [
+          -10.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          10.0,
+          10.0
+        ]
+      ]
+    ],
+    "expected_signed_delta_m": 4.158893936688449,
+    "expected_displacement_m": 0.02
+  },
+  "gate_corner": {
+    "width_m": 12.0,
+    "turn_rad": 0.7853981633974483,
+    "positive_endpoint": [
+      -6.0,
+      6.0
+    ],
+    "negative_endpoint": [
+      4.242640687119285,
+      -4.242640687119285
+    ]
+  },
+  "selection": {
+    "candidates": [
+      {
+        "id": "A",
+        "completion": 0.5,
+        "progress": 0.8,
+        "step": 100
+      },
+      {
+        "id": "B",
+        "completion": 0.5,
+        "progress": 0.9,
+        "step": 200
+      },
+      {
+        "id": "C",
+        "completion": 0.5,
+        "progress": 0.85,
+        "step": 300
+      }
+    ],
+    "winner": "B"
+  },
+  "bootstrap": {
+    "A": [
+      [
+        0.1,
+        0.2,
+        0.3
+      ],
+      [
+        0.4,
+        0.5,
+        0.6
+      ]
+    ],
+    "B": [
+      [
+        0.3,
+        0.4,
+        0.5
+      ],
+      [
+        0.6,
+        0.7,
+        0.8
+      ]
+    ],
+    "expected_B_minus_A": 0.2,
+    "rng_seed": 12345,
+    "replicates": 2000
+  }
+}

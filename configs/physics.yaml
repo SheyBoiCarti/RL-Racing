@@ -1,0 +1,9 @@
+dt_s: 0.05 # seconds per fixed tick
+max_speed_mps: 22.0 # metres/second
+max_steer_rad: 0.55 # radians
+wheelbase_m: 2.6 # metres
+acceleration_mps2: 6.0 # metres/second squared
+braking_mps2: 10.0 # metres/second squared
+rolling_drag_mps2: 0.25 # metres/second squared
+steering_slew_radps: 2.5 # radians/second
+car_radius_m: 0.8 # metres

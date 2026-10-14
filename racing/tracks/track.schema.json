@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-racing.local/specs/track.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "track-v1"
+      ]
+    },
+    "track_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "split": {
+      "enum": [
+        "demo",
+        "train",
+        "validation",
+        "test"
+      ]
+    },
+    "width_m": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "centerline": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 2,
+        "maxItems": 2
+      },
+      "minItems": 8
+    },
+    "checkpoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "s_m": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "index",
+          "s_m"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 4
+    },
+    "spawns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "spawn_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "s_m": {
+            "type": "number",
+            "minimum": 0
+          },
+          "lateral_m": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "spawn_id",
+          "s_m",
+          "lateral_m"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 3
+    },
+    "generator": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "minLength": 1
+            },
+            "seed": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4294967295
+            },
+            "attempt": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "config_hash": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "version",
+            "seed",
+            "attempt",
+            "config_hash"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "track_id",
+    "name",
+    "split",
+    "width_m",
+    "centerline",
+    "checkpoints",
+    "spawns",
+    "generator"
+  ],
+  "additionalProperties": false
+}

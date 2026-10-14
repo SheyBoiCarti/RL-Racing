@@ -1,0 +1,107 @@
+{
+  "schema_version": "model-v1",
+  "fixture_only": true,
+  "model_sha256": "5f14170a9bbd85390e0c4ace7c1db42bd1e09cd43d7d053c5bf2cb3ae971ac7f",
+  "algorithm": "ppo",
+  "policy": "MlpPolicy",
+  "checkpoint_step": 2048,
+  "update_count": 1,
+  "training_seed": 42,
+  "versions": {
+    "physics": "physics-v1",
+    "track": "track-v1",
+    "observation": "obs-rays15-v1",
+    "action": "action-v1",
+    "reward": "reward-v1",
+    "evaluation": "evaluation-v1",
+    "selection": "selection-v1"
+  },
+  "physics_config": {
+    "dt_s": 0.05,
+    "max_speed_mps": 22.0,
+    "max_steer_rad": 0.55,
+    "wheelbase_m": 2.6,
+    "acceleration_mps2": 6.0,
+    "braking_mps2": 10.0,
+    "rolling_drag_mps2": 0.25,
+    "steering_slew_radps": 2.5,
+    "car_radius_m": 0.8
+  },
+  "observation_config": {
+    "version": "obs-rays15-v1",
+    "ray_angles_deg": [
+      -90.0,
+      -77.14285714285714,
+      -64.28571428571428,
+      -51.42857142857143,
+      -38.57142857142857,
+      -25.714285714285708,
+      -12.857142857142861,
+      0.0,
+      12.857142857142861,
+      25.714285714285722,
+      38.571428571428584,
+      51.428571428571445,
+      64.28571428571428,
+      77.14285714285714,
+      90.0
+    ],
+    "ray_range_m": 40.0,
+    "dtype": "float32",
+    "dimension": 19
+  },
+  "action_config": {
+    "version": "action-v1",
+    "dimension": 2,
+    "dtype": "float32",
+    "order": [
+      "steering",
+      "longitudinal"
+    ]
+  },
+  "env_config": {
+    "target_laps": 1,
+    "max_steps": 1200,
+    "no_progress_steps": 120,
+    "progress_threshold_m": 0.01,
+    "reward_version": "reward-v1",
+    "steering_penalty": 0.01,
+    "progress_coefficient": 2.0,
+    "step_cost": 0.002,
+    "off_track_penalty": -10.0,
+    "lap_bonus": 50.0
+  },
+  "normalization": "none",
+  "config_hashes": {
+    "physics": "a89ead7c3a030b86f409e7159028074d90a1167f9161472333ddb1793fe807b8",
+    "observation": "88a8b8ef1bed94ce58609ef6c91f6486a49322819151936b98e8c093ea31c99f",
+    "action": "1be1622274d442089fbc329d5bac7012e4e3c8de4c534593581265c90d6eea52",
+    "env": "6b3421484f124f9c82529dfa76b08b9b0ced947fa8dcca55d9e3dae6175651f3",
+    "training": "81403c2138c1b05a6778d29f28c95e5a4cabfa70a026784abd02406c0e406d06"
+  },
+  "hyperparameters": {
+    "learning_rate": 0.0003,
+    "n_steps": 2048,
+    "batch_size": 64,
+    "n_epochs": 10
+  },
+  "train_track_hashes": [
+    "960352b04ce6f6d45661e0e60b7bc68e1fd90133fd9bd52637dec718affb63c4"
+  ],
+  "dependencies": {
+    "python": "fixture-runtime",
+    "platform": "fixture-platform",
+    "packages": {
+      "purpose": "specification-only"
+    },
+    "git_commit": null
+  },
+  "selection_metrics": {
+    "macro_completion": 0.5,
+    "macro_progress": 0.9,
+    "all_success": false,
+    "macro_mean_lap_time_s": null,
+    "checkpoint_step": 2048,
+    "update_count": 1
+  }
+}

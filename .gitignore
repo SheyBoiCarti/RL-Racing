@@ -1,0 +1,16 @@
+docs/*
+!docs/specs/
+*.md
+docs/phase_reports/
+docs/superpowers/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.superpowers/
+*.egg-info/
+build/
+dist/
+runs/
+*.zip

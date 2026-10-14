@@ -1,0 +1,150 @@
+{
+  "schema_version": "selection-v1",
+  "fixture_only": true,
+  "protocol": "smoke",
+  "experiment_sha256": "d7119c274f7fddada3c6f6f18819cfdaf463482ec1104a59e86e8f91eaea7d97",
+  "split_manifest_sha256": "b972c71483d5316d82d7db2ea41f73589e418b66bf52813c7559e98c93ad4e45",
+  "evaluation": {
+    "version": "evaluation-v1",
+    "selection_version": "selection-v1",
+    "eval_every_steps": 50000,
+    "base_reset_seed": 9000,
+    "episodes_per_track": 3,
+    "deterministic": true,
+    "evaluator_sha256": "e91090b09ca7c508702d1f1aa06fc31224beb59d29ea75b6cbf38e40805940db",
+    "config_sha256": "7156cc441c28fdaa67c3a258574061efccc3e948a9697d5e88d29138b507276d"
+  },
+  "baselines": [
+    {
+      "agent_id": "random",
+      "config": {
+        "profile": "fixture"
+      },
+      "config_sha256": "555550e1dcd001cfbba0dbf011b2331895bd09b8ffd1afaf05b4e5c5473ac3f4"
+    },
+    {
+      "agent_id": "scripted",
+      "config": {
+        "profile": "fixture"
+      },
+      "config_sha256": "555550e1dcd001cfbba0dbf011b2331895bd09b8ffd1afaf05b4e5c5473ac3f4"
+    }
+  ],
+  "models": [
+    {
+      "condition_id": "ppo_multi_7",
+      "training_seed": 42,
+      "model_path": "fixtures/model_bytes.fixture",
+      "metadata_path": "examples/models/ppo_multi_7.json",
+      "model_sha256": "5f14170a9bbd85390e0c4ace7c1db42bd1e09cd43d7d053c5bf2cb3ae971ac7f",
+      "metadata_sha256": "e8f0f2514dfc6e5b17c0c7a60b17759d4706c429bf9cec5186280b9011eb7f20",
+      "config_sha256": "e8f0f2514dfc6e5b17c0c7a60b17759d4706c429bf9cec5186280b9011eb7f20",
+      "checkpoint_step": 2048,
+      "update_count": 1,
+      "selection_metrics": {
+        "macro_completion": 0.5,
+        "macro_progress": 0.9,
+        "all_success": false,
+        "macro_mean_lap_time_s": null,
+        "checkpoint_step": 2048,
+        "update_count": 1
+      }
+    },
+    {
+      "condition_id": "sac_multi_7",
+      "training_seed": 42,
+      "model_path": "fixtures/model_bytes.fixture",
+      "metadata_path": "examples/models/sac_multi_7.json",
+      "model_sha256": "5f14170a9bbd85390e0c4ace7c1db42bd1e09cd43d7d053c5bf2cb3ae971ac7f",
+      "metadata_sha256": "f953a8ba19939124276bd807e7a5344025a2e79c1a6ca7a995df3445271c55ab",
+      "config_sha256": "f953a8ba19939124276bd807e7a5344025a2e79c1a6ca7a995df3445271c55ab",
+      "checkpoint_step": 2048,
+      "update_count": 1,
+      "selection_metrics": {
+        "macro_completion": 0.5,
+        "macro_progress": 0.9,
+        "all_success": false,
+        "macro_mean_lap_time_s": null,
+        "checkpoint_step": 2048,
+        "update_count": 1
+      }
+    },
+    {
+      "condition_id": "ppo_multi_3",
+      "training_seed": 42,
+      "model_path": "fixtures/model_bytes.fixture",
+      "metadata_path": "examples/models/ppo_multi_3.json",
+      "model_sha256": "5f14170a9bbd85390e0c4ace7c1db42bd1e09cd43d7d053c5bf2cb3ae971ac7f",
+      "metadata_sha256": "298ca5b1ff11504dc70a97f1b7dce15b9d99ce558787e94ef3037d666fdfcace",
+      "config_sha256": "298ca5b1ff11504dc70a97f1b7dce15b9d99ce558787e94ef3037d666fdfcace",
+      "checkpoint_step": 2048,
+      "update_count": 1,
+      "selection_metrics": {
+        "macro_completion": 0.5,
+        "macro_progress": 0.9,
+        "all_success": false,
+        "macro_mean_lap_time_s": null,
+        "checkpoint_step": 2048,
+        "update_count": 1
+      }
+    },
+    {
+      "condition_id": "ppo_multi_15",
+      "training_seed": 42,
+      "model_path": "fixtures/model_bytes.fixture",
+      "metadata_path": "examples/models/ppo_multi_15.json",
+      "model_sha256": "5f14170a9bbd85390e0c4ace7c1db42bd1e09cd43d7d053c5bf2cb3ae971ac7f",
+      "metadata_sha256": "d02881ef6c8a45c4ae2e74ecc75742a9a5a9da4c86e7a4950f188f5faf36f462",
+      "config_sha256": "d02881ef6c8a45c4ae2e74ecc75742a9a5a9da4c86e7a4950f188f5faf36f462",
+      "checkpoint_step": 2048,
+      "update_count": 1,
+      "selection_metrics": {
+        "macro_completion": 0.5,
+        "macro_progress": 0.9,
+        "all_success": false,
+        "macro_mean_lap_time_s": null,
+        "checkpoint_step": 2048,
+        "update_count": 1
+      }
+    },
+    {
+      "condition_id": "ppo_multi_no_steer_penalty",
+      "training_seed": 42,
+      "model_path": "fixtures/model_bytes.fixture",
+      "metadata_path": "examples/models/ppo_multi_no_steer_penalty.json",
+      "model_sha256": "5f14170a9bbd85390e0c4ace7c1db42bd1e09cd43d7d053c5bf2cb3ae971ac7f",
+      "metadata_sha256": "fbbe792516600a8feb452d12e7aef7e31bcde7a2bc5d5b533cd8dac7f5c48f8a",
+      "config_sha256": "fbbe792516600a8feb452d12e7aef7e31bcde7a2bc5d5b533cd8dac7f5c48f8a",
+      "checkpoint_step": 2048,
+      "update_count": 1,
+      "selection_metrics": {
+        "macro_completion": 0.5,
+        "macro_progress": 0.9,
+        "all_success": false,
+        "macro_mean_lap_time_s": null,
+        "checkpoint_step": 2048,
+        "update_count": 1
+      }
+    },
+    {
+      "condition_id": "ppo_single_7",
+      "training_seed": 42,
+      "model_path": "fixtures/model_bytes.fixture",
+      "metadata_path": "examples/models/ppo_single_7.json",
+      "model_sha256": "5f14170a9bbd85390e0c4ace7c1db42bd1e09cd43d7d053c5bf2cb3ae971ac7f",
+      "metadata_sha256": "e8f0f2514dfc6e5b17c0c7a60b17759d4706c429bf9cec5186280b9011eb7f20",
+      "config_sha256": "e8f0f2514dfc6e5b17c0c7a60b17759d4706c429bf9cec5186280b9011eb7f20",
+      "checkpoint_step": 2048,
+      "update_count": 1,
+      "selection_metrics": {
+        "macro_completion": 0.5,
+        "macro_progress": 0.9,
+        "all_success": false,
+        "macro_mean_lap_time_s": null,
+        "checkpoint_step": 2048,
+        "update_count": 1
+      }
+    }
+  ],
+  "manifest_sha256": "a7c7f2f7a5af61e4ed88541b82b9e7bd0625591a8b761f71aaa5b58c6db04f61"
+}

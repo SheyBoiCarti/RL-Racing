@@ -1,0 +1,48 @@
+{
+  "schema_version": "split-v1",
+  "fixture_only": true,
+  "generator_version": "manual-fixture-v1",
+  "generator_config": {
+    "source": "harmonic_reference",
+    "dense_samples": 4096
+  },
+  "counts": {
+    "train": 1,
+    "validation": 1,
+    "test": 1
+  },
+  "entries": [
+    {
+      "track_id": "fixture_train",
+      "split": "train",
+      "seed": 10000,
+      "attempt": 0,
+      "path": "fixtures/fixture_train.json",
+      "geometry_hash": "960352b04ce6f6d45661e0e60b7bc68e1fd90133fd9bd52637dec718affb63c4",
+      "length_m": 595.2025085013347,
+      "max_curvature": 0.02125995719754061
+    },
+    {
+      "track_id": "fixture_validation",
+      "split": "validation",
+      "seed": 20000,
+      "attempt": 0,
+      "path": "fixtures/fixture_validation.json",
+      "geometry_hash": "933c009c98098f6303bf20fb629854f2bd4b0ad7ea594778523fb35eecb8b279",
+      "length_m": 613.0637390460497,
+      "max_curvature": 0.020646048075014575
+    },
+    {
+      "track_id": "fixture_test",
+      "split": "test",
+      "seed": 30000,
+      "attempt": 0,
+      "path": "fixtures/fixture_test.json",
+      "geometry_hash": "cc8ea3adfda8ebce0ec820dc53db8475c517272626b5b65bd2e092720f8ae2de",
+      "length_m": 577.3421763874318,
+      "max_curvature": 0.021922180298260825
+    }
+  ],
+  "generator_config_hash": "fc9b2e0d9f2015718ac65af2b28bb5cdd4f708ab4a24c68c7bbb71729e01fb36",
+  "manifest_sha256": "b972c71483d5316d82d7db2ea41f73589e418b66bf52813c7559e98c93ad4e45"
+}

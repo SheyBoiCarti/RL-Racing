@@ -1,0 +1,188 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-racing.local/specs/selection.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "selection-v1"
+      ]
+    },
+    "fixture_only": {
+      "type": "boolean"
+    },
+    "protocol": {
+      "enum": [
+        "full",
+        "reduced",
+        "smoke"
+      ]
+    },
+    "experiment_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "split_manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "evaluation": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "enum": [
+            "evaluation-v1"
+          ]
+        },
+        "selection_version": {
+          "enum": [
+            "selection-v1"
+          ]
+        },
+        "eval_every_steps": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "base_reset_seed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "episodes_per_track": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "deterministic": {
+          "const": true
+        },
+        "evaluator_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "config_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "version",
+        "selection_version",
+        "eval_every_steps",
+        "base_reset_seed",
+        "episodes_per_track",
+        "deterministic",
+        "evaluator_sha256",
+        "config_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "models": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "condition_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "training_seed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4294967295
+          },
+          "model_path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "metadata_path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "model_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "metadata_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "config_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "checkpoint_step": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "update_count": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "selection_metrics": {
+            "$ref": "https://ai-racing.local/specs/common.schema.json#/$defs/selection_metrics"
+          }
+        },
+        "required": [
+          "condition_id",
+          "training_seed",
+          "model_path",
+          "metadata_path",
+          "model_sha256",
+          "metadata_sha256",
+          "config_sha256",
+          "checkpoint_step",
+          "update_count",
+          "selection_metrics"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 6
+    },
+    "baselines": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "agent_id": {
+            "enum": [
+              "random",
+              "scripted"
+            ]
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "config_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "agent_id",
+          "config",
+          "config_sha256"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "fixture_only",
+    "protocol",
+    "experiment_sha256",
+    "split_manifest_sha256",
+    "evaluation",
+    "models",
+    "baselines",
+    "manifest_sha256"
+  ],
+  "additionalProperties": false
+}
