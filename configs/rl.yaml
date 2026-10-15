@@ -1,0 +1,13 @@
+observation_version: obs-rays7-v1
+action_version: action-v1
+reward_version: reward-v1
+ray_angles_deg: [-90, -60, -30, 0, 30, 60, 90]
+ray_range_m: 40.0
+target_laps: 1
+max_steps: 1200
+no_progress_steps: 120
+progress_threshold_m: 0.01
+default_track_id: demo
+default_spawn_id: solo
+allowed_split: demo
+off_track_penalty: -10.0

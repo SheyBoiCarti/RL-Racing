@@ -1,0 +1,9 @@
+lookahead_base_m: 4.0
+lookahead_speed_s: 0.5
+lookahead_min_m: 4.0
+lookahead_max_m: 15.0
+curvature_horizon_m: 20.0
+max_speed_mps: 16.0
+lateral_acceleration_mps2: 4.0
+curvature_floor: 0.001
+speed_gain_divisor: 5.0

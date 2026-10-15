@@ -28,6 +28,31 @@ class Track:
             raise ValueError(f"{path}: {error}") from error
 
     def __init__(self, data):
+        # Geometry-only callers may omit provenance; catalog selection must
+        # distinguish those tracks from explicitly classified demo tracks.
+        self.split = data.get("split")
+
+        # Retain normalized source geometry for reproducible evaluation hashes.
+        def number(value):
+            return float(value) if value else 0.0
+
+        self.geometry_payload = {
+            "schema_version": data.get("schema_version", "track-v1"),
+            "centerline": [[number(v) for v in point] for point in data["centerline"]],
+            "width_m": number(data["width_m"]),
+            "checkpoints": [
+                {"index": int(g["index"]), "s_m": number(g["s_m"])}
+                for g in data["checkpoints"]
+            ],
+            "spawns": [
+                {
+                    "spawn_id": s["spawn_id"],
+                    "s_m": number(s["s_m"]),
+                    "lateral_m": number(s["lateral_m"]),
+                }
+                for s in data["spawns"]
+            ],
+        }
         self.track_id = data["track_id"]
         self.name = data["name"]
         self.width_m = float(data["width_m"])
