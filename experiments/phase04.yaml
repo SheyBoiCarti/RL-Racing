@@ -1,0 +1,16 @@
+experiment: phase04-generalization
+training_seeds:
+- 42
+conditions:
+  single: experiments/phase04_single.yaml
+  multi: experiments/phase04_multi.yaml
+selection: selection-v1
+evaluation_split: validation
+reset_seeds:
+- 9000
+- 9001
+- 9002
+eval_every_steps: 50000
+execution_profile_registration: execution-profile.phase04.json
+note: One training seed is preliminary; deterministic reset repetitions are not independent
+  trials.

@@ -22,6 +22,8 @@ class RLConfig:
     default_track_id: str = "demo"
     default_spawn_id: str = "solo"
     allowed_split: str = "demo"
+    track_sampling: str = "fixed"
+    split_manifest: str | None = None
     steering_penalty: float = 0.01
     progress_coefficient: float = 2.0
     step_cost: float = 0.002
@@ -30,6 +32,10 @@ class RLConfig:
     physics: PhysicsConfig = field(default_factory=PhysicsConfig)
 
     def __post_init__(self):
+        if self.track_sampling not in ("fixed", "uniform_train"):
+            raise ValueError("track_sampling: expected fixed or uniform_train")
+        if self.track_sampling == "uniform_train" and self.allowed_split != "train":
+            raise ValueError("uniform_train requires allowed_split=train")
         for name, expected in (
             ("observation_version", "obs-rays7-v1"),
             ("action_version", "action-v1"),

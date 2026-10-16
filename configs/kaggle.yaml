@@ -1,0 +1,7 @@
+platform: kaggle
+device: cpu
+torch_threads: 1
+# The notebook replaces this with the operator's available trainer time.
+max_session_seconds: 43200
+shutdown_margin_seconds: 900
+output_root: /kaggle/working/ai-racing/runs

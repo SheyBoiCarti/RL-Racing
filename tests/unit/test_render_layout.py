@@ -17,7 +17,7 @@ def test_camera_clockwise_coordinates():
 
 @pytest.mark.parametrize("size", [(1280, 720), (640, 480), (480, 360)])
 @pytest.mark.parametrize("state,actions", [
-    ("MENU", {"reset", "quit"}),
+    ("MENU", {"reset", "watch", "quit"}),
     ("PAUSED", {"resume", "reset", "menu"}),
     ("ATTEMPT_FAILED", {"reset", "menu"}),
     ("ATTEMPT_FINISHED", {"reset", "menu"}),

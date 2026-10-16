@@ -115,7 +115,7 @@ def test_renderer_resize_and_debug(track, monkeypatch):
                     track, app.simulation.snapshot(), state.value, True, None, 0
                 )
                 expected = {
-                    AppState.MENU: {"reset", "quit"},
+                    AppState.MENU: {"reset", "watch", "quit"},
                     AppState.PAUSED: {"resume", "reset", "menu"},
                     AppState.ATTEMPT_FAILED: {"reset", "menu"},
                     AppState.ATTEMPT_FINISHED: {"reset", "menu"},
@@ -139,7 +139,7 @@ def test_cli_paths_and_rejected_modes(tmp_path):
         capture_output=True,
         text=True,
     )
-    assert result.returncode == 2 and "invalid choice" in result.stderr
+    assert result.returncode == 2 and "requires --model" in result.stderr
     script = "from racing.core.config import load_game; from racing.tracks import Track; assert Track.from_json('assets/tracks/demo.json').track_id == 'demo'; assert load_game().render_fps == 60"
     subprocess.run(
         [sys.executable, "-c", script], cwd=tmp_path, check=True, capture_output=True

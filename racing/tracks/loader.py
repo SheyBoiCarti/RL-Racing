@@ -8,7 +8,9 @@ from racing.core.config import project_path
 from racing.core.geometry import (
     boundary_gate,
     inside,
+    intersection_candidates,
     intersects,
+    segment_distances,
     segment_project,
     segments,
     validate_loop,
@@ -78,10 +80,12 @@ class Track:
         loops = (self.points + offsets, self.points - offsets)
         for loop in loops:
             validate_loop(loop, "boundary offset fold")
-        for a, b in segments(loops[0]):
-            for c, d in segments(loops[1]):
-                if intersects(a, b, c, d):
-                    raise ValueError("boundary: loops intersect")
+        candidates = intersection_candidates(loops[0], np.roll(loops[0], -1, axis=0),
+                                             loops[1], np.roll(loops[1], -1, axis=0))
+        for i, j in zip(*np.nonzero(candidates)):
+            if intersects(loops[0][i], loops[0][(i+1) % len(self.points)],
+                          loops[1][j], loops[1][(j+1) % len(self.points)]):
+                raise ValueError("boundary: loops intersect")
         self.inner, self.outer = loops if inside(loops[0][0], loops[1]) else loops[::-1]
         if not all(inside(p, self.outer) for p in self.inner):
             raise ValueError("boundary: loops not nested")
@@ -92,6 +96,10 @@ class Track:
         if area(self.outer) <= area(self.inner):
             raise ValueError("boundary: nonpositive road area")
         self.boundary_segments = segments(self.outer) + segments(self.inner)
+        self._boundary_a = np.array([a for a, _ in self.boundary_segments])
+        self._boundary_b = np.array([b for _, b in self.boundary_segments])
+        self._boundary_a.flags.writeable = False
+        self._boundary_b.flags.writeable = False
         checkpoints = data["checkpoints"]
         stations = [g["s_m"] for g in checkpoints]
         if (
@@ -224,9 +232,12 @@ class Track:
         if not all(math.isfinite(v) for v in (x, y, radius)) or radius < 0:
             raise ValueError("disk: finite coordinates and nonnegative radius required")
         point = np.array((x, y))
+        if not hasattr(self, '_boundary_a'):
+            self._boundary_a = np.array([a for a, _ in self.boundary_segments])
+            self._boundary_b = np.array([b for _, b in self.boundary_segments])
         return (
             inside(point, self.outer)
             and not inside(point, self.inner)
-            and min(segment_project(point, a, b)[2] for a, b in self.boundary_segments)
+            and float(np.min(segment_distances(point, self._boundary_a, self._boundary_b)))
             >= radius - 1e-6
         )

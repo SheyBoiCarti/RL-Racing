@@ -49,24 +49,47 @@ def segments(loop):
 
 def inside(point, loop):
     """Even-odd half-open ray rule; boundary points are classified inside."""
-    result = False
-    for a, b in segments(loop):
-        if segment_project(point, a, b)[2] <= DISTANCE_EPS:
-            return True
-        if (a[1] > point[1]) != (b[1] > point[1]):
-            cut = a[0] + (point[1] - a[1]) * (b[0] - a[0]) / (b[1] - a[1])
-            if point[0] < cut:
-                result = not result
-    return result
+    a = np.asarray(loop, dtype=np.float64)
+    b = np.roll(a, -1, axis=0)
+    if np.any(segment_distances(point, a, b) <= DISTANCE_EPS):
+        return True
+    crossing = (a[:, 1] > point[1]) != (b[:, 1] > point[1])
+    aa, bb = a[crossing], b[crossing]
+    cuts = aa[:, 0] + (point[1]-aa[:, 1])*(bb[:, 0]-aa[:, 0])/(bb[:, 1]-aa[:, 1])
+    return bool(np.count_nonzero(point[0] < cuts) % 2)
+
+
+def segment_distances(point, a, b):
+    """Distances to a batch of finite segments, including point segments."""
+    edge = b-a
+    size = np.sum(edge*edge, axis=-1)
+    delta = np.asarray(point)-a
+    t = np.zeros_like(size)
+    np.divide(np.sum(delta*edge, axis=-1), size, out=t, where=size != 0)
+    return np.linalg.norm(delta-np.clip(t, 0, 1)[..., None]*edge, axis=-1)
+
+
+def intersection_candidates(a, b, c, d):
+    """Broad phase that preserves exact scalar intersection semantics."""
+    # Scalar intersects admits a dimensionless endpoint tolerance. Expand
+    # boxes by that tolerance times segment extent plus distance epsilon.
+    pad = DISTANCE_EPS + ORIENTATION_EPS*(np.linalg.norm(b-a, axis=-1)[:, None]
+                                       +np.linalg.norm(d-c, axis=-1)[None, :])
+    return np.all(np.maximum(np.minimum(a, b)[:, None, :], np.minimum(c, d)[None, :, :])
+                  <= np.minimum(np.maximum(a, b)[:, None, :], np.maximum(c, d)[None, :, :])+pad[:, :, None], axis=-1)
 
 
 def validate_loop(loop, label):
     edges = segments(loop)
+    candidates = intersection_candidates(np.asarray(loop), np.roll(loop, -1, axis=0),
+                                         np.asarray(loop), np.roll(loop, -1, axis=0))
     for i, (a, b) in enumerate(edges):
         c = loop[(i + 2) % len(loop)]
         if abs(cross(b - a, c - b)) <= ORIENTATION_EPS and float((b - a) @ (c - b)) < 0:
             raise ValueError(f"{label}: adjacent overlap")
-        for j in range(i + 1, len(edges)):
+        for j in np.flatnonzero(candidates[i]):
+            if j <= i:
+                continue
             if j == i + 1 or (i == 0 and j == len(edges) - 1):
                 continue
             if intersects(a, b, *edges[j]):

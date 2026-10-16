@@ -51,7 +51,7 @@ def font(size_px, bold=False):
     return _fonts[key]
 
 
-def layout(viewport, state):
+def layout(viewport, state, watch_mode=False):
     width, height = viewport
     compact = width < 800 or height < 560
     margin = 12 if compact else 24
@@ -72,7 +72,7 @@ def layout(viewport, state):
             "hint": pygame.Rect(margin, height - 32, width - 2 * margin, 24),
         }
     actions = {
-        "MENU": ("reset", "quit"), "PAUSED": ("resume", "reset", "menu"),
+        "MENU": ("reset", "quit") if watch_mode else ("reset", "watch", "quit"), "PAUSED": ("resume", "reset", "menu"),
         "ATTEMPT_FAILED": ("reset", "menu"),
         "ATTEMPT_FINISHED": ("reset", "menu"), "DRIVING": (),
     }[state]

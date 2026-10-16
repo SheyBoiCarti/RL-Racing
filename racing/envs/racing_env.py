@@ -30,6 +30,16 @@ class RacingEnv(gym.Env):
             if track_catalog is not None
             else {"demo": (Track.from_json("assets/tracks/demo.json"), "demo")}
         )
+        if track_catalog is None and self.config.split_manifest:
+            from racing.tracks.splits import load_split_catalog
+
+            self.track_catalog = load_split_catalog(self.config.split_manifest, self.config.allowed_split)
+        if self.config.track_sampling == "uniform_train":
+            if not self.track_catalog or any(
+                getattr(entry[0] if isinstance(entry, tuple) else entry, "split", None) != "train"
+                for entry in self.track_catalog.values()
+            ):
+                raise ValueError("uniform_train requires a nonempty train-only catalog")
         self.action_space = gym.spaces.Box(-1, 1, (2,), dtype=np.float32)
         self.observation_space = gym.spaces.Box(-1, 1, (11,), dtype=np.float32)
         self.simulation = Simulation(self.config.physics)
@@ -51,7 +61,11 @@ class RacingEnv(gym.Env):
             "spawn_id",
         }:
             raise ValueError("options: only track_id and spawn_id supported")
-        track_id = options.get("track_id", self.config.default_track_id)
+        if "track_id" not in options and self.config.track_sampling == "uniform_train":
+            ids = sorted(self.track_catalog)
+            track_id = ids[int(self.np_random.integers(len(ids)))]
+        else:
+            track_id = options.get("track_id", self.config.default_track_id)
         spawn_id = options.get("spawn_id", self.config.default_spawn_id)
         if not isinstance(track_id, str) or track_id not in self.track_catalog:
             raise ValueError("track_id: unknown track")

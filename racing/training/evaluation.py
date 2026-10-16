@@ -150,6 +150,91 @@ def _write_csv(path, columns, rows):
     _atomic(path, output.getvalue())
 
 
+def validate_split_attempts(rows, track_ids, reset_seeds, *, deterministic):
+    """Require exact paired coverage and reproducible deterministic outcomes."""
+    expected = [(track_id, seed) for track_id in sorted(track_ids) for seed in reset_seeds]
+    if [(row["track_id"], row["reset_seed"]) for row in rows] != expected:
+        raise ValueError("validation attempt coverage mismatch")
+    if deterministic:
+        fields = ("success", "reason", "completed_laps", "lap_time_s", "progress_fraction",
+                  "episode_steps", "episode_return", "sim_duration_s")
+        reference = {}
+        for row in rows:
+            outcome = tuple(row[key] for key in fields)
+            if reference.setdefault(row["track_id"], outcome) != outcome:
+                raise ValueError(f"deterministic reproducibility failure: {row['track_id']}")
+
+
+def evaluate_split(agent_id, *, split="validation", split_manifest, output,
+                   episodes_per_track=3, seed=9000, reset_seeds=None,
+                   config=None, agent=None, model=None):
+    """Evaluate sorted held-out IDs explicitly; final tests remain embargoed."""
+    from dataclasses import replace
+
+    from racing.envs.config import load_rl
+    from racing.envs.racing_env import RacingEnv
+    if split != "validation":
+        raise ValueError("Only validation inference is authorized; test requires Phase 6 frozen selection")
+    from racing.tracks.splits import load_manifest, load_split_catalog
+
+    manifest_data = load_manifest(split_manifest)
+    catalog = load_split_catalog(split_manifest, split)
+    if not catalog:
+        raise ValueError("empty validation catalog")
+    config = replace(config or load_rl(), allowed_split=split, track_sampling="fixed", split_manifest=None)
+    if agent_id == "ppo" and agent is None:
+        from racing.agents.policy import PolicyController
+
+        if model is None:
+            raise ValueError("ppo evaluation requires --model")
+        agent = PolicyController(model, config=config)
+    output = Path(output)
+    output.mkdir(parents=True, exist_ok=False)
+    started = time.perf_counter()
+    rows, tracks, stepping = [], [], 0.
+    metadata = dict(evaluation_version=EVALUATION_VERSION, status="running", split=split,
+                    split_manifest_sha256=manifest_data["manifest_sha256"],
+                    track_ids=sorted(catalog), reset_seeds=reset_seeds or list(range(seed, seed + episodes_per_track)),
+                    reproducibility_note="Deterministic reset repeats are not independent trials.")
+    _write_json(output / "manifest.json", metadata)
+    try:
+        for track_id in sorted(catalog):
+            folder = output / track_id
+            summary = evaluate(agent_id, track_id=track_id, episodes=episodes_per_track,
+                               seed=seed, reset_seeds=reset_seeds, output=folder,
+                               config=replace(config, default_track_id=track_id), agent=agent, model=model,
+                               env_factory=lambda config: RacingEnv(config=config, track_catalog=catalog))
+            with (folder / "attempts.csv").open(newline="", encoding="utf-8") as file:
+                for row in csv.DictReader(file):
+                    rows.append({key: (row[key] == "true" if key == "success" else
+                                      None if row[key] == "" else
+                                      float(row[key]) if key in ("lap_time_s", "progress_fraction", "episode_return", "sim_duration_s", "wall_duration_s") else
+                                      int(row[key]) if key in ("training_seed", "reset_seed", "simulator_seed", "agent_seed", "completed_laps", "episode_steps") else row[key])
+                                 for key in ATTEMPT_COLUMNS})
+            tracks.append(dict(track_id=track_id, track_hash=canonical_hash(track_geometry(catalog[track_id])), **summary))
+            stepping += summary["stepping_duration_s"]
+        validate_split_attempts(rows, sorted(catalog), reset_seeds if reset_seeds is not None
+                                else list(range(seed, seed + episodes_per_track)), deterministic=agent_id != "random")
+        summary = summarize(rows, stepping_duration_s=stepping, wall_duration_s=time.perf_counter() - started)
+        summary.update(macro_completion=statistics.mean(t["completion_rate"] for t in tracks),
+                       macro_progress=statistics.mean(t["mean_progress_fraction"] for t in tracks),
+                       track_count=len(tracks), mode="validation")
+        _write_csv(output / "attempts.csv", ATTEMPT_COLUMNS, rows)
+        columns = ("track_id", "track_hash", "attempted", "completed", "completion_rate", "off_track_count", "timeout_count",
+                   "mean_progress_fraction", "successful_lap_count", "lap_time_median_s", "lap_time_iqr_s", "lap_time_std_s",
+                   "stepping_duration_s", "wall_duration_s")
+        _write_csv(output / "tracks.csv", columns, tracks)
+        _write_json(output / "summary.json", summary)
+        metadata.update(status="completed", artifact_sha256={name: hashlib.sha256((output / name).read_bytes()).hexdigest()
+                        for name in ("attempts.csv", "tracks.csv", "summary.json")})
+        _write_json(output / "manifest.json", metadata)
+        return summary
+    except BaseException as error:
+        metadata.update(status="failed", error=f"{type(error).__name__}: {error}")
+        _write_json(output / "manifest.json", metadata)
+        raise
+
+
 def evaluate(
     agent_id,
     *,
@@ -161,6 +246,8 @@ def evaluate(
     profile_steps=None,
     agent=None,
     env_factory=None,
+    model=None,
+    reset_seeds=None,
 ):
     """Evaluate complete fixed-track attempts, or an exact profiling step budget."""
     from racing.agents.random import RandomAgent
@@ -169,8 +256,14 @@ def evaluate(
     from racing.envs.racing_env import RacingEnv
     from racing.tracks import schema as track_schema
 
-    if agent_id not in ("random", "scripted"):
-        raise ValueError("agent_id: expected random or scripted")
+    if agent_id not in ("random", "scripted", "ppo"):
+        raise ValueError("agent_id: expected random, scripted or ppo")
+    if agent_id == "ppo" and agent is None:
+        from racing.agents.policy import PolicyController
+
+        if model is None:
+            raise ValueError("ppo evaluation requires --model")
+        agent = PolicyController(model, config=config)
     if type(seed) is not int or not 0 <= seed < 2**32:
         raise ValueError("seed: expected uint32")
     if profile_steps is not None and episodes is not None:
@@ -184,6 +277,12 @@ def evaluate(
         raise ValueError("episodes: expected positive integer")
     if seed + (profile_steps or episodes) - 1 >= 2**32:
         raise ValueError("attempt seeds exceed uint32")
+    if reset_seeds is not None and (
+        profile_steps is not None or len(reset_seeds) != episodes
+        or len(set(reset_seeds)) != episodes
+        or any(type(s) is not int or not 0 <= s < 2**32 for s in reset_seeds)
+    ):
+        raise ValueError("reset_seeds: exact distinct episode seed coverage required")
     started = time.perf_counter()
     config = config if config is not None else load_rl()
     agent = (
@@ -230,6 +329,10 @@ def evaluate(
         },
         agent_settings_hash=canonical_hash(getattr(agent, "config", {})),
     )
+    if agent_id == "ppo":
+        manifest["model_metadata"] = getattr(agent, "metadata", None)
+        manifest["reproducibility_note"] = "Fixed-track deterministic attempts are duplicates, not independent samples."
+    manifest["reset_seeds"] = reset_seeds
     _write_json(output / "manifest.json", manifest)
     env = None
     rows, partial, step_duration, total_steps = [], None, 0.0, 0
@@ -242,7 +345,7 @@ def evaluate(
             else index < episodes
         ):
             attempt_started = time.perf_counter()
-            attempt_seed = seed + index
+            attempt_seed = reset_seeds[index] if reset_seeds is not None else seed + index
             observation, info = env.reset(
                 seed=attempt_seed, options={"track_id": track_id}
             )
@@ -267,7 +370,7 @@ def evaluate(
             row = dict(
                 evaluation_version=EVALUATION_VERSION,
                 agent_id=agent_id,
-                training_seed=None,
+                training_seed=getattr(agent, "training_seed", None),
                 track_id=track_id,
                 track_hash=geometry_hash,
                 reset_seed=attempt_seed,
@@ -290,7 +393,7 @@ def evaluate(
             else:
                 partial = row
             index += 1
-        expected = list(range(seed, seed + len(rows)))
+        expected = reset_seeds if reset_seeds is not None else list(range(seed, seed + len(rows)))
         if [r["reset_seed"] for r in rows] != expected or any(
             r["track_id"] != track_id for r in rows
         ):

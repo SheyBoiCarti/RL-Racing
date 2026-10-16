@@ -1,0 +1,1450 @@
+{
+  "runtime_s": 31.71588389998942,
+  "validator_version": "geometry-v1",
+  "tracks": [
+    {
+      "track_id": "train_000",
+      "length_m": 591.9762264222759,
+      "max_curvature": 0.07717605884922042,
+      "max_heading_change_rad": 0.30572784850594337,
+      "min_clearance_m": 10.003813372441424,
+      "validator_version": "geometry-v1",
+      "seed": 10000,
+      "attempt": 4,
+      "rejection_counts": {
+        "heading": 4
+      },
+      "runtime_s": 0.8527968999987934,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_001",
+      "length_m": 584.0095546388334,
+      "max_curvature": 0.06290126395507971,
+      "max_heading_change_rad": 0.2493419600241249,
+      "min_clearance_m": 10.649860875617598,
+      "validator_version": "geometry-v1",
+      "seed": 10001,
+      "attempt": 6,
+      "rejection_counts": {
+        "heading": 6
+      },
+      "runtime_s": 0.8147018000017852,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_002",
+      "length_m": 611.9312730199501,
+      "max_curvature": 0.06385279749804232,
+      "max_heading_change_rad": 0.2531388313187932,
+      "min_clearance_m": 10.485188288349914,
+      "validator_version": "geometry-v1",
+      "seed": 10002,
+      "attempt": 2,
+      "rejection_counts": {
+        "heading": 2
+      },
+      "runtime_s": 1.0523363999964204,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_003",
+      "length_m": 590.4829891225448,
+      "max_curvature": 0.05595910318049394,
+      "max_heading_change_rad": 0.2228888678468497,
+      "min_clearance_m": 10.85307191660294,
+      "validator_version": "geometry-v1",
+      "seed": 10003,
+      "attempt": 1,
+      "rejection_counts": {
+        "heading": 1
+      },
+      "runtime_s": 0.9304803000122774,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_004",
+      "length_m": 604.7578555508469,
+      "max_curvature": 0.0747631140613079,
+      "max_heading_change_rad": 0.29653216633689716,
+      "min_clearance_m": 10.15886111723006,
+      "validator_version": "geometry-v1",
+      "seed": 10004,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 1.0557652999996208,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_005",
+      "length_m": 611.2011215966991,
+      "max_curvature": 0.07921241000326439,
+      "max_heading_change_rad": 0.31528810688827624,
+      "min_clearance_m": 9.856507927659166,
+      "validator_version": "geometry-v1",
+      "seed": 10005,
+      "attempt": 3,
+      "rejection_counts": {
+        "heading": 3
+      },
+      "runtime_s": 0.9833891000016592,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_006",
+      "length_m": 594.1630669872408,
+      "max_curvature": 0.06289688336293749,
+      "max_heading_change_rad": 0.2503273196611442,
+      "min_clearance_m": 10.691078957433486,
+      "validator_version": "geometry-v1",
+      "seed": 10006,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.9041247999994084,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_007",
+      "length_m": 632.6998528934903,
+      "max_curvature": 0.06630094217564922,
+      "max_heading_change_rad": 0.2632019557040728,
+      "min_clearance_m": 10.436359012534119,
+      "validator_version": "geometry-v1",
+      "seed": 10007,
+      "attempt": 4,
+      "rejection_counts": {
+        "heading": 4
+      },
+      "runtime_s": 1.0452596999966772,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_008",
+      "length_m": 589.4787361716637,
+      "max_curvature": 0.0640217358252822,
+      "max_heading_change_rad": 0.25441072172821055,
+      "min_clearance_m": 10.466160584334318,
+      "validator_version": "geometry-v1",
+      "seed": 10008,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.9443581999948947,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_009",
+      "length_m": 582.4557193804604,
+      "max_curvature": 0.07176546886895745,
+      "max_heading_change_rad": 0.28545065153623383,
+      "min_clearance_m": 10.144236406535516,
+      "validator_version": "geometry-v1",
+      "seed": 10009,
+      "attempt": 1,
+      "rejection_counts": {
+        "heading": 1
+      },
+      "runtime_s": 0.9006230000086362,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_010",
+      "length_m": 594.0340421574194,
+      "max_curvature": 0.06761455896988726,
+      "max_heading_change_rad": 0.2689481605321955,
+      "min_clearance_m": 10.574275036151331,
+      "validator_version": "geometry-v1",
+      "seed": 10010,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 1.10250019999512,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_011",
+      "length_m": 610.5605981134397,
+      "max_curvature": 0.06286920605270035,
+      "max_heading_change_rad": 0.25029302769057615,
+      "min_clearance_m": 10.521751006898239,
+      "validator_version": "geometry-v1",
+      "seed": 10011,
+      "attempt": 2,
+      "rejection_counts": {
+        "heading": 2
+      },
+      "runtime_s": 1.0633992999937618,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_012",
+      "length_m": 603.6621648825869,
+      "max_curvature": 0.06237582228852603,
+      "max_heading_change_rad": 0.24878214339686355,
+      "min_clearance_m": 10.733442469053056,
+      "validator_version": "geometry-v1",
+      "seed": 10012,
+      "attempt": 2,
+      "rejection_counts": {
+        "heading": 2
+      },
+      "runtime_s": 1.2167811999970581,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_013",
+      "length_m": 605.0744208622012,
+      "max_curvature": 0.0718657275272145,
+      "max_heading_change_rad": 0.2852435227993353,
+      "min_clearance_m": 10.302108841326469,
+      "validator_version": "geometry-v1",
+      "seed": 10013,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 1.0888733000028878,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_014",
+      "length_m": 607.8470786913031,
+      "max_curvature": 0.08193237905414252,
+      "max_heading_change_rad": 0.3242736009059888,
+      "min_clearance_m": 9.616265591755784,
+      "validator_version": "geometry-v1",
+      "seed": 10014,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 1.1937913000001572,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_015",
+      "length_m": 611.114855664385,
+      "max_curvature": 0.08014448736507687,
+      "max_heading_change_rad": 0.318982159304686,
+      "min_clearance_m": 10.228011631686552,
+      "validator_version": "geometry-v1",
+      "seed": 10015,
+      "attempt": 5,
+      "rejection_counts": {
+        "heading": 5
+      },
+      "runtime_s": 1.1877317000034964,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_016",
+      "length_m": 573.3189620316145,
+      "max_curvature": 0.07112011275941342,
+      "max_heading_change_rad": 0.28238614055390654,
+      "min_clearance_m": 10.278559560809242,
+      "validator_version": "geometry-v1",
+      "seed": 10016,
+      "attempt": 11,
+      "rejection_counts": {
+        "heading": 11
+      },
+      "runtime_s": 1.141355300002033,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_017",
+      "length_m": 582.07749714479,
+      "max_curvature": 0.0837131556488474,
+      "max_heading_change_rad": 0.3325225295993479,
+      "min_clearance_m": 9.849294277125225,
+      "validator_version": "geometry-v1",
+      "seed": 10017,
+      "attempt": 1,
+      "rejection_counts": {
+        "heading": 1
+      },
+      "runtime_s": 1.028959900009795,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_018",
+      "length_m": 572.2171105413036,
+      "max_curvature": 0.08425216213472525,
+      "max_heading_change_rad": 0.3337010496598105,
+      "min_clearance_m": 9.917185556918252,
+      "validator_version": "geometry-v1",
+      "seed": 10018,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.8852640999975847,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_019",
+      "length_m": 598.8031670070259,
+      "max_curvature": 0.0835621722279787,
+      "max_heading_change_rad": 0.33231069108626254,
+      "min_clearance_m": 9.923452235900555,
+      "validator_version": "geometry-v1",
+      "seed": 10019,
+      "attempt": 3,
+      "rejection_counts": {
+        "heading": 3
+      },
+      "runtime_s": 0.8780998000002,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_020",
+      "length_m": 617.2746367043694,
+      "max_curvature": 0.06469256637587614,
+      "max_heading_change_rad": 0.2570245300202525,
+      "min_clearance_m": 10.332370066037555,
+      "validator_version": "geometry-v1",
+      "seed": 10020,
+      "attempt": 8,
+      "rejection_counts": {
+        "heading": 8
+      },
+      "runtime_s": 0.961079200002132,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_021",
+      "length_m": 602.4951653924347,
+      "max_curvature": 0.07999519822513676,
+      "max_heading_change_rad": 0.31793759164982793,
+      "min_clearance_m": 10.12110318080925,
+      "validator_version": "geometry-v1",
+      "seed": 10021,
+      "attempt": 6,
+      "rejection_counts": {
+        "heading": 6
+      },
+      "runtime_s": 0.893335599990678,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_022",
+      "length_m": 623.3253935356403,
+      "max_curvature": 0.07264287877446339,
+      "max_heading_change_rad": 0.28942751668657696,
+      "min_clearance_m": 10.253420144156042,
+      "validator_version": "geometry-v1",
+      "seed": 10022,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.8732837999996264,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_023",
+      "length_m": 581.355586526757,
+      "max_curvature": 0.08369489029695774,
+      "max_heading_change_rad": 0.33195426150887775,
+      "min_clearance_m": 9.880014673602254,
+      "validator_version": "geometry-v1",
+      "seed": 10023,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.7438166999927489,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_024",
+      "length_m": 572.1972789257068,
+      "max_curvature": 0.06906166379485451,
+      "max_heading_change_rad": 0.27368311987860316,
+      "min_clearance_m": 10.419094291881287,
+      "validator_version": "geometry-v1",
+      "seed": 10024,
+      "attempt": 2,
+      "rejection_counts": {
+        "heading": 2
+      },
+      "runtime_s": 1.0102874000003794,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_025",
+      "length_m": 635.4171529206819,
+      "max_curvature": 0.08663275744282448,
+      "max_heading_change_rad": 0.34497683758806197,
+      "min_clearance_m": 9.85407195901718,
+      "validator_version": "geometry-v1",
+      "seed": 10025,
+      "attempt": 1,
+      "rejection_counts": {
+        "heading": 1
+      },
+      "runtime_s": 0.9409606999979587,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_026",
+      "length_m": 604.4499879369407,
+      "max_curvature": 0.0816784243896625,
+      "max_heading_change_rad": 0.32360158940017847,
+      "min_clearance_m": 9.769977078849877,
+      "validator_version": "geometry-v1",
+      "seed": 10026,
+      "attempt": 2,
+      "rejection_counts": {
+        "heading": 2
+      },
+      "runtime_s": 1.0192327999975532,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_027",
+      "length_m": 592.5667120029768,
+      "max_curvature": 0.08267707652732814,
+      "max_heading_change_rad": 0.3276507350637514,
+      "min_clearance_m": 9.82579572820421,
+      "validator_version": "geometry-v1",
+      "seed": 10027,
+      "attempt": 2,
+      "rejection_counts": {
+        "heading": 2
+      },
+      "runtime_s": 0.9765601999970386,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_028",
+      "length_m": 592.4039874375967,
+      "max_curvature": 0.07429592952553064,
+      "max_heading_change_rad": 0.29451395097938615,
+      "min_clearance_m": 9.913410761144643,
+      "validator_version": "geometry-v1",
+      "seed": 10028,
+      "attempt": 7,
+      "rejection_counts": {
+        "heading": 7
+      },
+      "runtime_s": 0.9626155000005383,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_029",
+      "length_m": 611.267973102444,
+      "max_curvature": 0.062431991097781074,
+      "max_heading_change_rad": 0.24886677642492439,
+      "min_clearance_m": 10.597596304013788,
+      "validator_version": "geometry-v1",
+      "seed": 10029,
+      "attempt": 2,
+      "rejection_counts": {
+        "heading": 2
+      },
+      "runtime_s": 0.951323000001139,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_030",
+      "length_m": 622.013512448731,
+      "max_curvature": 0.07853851085901907,
+      "max_heading_change_rad": 0.31204622956546135,
+      "min_clearance_m": 9.8075236649577,
+      "validator_version": "geometry-v1",
+      "seed": 10030,
+      "attempt": 1,
+      "rejection_counts": {
+        "heading": 1
+      },
+      "runtime_s": 0.8427587000041967,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_031",
+      "length_m": 596.7513347822444,
+      "max_curvature": 0.08750505992616471,
+      "max_heading_change_rad": 0.3466077413572983,
+      "min_clearance_m": 9.583883785607934,
+      "validator_version": "geometry-v1",
+      "seed": 10031,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.7650292000034824,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_032",
+      "length_m": 572.6398577269156,
+      "max_curvature": 0.045345967000981445,
+      "max_heading_change_rad": 0.18012253573692227,
+      "min_clearance_m": 10.885772351612392,
+      "validator_version": "geometry-v1",
+      "seed": 10032,
+      "attempt": 4,
+      "rejection_counts": {
+        "heading": 4
+      },
+      "runtime_s": 0.7655132999934722,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_033",
+      "length_m": 603.3162594475234,
+      "max_curvature": 0.06809456334649724,
+      "max_heading_change_rad": 0.2713265074606017,
+      "min_clearance_m": 10.346147391417276,
+      "validator_version": "geometry-v1",
+      "seed": 10033,
+      "attempt": 1,
+      "rejection_counts": {
+        "heading": 1
+      },
+      "runtime_s": 0.8029206999926828,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_034",
+      "length_m": 589.0865681532281,
+      "max_curvature": 0.07472282321052827,
+      "max_heading_change_rad": 0.29655495487261563,
+      "min_clearance_m": 10.029503511382298,
+      "validator_version": "geometry-v1",
+      "seed": 10034,
+      "attempt": 4,
+      "rejection_counts": {
+        "heading": 4
+      },
+      "runtime_s": 0.7036948000022676,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_035",
+      "length_m": 614.6837667703732,
+      "max_curvature": 0.08573136236565146,
+      "max_heading_change_rad": 0.34069953287396304,
+      "min_clearance_m": 9.567370789084517,
+      "validator_version": "geometry-v1",
+      "seed": 10035,
+      "attempt": 1,
+      "rejection_counts": {
+        "heading": 1
+      },
+      "runtime_s": 0.8065511000022525,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_036",
+      "length_m": 623.2765008136702,
+      "max_curvature": 0.07369764577619892,
+      "max_heading_change_rad": 0.2935908422525335,
+      "min_clearance_m": 9.849398583035391,
+      "validator_version": "geometry-v1",
+      "seed": 10036,
+      "attempt": 4,
+      "rejection_counts": {
+        "heading": 4
+      },
+      "runtime_s": 0.841400600009365,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_037",
+      "length_m": 550.6393502752259,
+      "max_curvature": 0.05540738501499798,
+      "max_heading_change_rad": 0.22067478278230368,
+      "min_clearance_m": 10.689564004519134,
+      "validator_version": "geometry-v1",
+      "seed": 10037,
+      "attempt": 3,
+      "rejection_counts": {
+        "heading": 3
+      },
+      "runtime_s": 0.679126200004248,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_038",
+      "length_m": 610.3096187841109,
+      "max_curvature": 0.06115742295237196,
+      "max_heading_change_rad": 0.24343090113635846,
+      "min_clearance_m": 10.74130981486902,
+      "validator_version": "geometry-v1",
+      "seed": 10038,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.8179398000065703,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_039",
+      "length_m": 611.8375511869908,
+      "max_curvature": 0.0879620483049339,
+      "max_heading_change_rad": 0.3480138039561851,
+      "min_clearance_m": 9.527083327625597,
+      "validator_version": "geometry-v1",
+      "seed": 10039,
+      "attempt": 5,
+      "rejection_counts": {
+        "heading": 5
+      },
+      "runtime_s": 0.8732179000071483,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_040",
+      "length_m": 573.7901664498072,
+      "max_curvature": 0.0829697524059051,
+      "max_heading_change_rad": 0.32941470795138805,
+      "min_clearance_m": 9.906850333295655,
+      "validator_version": "geometry-v1",
+      "seed": 10040,
+      "attempt": 1,
+      "rejection_counts": {
+        "heading": 1
+      },
+      "runtime_s": 0.7315499999967869,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_041",
+      "length_m": 579.1942176473965,
+      "max_curvature": 0.06879395532455795,
+      "max_heading_change_rad": 0.27410270517860447,
+      "min_clearance_m": 10.317264572623994,
+      "validator_version": "geometry-v1",
+      "seed": 10041,
+      "attempt": 1,
+      "rejection_counts": {
+        "heading": 1
+      },
+      "runtime_s": 0.7912092000042321,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_042",
+      "length_m": 591.9781567870327,
+      "max_curvature": 0.0778176636797988,
+      "max_heading_change_rad": 0.3080778637644759,
+      "min_clearance_m": 9.848371846424484,
+      "validator_version": "geometry-v1",
+      "seed": 10042,
+      "attempt": 6,
+      "rejection_counts": {
+        "heading": 6
+      },
+      "runtime_s": 1.0229778999928385,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_043",
+      "length_m": 617.7970083458458,
+      "max_curvature": 0.059303265774465395,
+      "max_heading_change_rad": 0.23595114431969844,
+      "min_clearance_m": 10.699845077058416,
+      "validator_version": "geometry-v1",
+      "seed": 10043,
+      "attempt": 2,
+      "rejection_counts": {
+        "heading": 2
+      },
+      "runtime_s": 1.0735860999993747,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_044",
+      "length_m": 596.0481878903773,
+      "max_curvature": 0.06998329595336451,
+      "max_heading_change_rad": 0.27740983975603495,
+      "min_clearance_m": 10.256288820636314,
+      "validator_version": "geometry-v1",
+      "seed": 10044,
+      "attempt": 7,
+      "rejection_counts": {
+        "heading": 7
+      },
+      "runtime_s": 1.0518780000129482,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_045",
+      "length_m": 612.9337564601896,
+      "max_curvature": 0.06862883555359474,
+      "max_heading_change_rad": 0.2725090692390757,
+      "min_clearance_m": 10.19015157309098,
+      "validator_version": "geometry-v1",
+      "seed": 10045,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 1.053132299988647,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_046",
+      "length_m": 626.2517447340896,
+      "max_curvature": 0.07640044055748753,
+      "max_heading_change_rad": 0.3038657027779905,
+      "min_clearance_m": 10.36688798406989,
+      "validator_version": "geometry-v1",
+      "seed": 10046,
+      "attempt": 2,
+      "rejection_counts": {
+        "heading": 2
+      },
+      "runtime_s": 1.0656426000059582,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_047",
+      "length_m": 624.9333704220413,
+      "max_curvature": 0.08236153808453801,
+      "max_heading_change_rad": 0.32675232472956006,
+      "min_clearance_m": 9.973108941606444,
+      "validator_version": "geometry-v1",
+      "seed": 10047,
+      "attempt": 2,
+      "rejection_counts": {
+        "heading": 2
+      },
+      "runtime_s": 1.0574859000043944,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_048",
+      "length_m": 590.7394134312826,
+      "max_curvature": 0.07033394604165087,
+      "max_heading_change_rad": 0.2799964345117427,
+      "min_clearance_m": 10.3939078280581,
+      "validator_version": "geometry-v1",
+      "seed": 10048,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.8714020000043092,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_049",
+      "length_m": 595.6882014713035,
+      "max_curvature": 0.08729976057355686,
+      "max_heading_change_rad": 0.34752344284141934,
+      "min_clearance_m": 9.755290669130417,
+      "validator_version": "geometry-v1",
+      "seed": 10049,
+      "attempt": 7,
+      "rejection_counts": {
+        "heading": 7
+      },
+      "runtime_s": 1.020338799993624,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_050",
+      "length_m": 559.5876864683446,
+      "max_curvature": 0.057251576635666955,
+      "max_heading_change_rad": 0.2283997454170521,
+      "min_clearance_m": 10.760048553699903,
+      "validator_version": "geometry-v1",
+      "seed": 10050,
+      "attempt": 13,
+      "rejection_counts": {
+        "heading": 13
+      },
+      "runtime_s": 0.819667899995693,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_051",
+      "length_m": 593.5259221959884,
+      "max_curvature": 0.0846654091189574,
+      "max_heading_change_rad": 0.3359980596710841,
+      "min_clearance_m": 9.68237353889306,
+      "validator_version": "geometry-v1",
+      "seed": 10051,
+      "attempt": 2,
+      "rejection_counts": {
+        "heading": 2
+      },
+      "runtime_s": 0.8263050999958068,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_052",
+      "length_m": 590.7322845927929,
+      "max_curvature": 0.08403177201973264,
+      "max_heading_change_rad": 0.3341233572143052,
+      "min_clearance_m": 9.92455445548951,
+      "validator_version": "geometry-v1",
+      "seed": 10052,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.6987239999871235,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_053",
+      "length_m": 617.0512371245422,
+      "max_curvature": 0.07471423175286858,
+      "max_heading_change_rad": 0.2966087287654551,
+      "min_clearance_m": 10.31892622761778,
+      "validator_version": "geometry-v1",
+      "seed": 10053,
+      "attempt": 4,
+      "rejection_counts": {
+        "heading": 4
+      },
+      "runtime_s": 0.7684850000077859,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_054",
+      "length_m": 616.3558235448863,
+      "max_curvature": 0.07481807784113553,
+      "max_heading_change_rad": 0.29661352812351227,
+      "min_clearance_m": 10.291472379991855,
+      "validator_version": "geometry-v1",
+      "seed": 10054,
+      "attempt": 2,
+      "rejection_counts": {
+        "heading": 2
+      },
+      "runtime_s": 0.8421228000079282,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_055",
+      "length_m": 613.3671737390205,
+      "max_curvature": 0.05668640201035281,
+      "max_heading_change_rad": 0.22540995469637526,
+      "min_clearance_m": 10.873104992398062,
+      "validator_version": "geometry-v1",
+      "seed": 10055,
+      "attempt": 7,
+      "rejection_counts": {
+        "heading": 7
+      },
+      "runtime_s": 0.9281842999916989,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_056",
+      "length_m": 615.9296368280899,
+      "max_curvature": 0.07321936273632643,
+      "max_heading_change_rad": 0.2901795267087217,
+      "min_clearance_m": 10.234778289441632,
+      "validator_version": "geometry-v1",
+      "seed": 10056,
+      "attempt": 2,
+      "rejection_counts": {
+        "heading": 2
+      },
+      "runtime_s": 0.9029756999952951,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_057",
+      "length_m": 611.4758396915468,
+      "max_curvature": 0.08539320363526723,
+      "max_heading_change_rad": 0.3398220068630664,
+      "min_clearance_m": 9.785399062251074,
+      "validator_version": "geometry-v1",
+      "seed": 10057,
+      "attempt": 5,
+      "rejection_counts": {
+        "heading": 5
+      },
+      "runtime_s": 1.1482017999951495,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_058",
+      "length_m": 589.0323759644764,
+      "max_curvature": 0.058041801624525116,
+      "max_heading_change_rad": 0.230580035411605,
+      "min_clearance_m": 10.808038030859063,
+      "validator_version": "geometry-v1",
+      "seed": 10058,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 1.2480116999940947,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "train_059",
+      "length_m": 598.2862703759408,
+      "max_curvature": 0.07821981937050325,
+      "max_heading_change_rad": 0.3110077161978593,
+      "min_clearance_m": 10.007006375796273,
+      "validator_version": "geometry-v1",
+      "seed": 10059,
+      "attempt": 2,
+      "rejection_counts": {
+        "heading": 2
+      },
+      "runtime_s": 1.1956960000097752,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "validation_000",
+      "length_m": 582.4730154798087,
+      "max_curvature": 0.06379374064329753,
+      "max_heading_change_rad": 0.25392685574702334,
+      "min_clearance_m": 10.961277898613332,
+      "validator_version": "geometry-v1",
+      "seed": 20000,
+      "attempt": 2,
+      "rejection_counts": {
+        "heading": 2
+      },
+      "runtime_s": 1.2417404000007082,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "validation_001",
+      "length_m": 591.5143128611127,
+      "max_curvature": 0.08616596223630643,
+      "max_heading_change_rad": 0.34291585972686445,
+      "min_clearance_m": 9.662573752518071,
+      "validator_version": "geometry-v1",
+      "seed": 20001,
+      "attempt": 6,
+      "rejection_counts": {
+        "heading": 6
+      },
+      "runtime_s": 1.378127100004349,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "validation_002",
+      "length_m": 567.6262170223467,
+      "max_curvature": 0.07451049662298077,
+      "max_heading_change_rad": 0.2969567567884024,
+      "min_clearance_m": 10.424203350027515,
+      "validator_version": "geometry-v1",
+      "seed": 20002,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 1.4870097000093665,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "validation_003",
+      "length_m": 612.2422741430976,
+      "max_curvature": 0.08303606208045365,
+      "max_heading_change_rad": 0.32885533818663504,
+      "min_clearance_m": 9.923029471265725,
+      "validator_version": "geometry-v1",
+      "seed": 20003,
+      "attempt": 1,
+      "rejection_counts": {
+        "heading": 1
+      },
+      "runtime_s": 1.5814989999926183,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "validation_004",
+      "length_m": 609.8819026081064,
+      "max_curvature": 0.08450592551498684,
+      "max_heading_change_rad": 0.33554226289284905,
+      "min_clearance_m": 9.68479397949432,
+      "validator_version": "geometry-v1",
+      "seed": 20004,
+      "attempt": 2,
+      "rejection_counts": {
+        "heading": 2
+      },
+      "runtime_s": 1.6313660000014352,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "validation_005",
+      "length_m": 583.383104900216,
+      "max_curvature": 0.07138556700646145,
+      "max_heading_change_rad": 0.28441658392838853,
+      "min_clearance_m": 10.323776692397772,
+      "validator_version": "geometry-v1",
+      "seed": 20005,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 1.2218133999995189,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "validation_006",
+      "length_m": 586.1784828978643,
+      "max_curvature": 0.060541074273567405,
+      "max_heading_change_rad": 0.240969318781604,
+      "min_clearance_m": 10.744335496314168,
+      "validator_version": "geometry-v1",
+      "seed": 20006,
+      "attempt": 8,
+      "rejection_counts": {
+        "heading": 8
+      },
+      "runtime_s": 0.878503499989165,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "validation_007",
+      "length_m": 582.076921069091,
+      "max_curvature": 0.06507519732643273,
+      "max_heading_change_rad": 0.2587951113415272,
+      "min_clearance_m": 10.39942901386667,
+      "validator_version": "geometry-v1",
+      "seed": 20007,
+      "attempt": 3,
+      "rejection_counts": {
+        "heading": 3
+      },
+      "runtime_s": 0.8180455999972764,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "validation_008",
+      "length_m": 594.9590345122483,
+      "max_curvature": 0.05660200047492507,
+      "max_heading_change_rad": 0.22563243333828575,
+      "min_clearance_m": 10.818297926702268,
+      "validator_version": "geometry-v1",
+      "seed": 20008,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.8859641000017291,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "validation_009",
+      "length_m": 587.0467444028118,
+      "max_curvature": 0.08061277520550791,
+      "max_heading_change_rad": 0.32091149663651297,
+      "min_clearance_m": 10.294912633222783,
+      "validator_version": "geometry-v1",
+      "seed": 20009,
+      "attempt": 1,
+      "rejection_counts": {
+        "heading": 1
+      },
+      "runtime_s": 0.93086979999498,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "validation_010",
+      "length_m": 582.2639855337279,
+      "max_curvature": 0.06255691032417121,
+      "max_heading_change_rad": 0.24891866019620412,
+      "min_clearance_m": 10.592858075963257,
+      "validator_version": "geometry-v1",
+      "seed": 20010,
+      "attempt": 10,
+      "rejection_counts": {
+        "heading": 10
+      },
+      "runtime_s": 1.0164576999959536,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "validation_011",
+      "length_m": 605.1467283599069,
+      "max_curvature": 0.07390398336107741,
+      "max_heading_change_rad": 0.293378379800763,
+      "min_clearance_m": 10.1745422468308,
+      "validator_version": "geometry-v1",
+      "seed": 20011,
+      "attempt": 7,
+      "rejection_counts": {
+        "heading": 7
+      },
+      "runtime_s": 1.1534711999993306,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "validation_012",
+      "length_m": 593.6849109184001,
+      "max_curvature": 0.051379283786063164,
+      "max_heading_change_rad": 0.20444072763223886,
+      "min_clearance_m": 11.02981301088667,
+      "validator_version": "geometry-v1",
+      "seed": 20012,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.9455147000116995,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "validation_013",
+      "length_m": 601.7676833086945,
+      "max_curvature": 0.08217939530140352,
+      "max_heading_change_rad": 0.3262882901106514,
+      "min_clearance_m": 9.7623861432368,
+      "validator_version": "geometry-v1",
+      "seed": 20013,
+      "attempt": 1,
+      "rejection_counts": {
+        "heading": 1
+      },
+      "runtime_s": 0.9096125999931246,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "validation_014",
+      "length_m": 624.9271163483688,
+      "max_curvature": 0.06414708935825279,
+      "max_heading_change_rad": 0.25476562710993456,
+      "min_clearance_m": 10.580211880952156,
+      "validator_version": "geometry-v1",
+      "seed": 20014,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.6892816000035964,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_000",
+      "length_m": 607.4614928313688,
+      "max_curvature": 0.08643186432205188,
+      "max_heading_change_rad": 0.3440275807885893,
+      "min_clearance_m": 9.768632948227435,
+      "validator_version": "geometry-v1",
+      "seed": 30000,
+      "attempt": 3,
+      "rejection_counts": {
+        "heading": 3
+      },
+      "runtime_s": 0.6355355999985477,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_001",
+      "length_m": 614.6554810385394,
+      "max_curvature": 0.08445096198674973,
+      "max_heading_change_rad": 0.33573612293925503,
+      "min_clearance_m": 9.702213957926897,
+      "validator_version": "geometry-v1",
+      "seed": 30001,
+      "attempt": 6,
+      "rejection_counts": {
+        "heading": 6
+      },
+      "runtime_s": 0.7611500999919372,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_002",
+      "length_m": 596.4840753725193,
+      "max_curvature": 0.08200167068371093,
+      "max_heading_change_rad": 0.3249473046884317,
+      "min_clearance_m": 9.865148668436646,
+      "validator_version": "geometry-v1",
+      "seed": 30002,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.6735007999959635,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_003",
+      "length_m": 599.0107078822531,
+      "max_curvature": 0.07772950773977301,
+      "max_heading_change_rad": 0.30934761374682385,
+      "min_clearance_m": 10.666857173871502,
+      "validator_version": "geometry-v1",
+      "seed": 30003,
+      "attempt": 14,
+      "rejection_counts": {
+        "heading": 14
+      },
+      "runtime_s": 0.7062452999962261,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_004",
+      "length_m": 609.822144862394,
+      "max_curvature": 0.068133833007327,
+      "max_heading_change_rad": 0.27083521773341035,
+      "min_clearance_m": 10.401307459529932,
+      "validator_version": "geometry-v1",
+      "seed": 30004,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.6888764000032097,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_005",
+      "length_m": 625.9400586690656,
+      "max_curvature": 0.08362935234748642,
+      "max_heading_change_rad": 0.3321513435529173,
+      "min_clearance_m": 9.839792276479052,
+      "validator_version": "geometry-v1",
+      "seed": 30005,
+      "attempt": 4,
+      "rejection_counts": {
+        "heading": 4
+      },
+      "runtime_s": 0.6985091000096872,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_006",
+      "length_m": 610.5137166644996,
+      "max_curvature": 0.07319320065602343,
+      "max_heading_change_rad": 0.2910673843869147,
+      "min_clearance_m": 10.003712631108641,
+      "validator_version": "geometry-v1",
+      "seed": 30006,
+      "attempt": 1,
+      "rejection_counts": {
+        "heading": 1
+      },
+      "runtime_s": 0.7015786999982083,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_007",
+      "length_m": 591.6397572146095,
+      "max_curvature": 0.0834353081918387,
+      "max_heading_change_rad": 0.33215848274951654,
+      "min_clearance_m": 9.719461676893197,
+      "validator_version": "geometry-v1",
+      "seed": 30007,
+      "attempt": 1,
+      "rejection_counts": {
+        "heading": 1
+      },
+      "runtime_s": 0.7213898000045447,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_008",
+      "length_m": 600.0063858698788,
+      "max_curvature": 0.0853158093233188,
+      "max_heading_change_rad": 0.3375992825337564,
+      "min_clearance_m": 9.51769764808143,
+      "validator_version": "geometry-v1",
+      "seed": 30008,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.7914634000044316,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_009",
+      "length_m": 575.5593259690363,
+      "max_curvature": 0.07451458650925699,
+      "max_heading_change_rad": 0.29685522851247903,
+      "min_clearance_m": 10.336981849283085,
+      "validator_version": "geometry-v1",
+      "seed": 30009,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.5867375999951037,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_010",
+      "length_m": 630.0859975761496,
+      "max_curvature": 0.08683712887921215,
+      "max_heading_change_rad": 0.3447812761086526,
+      "min_clearance_m": 9.663114268794722,
+      "validator_version": "geometry-v1",
+      "seed": 30010,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.722173499991186,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_011",
+      "length_m": 584.5439097000713,
+      "max_curvature": 0.08276394244218604,
+      "max_heading_change_rad": 0.32775467789311996,
+      "min_clearance_m": 9.672622981776549,
+      "validator_version": "geometry-v1",
+      "seed": 30011,
+      "attempt": 12,
+      "rejection_counts": {
+        "heading": 12
+      },
+      "runtime_s": 0.6848707000026479,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_012",
+      "length_m": 614.6025172047578,
+      "max_curvature": 0.07507170042538484,
+      "max_heading_change_rad": 0.29863936861940044,
+      "min_clearance_m": 10.2092899157306,
+      "validator_version": "geometry-v1",
+      "seed": 30012,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.7525125999964075,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_013",
+      "length_m": 590.1143468698094,
+      "max_curvature": 0.0811179579631269,
+      "max_heading_change_rad": 0.3222907810134288,
+      "min_clearance_m": 9.967591957587072,
+      "validator_version": "geometry-v1",
+      "seed": 30013,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.6818980999960331,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_014",
+      "length_m": 607.7114824767199,
+      "max_curvature": 0.06055362252059482,
+      "max_heading_change_rad": 0.24161132100150917,
+      "min_clearance_m": 10.605448746148351,
+      "validator_version": "geometry-v1",
+      "seed": 30014,
+      "attempt": 0,
+      "rejection_counts": {},
+      "runtime_s": 0.7288874999940163,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_015",
+      "length_m": 596.189240724741,
+      "max_curvature": 0.07189533625095887,
+      "max_heading_change_rad": 0.28488633408048614,
+      "min_clearance_m": 10.339996463455961,
+      "validator_version": "geometry-v1",
+      "seed": 30015,
+      "attempt": 2,
+      "rejection_counts": {
+        "heading": 2
+      },
+      "runtime_s": 0.6313539999973727,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_016",
+      "length_m": 618.5620027449359,
+      "max_curvature": 0.08673049172792544,
+      "max_heading_change_rad": 0.34470535554397896,
+      "min_clearance_m": 9.688015324627425,
+      "validator_version": "geometry-v1",
+      "seed": 30016,
+      "attempt": 2,
+      "rejection_counts": {
+        "heading": 2
+      },
+      "runtime_s": 0.6035464000015054,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_017",
+      "length_m": 623.2404016657008,
+      "max_curvature": 0.07386215380998502,
+      "max_heading_change_rad": 0.2941271765182081,
+      "min_clearance_m": 10.068154887749092,
+      "validator_version": "geometry-v1",
+      "seed": 30017,
+      "attempt": 2,
+      "rejection_counts": {
+        "heading": 2
+      },
+      "runtime_s": 0.6134728999895742,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_018",
+      "length_m": 591.4345481899057,
+      "max_curvature": 0.07895718082046986,
+      "max_heading_change_rad": 0.31448148529914244,
+      "min_clearance_m": 10.078867585901456,
+      "validator_version": "geometry-v1",
+      "seed": 30018,
+      "attempt": 7,
+      "rejection_counts": {
+        "heading": 7
+      },
+      "runtime_s": 0.5880432999983896,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_019",
+      "length_m": 584.3270619162164,
+      "max_curvature": 0.06332287876017856,
+      "max_heading_change_rad": 0.2511899638635886,
+      "min_clearance_m": 10.577788549057964,
+      "validator_version": "geometry-v1",
+      "seed": 30019,
+      "attempt": 8,
+      "rejection_counts": {
+        "heading": 8
+      },
+      "runtime_s": 0.6364304000017,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_020",
+      "length_m": 598.1289356213019,
+      "max_curvature": 0.08675149328006555,
+      "max_heading_change_rad": 0.3444793644592119,
+      "min_clearance_m": 9.58499857344637,
+      "validator_version": "geometry-v1",
+      "seed": 30020,
+      "attempt": 3,
+      "rejection_counts": {
+        "heading": 3
+      },
+      "runtime_s": 0.6966568999923766,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_021",
+      "length_m": 586.6581686498689,
+      "max_curvature": 0.08136344130447386,
+      "max_heading_change_rad": 0.32358200239127743,
+      "min_clearance_m": 9.84431190837784,
+      "validator_version": "geometry-v1",
+      "seed": 30021,
+      "attempt": 4,
+      "rejection_counts": {
+        "heading": 4
+      },
+      "runtime_s": 0.7156850000028498,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_022",
+      "length_m": 621.6776338701256,
+      "max_curvature": 0.07844953773486066,
+      "max_heading_change_rad": 0.3115507278192462,
+      "min_clearance_m": 9.877927068133697,
+      "validator_version": "geometry-v1",
+      "seed": 30022,
+      "attempt": 1,
+      "rejection_counts": {
+        "heading": 1
+      },
+      "runtime_s": 0.7424439000023995,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_023",
+      "length_m": 608.164710865485,
+      "max_curvature": 0.07277875680183113,
+      "max_heading_change_rad": 0.28858352270511833,
+      "min_clearance_m": 10.165296097580153,
+      "validator_version": "geometry-v1",
+      "seed": 30023,
+      "attempt": 4,
+      "rejection_counts": {
+        "heading": 4
+      },
+      "runtime_s": 0.7380075000110082,
+      "numpy_version": "2.4.6"
+    },
+    {
+      "track_id": "test_024",
+      "length_m": 592.778765406055,
+      "max_curvature": 0.06679012433644524,
+      "max_heading_change_rad": 0.26510287217815875,
+      "min_clearance_m": 10.454634244748519,
+      "validator_version": "geometry-v1",
+      "seed": 30024,
+      "attempt": 3,
+      "rejection_counts": {
+        "heading": 3
+      },
+      "runtime_s": 0.6003221999999369,
+      "numpy_version": "2.4.6"
+    }
+  ]
+}

@@ -43,6 +43,7 @@ class RaceInterface:
 
     def __init__(self, game, physics):
         self.game, self.physics = game, physics
+        self.watch_mode = False
 
     def _text(self, surface, text, position, size=18, color=None, bold=False):
         image = font(size, bold).render(text, True, color or P["ivory"])
@@ -75,7 +76,7 @@ class RaceInterface:
         pygame.draw.polygon(surface, P["accent"], vertices)
 
     def draw(self, surface, track, snapshot, state, best_lap, elapsed_s, pointer=None):
-        rects = layout(surface.get_size(), state)
+        rects = layout(surface.get_size(), state, self.watch_mode)
         readout = race_readout(snapshot, self.physics, best_lap)
         compact = surface.get_width() < 800 or surface.get_height() < 560
         if state != "MENU":
@@ -111,7 +112,7 @@ class RaceInterface:
                   "ATTEMPT_FINISHED": "Lap complete"}
         self._text(surface, titles[state], (panel.x + 20, panel.y + 16),
                    32 if compact else 46, P["accent"], True)
-        messages = {"MENU": ["One car. One clean lap."], "PAUSED": ["Your lap is on hold."],
+        messages = {"MENU": [f"{track.name} · {track.length_m:.0f} m"], "PAUSED": ["Your lap is on hold."],
                     "ATTEMPT_FAILED": ["Keep the whole car inside", "the white road edges."]}
         if state == "ATTEMPT_FINISHED":
             self._text(surface, readout.time, (panel.x + 20, panel.y + 66), 32, bold=True)
@@ -125,13 +126,15 @@ class RaceInterface:
             controls = [f"{ '/'.join(bindings['accelerate']).upper()} accelerate · "
                         f"{ '/'.join(bindings['brake']).upper()} brake",
                         f"{bindings['left'][0].upper()} / {bindings['right'][0].upper()} steer · "
-                        f"{bindings['brake_override'][0].upper()} brake"]
+                        f"{bindings['brake_override'][0].upper()} brake · C choose track"]
             for index, text in enumerate(controls):
                 self._text(surface, text, (panel.x + 20, panel.y + 105 + index * 23), 14, P["secondary"])
-        choices = {"MENU": [("reset", "Start driving  [Enter]"), ("quit", "Quit  [Q]")],
+        choices = {"MENU": [("reset", "Drive  [Enter]"), ("watch", "Watch AI"), ("quit", "Quit  [Q]")],
                    "PAUSED": [("resume", "Resume  [Enter]"), ("reset", "Restart"), ("menu", "Menu")],
                    "ATTEMPT_FAILED": [("reset", "Restart"), ("menu", "Menu")],
                    "ATTEMPT_FINISHED": [("reset", "Restart"), ("menu", "Menu")]}[state]
+        if self.watch_mode and state == "MENU":
+            choices = [("reset", "Watch AI  [Enter]"), ("quit", "Quit  [Q]")]
         actions = {}
         for index, (action, label) in enumerate(choices):
             rect = rects[action]

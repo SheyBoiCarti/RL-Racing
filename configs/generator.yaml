@@ -1,0 +1,18 @@
+version: generator-v1
+control_points: 16
+base_radius_m: 90.0
+radial_variation: 0.18
+angular_jitter_fraction: 0.20
+width_m: 12.0
+resample_spacing_m: 4.0
+length_min_m: 400.0
+length_max_m: 800.0
+max_abs_curvature_per_m: 0.10
+max_heading_change_rad: 0.35
+min_road_clearance_m: 2.0
+checkpoint_spacing_target_m: 60.0
+max_attempts: 100
+seed_pools:
+  train: [10000, 60]
+  validation: [20000, 15]
+  test: [30000, 25]

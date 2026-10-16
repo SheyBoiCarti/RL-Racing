@@ -14,7 +14,7 @@ racing-play = "racing.render.app:main"
 
 [project.optional-dependencies]
 dev = ["pytest", "ruff"]
-rl = ["gymnasium>=1.2,<2", "stable-baselines3>=2.7,<3"]
+rl = ["gymnasium==1.4.0", "stable-baselines3==2.9.0", "tensorboard==2.21.0"]
 analytics = []
 
 [tool.setuptools.packages.find]

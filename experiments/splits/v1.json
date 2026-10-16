@@ -1,0 +1,1030 @@
+{
+  "schema_version": "split-v1",
+  "fixture_only": false,
+  "generator_version": "generator-v1",
+  "generator_config": {
+    "version": "generator-v1",
+    "control_points": 16,
+    "base_radius_m": 90.0,
+    "radial_variation": 0.18,
+    "angular_jitter_fraction": 0.2,
+    "width_m": 12.0,
+    "resample_spacing_m": 4.0,
+    "length_min_m": 400.0,
+    "length_max_m": 800.0,
+    "max_abs_curvature_per_m": 0.1,
+    "max_heading_change_rad": 0.35,
+    "min_road_clearance_m": 2.0,
+    "checkpoint_spacing_target_m": 60.0,
+    "max_attempts": 100
+  },
+  "generator_config_hash": "91aa6945ffbf4c9e668a7c955fbc2aa8afeab591c3a0800737b9c7d16a2c6e90",
+  "counts": {
+    "train": 60,
+    "validation": 15,
+    "test": 25
+  },
+  "entries": [
+    {
+      "track_id": "train_000",
+      "split": "train",
+      "seed": 10000,
+      "attempt": 4,
+      "path": "assets/tracks/generated/train_000.json",
+      "geometry_hash": "fa485fb6aeb1477796821dc7d73a760a9b0b9e934e824afe39878effdc12a1e7",
+      "length_m": 591.9762264222759,
+      "max_curvature": 0.07717605884922042
+    },
+    {
+      "track_id": "train_001",
+      "split": "train",
+      "seed": 10001,
+      "attempt": 6,
+      "path": "assets/tracks/generated/train_001.json",
+      "geometry_hash": "16fffdc6e13a192095b872381df38d35842d55b46a583e4d694c63b781fde7ce",
+      "length_m": 584.0095546388334,
+      "max_curvature": 0.06290126395507971
+    },
+    {
+      "track_id": "train_002",
+      "split": "train",
+      "seed": 10002,
+      "attempt": 2,
+      "path": "assets/tracks/generated/train_002.json",
+      "geometry_hash": "6a74cf682ad0ca758c1d0391ad54166e0e11f8a3ff497d19b49f63b2c90cc0d9",
+      "length_m": 611.9312730199501,
+      "max_curvature": 0.06385279749804232
+    },
+    {
+      "track_id": "train_003",
+      "split": "train",
+      "seed": 10003,
+      "attempt": 1,
+      "path": "assets/tracks/generated/train_003.json",
+      "geometry_hash": "9de21c40d81b5002326ca4f758be53fdafb5630616eb294b035e147e722d5d01",
+      "length_m": 590.4829891225448,
+      "max_curvature": 0.05595910318049394
+    },
+    {
+      "track_id": "train_004",
+      "split": "train",
+      "seed": 10004,
+      "attempt": 0,
+      "path": "assets/tracks/generated/train_004.json",
+      "geometry_hash": "23cc9d9d21d27099a31a485de4936b5d565deccfdee196892701c132a04b2056",
+      "length_m": 604.7578555508469,
+      "max_curvature": 0.0747631140613079
+    },
+    {
+      "track_id": "train_005",
+      "split": "train",
+      "seed": 10005,
+      "attempt": 3,
+      "path": "assets/tracks/generated/train_005.json",
+      "geometry_hash": "c3aa8c8d39c765f3b2b6e98c7acb81b907c4598331675c3045a0070c45c65cfb",
+      "length_m": 611.2011215966991,
+      "max_curvature": 0.07921241000326439
+    },
+    {
+      "track_id": "train_006",
+      "split": "train",
+      "seed": 10006,
+      "attempt": 0,
+      "path": "assets/tracks/generated/train_006.json",
+      "geometry_hash": "49f015537d5363057607d5f377e9d806a1b7ea2b0fcd32e4348d7b5319aff098",
+      "length_m": 594.1630669872408,
+      "max_curvature": 0.06289688336293749
+    },
+    {
+      "track_id": "train_007",
+      "split": "train",
+      "seed": 10007,
+      "attempt": 4,
+      "path": "assets/tracks/generated/train_007.json",
+      "geometry_hash": "9fd2087055a832ef11bbf29d3cb02128675aab7caee7901629d1195390dec771",
+      "length_m": 632.6998528934903,
+      "max_curvature": 0.06630094217564922
+    },
+    {
+      "track_id": "train_008",
+      "split": "train",
+      "seed": 10008,
+      "attempt": 0,
+      "path": "assets/tracks/generated/train_008.json",
+      "geometry_hash": "638eddbc4ef04fc3df9babc7da570e578a4f08221d95e51e2aeb49006c12844d",
+      "length_m": 589.4787361716637,
+      "max_curvature": 0.0640217358252822
+    },
+    {
+      "track_id": "train_009",
+      "split": "train",
+      "seed": 10009,
+      "attempt": 1,
+      "path": "assets/tracks/generated/train_009.json",
+      "geometry_hash": "da9ff1bb2fe843467f9642cb83f2a207eda9a30992755408f5a356a683375f19",
+      "length_m": 582.4557193804604,
+      "max_curvature": 0.07176546886895745
+    },
+    {
+      "track_id": "train_010",
+      "split": "train",
+      "seed": 10010,
+      "attempt": 0,
+      "path": "assets/tracks/generated/train_010.json",
+      "geometry_hash": "713c88957c96559ccaba0adda07baf0b6dcec76bea30342416659e54e7067efa",
+      "length_m": 594.0340421574194,
+      "max_curvature": 0.06761455896988726
+    },
+    {
+      "track_id": "train_011",
+      "split": "train",
+      "seed": 10011,
+      "attempt": 2,
+      "path": "assets/tracks/generated/train_011.json",
+      "geometry_hash": "fdea9965122dcac0252612c92de460360e65473ed69423fbd5bdd335b87b97d0",
+      "length_m": 610.5605981134397,
+      "max_curvature": 0.06286920605270035
+    },
+    {
+      "track_id": "train_012",
+      "split": "train",
+      "seed": 10012,
+      "attempt": 2,
+      "path": "assets/tracks/generated/train_012.json",
+      "geometry_hash": "7d8b995eec1bbeaa919ae26806eec60e7260fa62ee4fe1563be79b605002b4c5",
+      "length_m": 603.6621648825869,
+      "max_curvature": 0.06237582228852603
+    },
+    {
+      "track_id": "train_013",
+      "split": "train",
+      "seed": 10013,
+      "attempt": 0,
+      "path": "assets/tracks/generated/train_013.json",
+      "geometry_hash": "8e137a831d5f2440d247ed351e6bab9a46a255347e1db8d349365db14da07bbb",
+      "length_m": 605.0744208622012,
+      "max_curvature": 0.0718657275272145
+    },
+    {
+      "track_id": "train_014",
+      "split": "train",
+      "seed": 10014,
+      "attempt": 0,
+      "path": "assets/tracks/generated/train_014.json",
+      "geometry_hash": "ef0a3a34d155bee3000aad165a5224075c2ad92cd0d138c1552f1062f8af5c14",
+      "length_m": 607.8470786913031,
+      "max_curvature": 0.08193237905414252
+    },
+    {
+      "track_id": "train_015",
+      "split": "train",
+      "seed": 10015,
+      "attempt": 5,
+      "path": "assets/tracks/generated/train_015.json",
+      "geometry_hash": "32273e00b45db2f15ccb7815cbf7a3a02df2b20cb5a6ad53518c9fff96cdc317",
+      "length_m": 611.114855664385,
+      "max_curvature": 0.08014448736507687
+    },
+    {
+      "track_id": "train_016",
+      "split": "train",
+      "seed": 10016,
+      "attempt": 11,
+      "path": "assets/tracks/generated/train_016.json",
+      "geometry_hash": "26143a1ba52e21dbb82bf85d5dc163fc09bdbfc9e0f284613ed237fa267a10bb",
+      "length_m": 573.3189620316145,
+      "max_curvature": 0.07112011275941342
+    },
+    {
+      "track_id": "train_017",
+      "split": "train",
+      "seed": 10017,
+      "attempt": 1,
+      "path": "assets/tracks/generated/train_017.json",
+      "geometry_hash": "21c1a4dfaa979ff6ad23934f41210d3ea319cb326edb2f7ea0d42c42e3f2d8a5",
+      "length_m": 582.07749714479,
+      "max_curvature": 0.0837131556488474
+    },
+    {
+      "track_id": "train_018",
+      "split": "train",
+      "seed": 10018,
+      "attempt": 0,
+      "path": "assets/tracks/generated/train_018.json",
+      "geometry_hash": "704251d561c19146086372fba4b28a45b3e3d226bd915fcea07bc256f4d53c65",
+      "length_m": 572.2171105413036,
+      "max_curvature": 0.08425216213472525
+    },
+    {
+      "track_id": "train_019",
+      "split": "train",
+      "seed": 10019,
+      "attempt": 3,
+      "path": "assets/tracks/generated/train_019.json",
+      "geometry_hash": "97b08aa1acd96a21858e0279216a0393016333131bdb56a4d16f813778052007",
+      "length_m": 598.8031670070259,
+      "max_curvature": 0.0835621722279787
+    },
+    {
+      "track_id": "train_020",
+      "split": "train",
+      "seed": 10020,
+      "attempt": 8,
+      "path": "assets/tracks/generated/train_020.json",
+      "geometry_hash": "07f4ae3f70d44e09a13afe725c77506579017bbf35b8f485219893741013c735",
+      "length_m": 617.2746367043694,
+      "max_curvature": 0.06469256637587614
+    },
+    {
+      "track_id": "train_021",
+      "split": "train",
+      "seed": 10021,
+      "attempt": 6,
+      "path": "assets/tracks/generated/train_021.json",
+      "geometry_hash": "8f0306a70c5ab90372f90c4a425c5b77c32b30517866780a08f296de8881a404",
+      "length_m": 602.4951653924347,
+      "max_curvature": 0.07999519822513676
+    },
+    {
+      "track_id": "train_022",
+      "split": "train",
+      "seed": 10022,
+      "attempt": 0,
+      "path": "assets/tracks/generated/train_022.json",
+      "geometry_hash": "eac9b85166cb598207dedf06a937ca0d3b23b05973456e46e48369d55d5f4758",
+      "length_m": 623.3253935356403,
+      "max_curvature": 0.07264287877446339
+    },
+    {
+      "track_id": "train_023",
+      "split": "train",
+      "seed": 10023,
+      "attempt": 0,
+      "path": "assets/tracks/generated/train_023.json",
+      "geometry_hash": "755fb5df06c9d22125e5128f842e11ba3fdeeb4f14e152f05aee36e072b50efe",
+      "length_m": 581.355586526757,
+      "max_curvature": 0.08369489029695774
+    },
+    {
+      "track_id": "train_024",
+      "split": "train",
+      "seed": 10024,
+      "attempt": 2,
+      "path": "assets/tracks/generated/train_024.json",
+      "geometry_hash": "7937876cbb4794a845bfc02fe5b863f326dd6175a9a7d33585cb30670f17f32f",
+      "length_m": 572.1972789257068,
+      "max_curvature": 0.06906166379485451
+    },
+    {
+      "track_id": "train_025",
+      "split": "train",
+      "seed": 10025,
+      "attempt": 1,
+      "path": "assets/tracks/generated/train_025.json",
+      "geometry_hash": "05a8063248971de995dd9656f6f6938721194955cd9ab5aaca342bfcf6381af8",
+      "length_m": 635.4171529206819,
+      "max_curvature": 0.08663275744282448
+    },
+    {
+      "track_id": "train_026",
+      "split": "train",
+      "seed": 10026,
+      "attempt": 2,
+      "path": "assets/tracks/generated/train_026.json",
+      "geometry_hash": "0adf7c08d85f77516610ac9f9664407cd21f01a7f634a50143d76dfe4717a650",
+      "length_m": 604.4499879369407,
+      "max_curvature": 0.0816784243896625
+    },
+    {
+      "track_id": "train_027",
+      "split": "train",
+      "seed": 10027,
+      "attempt": 2,
+      "path": "assets/tracks/generated/train_027.json",
+      "geometry_hash": "2cdcdd73683506f5fae665fdafb02e91e07c156fc7a315e7b8505009abd0fb06",
+      "length_m": 592.5667120029768,
+      "max_curvature": 0.08267707652732814
+    },
+    {
+      "track_id": "train_028",
+      "split": "train",
+      "seed": 10028,
+      "attempt": 7,
+      "path": "assets/tracks/generated/train_028.json",
+      "geometry_hash": "eb5a8444c6274e94e4a377adc09388120d7b8167f0286f498f6128bbb7b28c36",
+      "length_m": 592.4039874375967,
+      "max_curvature": 0.07429592952553064
+    },
+    {
+      "track_id": "train_029",
+      "split": "train",
+      "seed": 10029,
+      "attempt": 2,
+      "path": "assets/tracks/generated/train_029.json",
+      "geometry_hash": "a28f3c98bffe265388d8779c142cf4a4c7443f12c4aad29dd80cf5c228c64a0d",
+      "length_m": 611.267973102444,
+      "max_curvature": 0.062431991097781074
+    },
+    {
+      "track_id": "train_030",
+      "split": "train",
+      "seed": 10030,
+      "attempt": 1,
+      "path": "assets/tracks/generated/train_030.json",
+      "geometry_hash": "be0c4e287f5bd14976eafa6cfdbc878276685d77ea061893225cf52df7c48227",
+      "length_m": 622.013512448731,
+      "max_curvature": 0.07853851085901907
+    },
+    {
+      "track_id": "train_031",
+      "split": "train",
+      "seed": 10031,
+      "attempt": 0,
+      "path": "assets/tracks/generated/train_031.json",
+      "geometry_hash": "e00b8c579ceb03078819262845e298f6546a7f5d497ebc66509b6a7d855b1676",
+      "length_m": 596.7513347822444,
+      "max_curvature": 0.08750505992616471
+    },
+    {
+      "track_id": "train_032",
+      "split": "train",
+      "seed": 10032,
+      "attempt": 4,
+      "path": "assets/tracks/generated/train_032.json",
+      "geometry_hash": "32cfd8a16bcad08541fde8560a02f728b0f1eb8b2e283a30407b44a1782b5bbc",
+      "length_m": 572.6398577269156,
+      "max_curvature": 0.045345967000981445
+    },
+    {
+      "track_id": "train_033",
+      "split": "train",
+      "seed": 10033,
+      "attempt": 1,
+      "path": "assets/tracks/generated/train_033.json",
+      "geometry_hash": "5e0f955dc07ae7b95ec90ca174070cbf82863d0c4157830e58e29227e114dda6",
+      "length_m": 603.3162594475234,
+      "max_curvature": 0.06809456334649724
+    },
+    {
+      "track_id": "train_034",
+      "split": "train",
+      "seed": 10034,
+      "attempt": 4,
+      "path": "assets/tracks/generated/train_034.json",
+      "geometry_hash": "0edfe36c34f222bf2af7aac204a3d85d6d4eefb927d01831f34a72be6ef2a5b7",
+      "length_m": 589.0865681532281,
+      "max_curvature": 0.07472282321052827
+    },
+    {
+      "track_id": "train_035",
+      "split": "train",
+      "seed": 10035,
+      "attempt": 1,
+      "path": "assets/tracks/generated/train_035.json",
+      "geometry_hash": "ecd7dde1420933cc47b0f647a9a0e092f8546bb804599977081e593072433f53",
+      "length_m": 614.6837667703732,
+      "max_curvature": 0.08573136236565146
+    },
+    {
+      "track_id": "train_036",
+      "split": "train",
+      "seed": 10036,
+      "attempt": 4,
+      "path": "assets/tracks/generated/train_036.json",
+      "geometry_hash": "0027f9c5741b67f4e19107b8071c1deda066b42a2d2e87f9c1f9ce3875378d7c",
+      "length_m": 623.2765008136702,
+      "max_curvature": 0.07369764577619892
+    },
+    {
+      "track_id": "train_037",
+      "split": "train",
+      "seed": 10037,
+      "attempt": 3,
+      "path": "assets/tracks/generated/train_037.json",
+      "geometry_hash": "a9921661de2c9cb3261e4f31587abec1ae5224288f004f2a2fb4d371e0973eee",
+      "length_m": 550.6393502752259,
+      "max_curvature": 0.05540738501499798
+    },
+    {
+      "track_id": "train_038",
+      "split": "train",
+      "seed": 10038,
+      "attempt": 0,
+      "path": "assets/tracks/generated/train_038.json",
+      "geometry_hash": "d38ce53dbde2574939a1d1c132fc6d0e37d098823e26774686180818725effe3",
+      "length_m": 610.3096187841109,
+      "max_curvature": 0.06115742295237196
+    },
+    {
+      "track_id": "train_039",
+      "split": "train",
+      "seed": 10039,
+      "attempt": 5,
+      "path": "assets/tracks/generated/train_039.json",
+      "geometry_hash": "05415ac300901744266c2fdbcacd04fc166880337be0d84f79762246516bdfe2",
+      "length_m": 611.8375511869908,
+      "max_curvature": 0.0879620483049339
+    },
+    {
+      "track_id": "train_040",
+      "split": "train",
+      "seed": 10040,
+      "attempt": 1,
+      "path": "assets/tracks/generated/train_040.json",
+      "geometry_hash": "f9f6f3bba6ec92aff16e27d31eb94727a3f59d7e1f1807c3124e673494469312",
+      "length_m": 573.7901664498072,
+      "max_curvature": 0.0829697524059051
+    },
+    {
+      "track_id": "train_041",
+      "split": "train",
+      "seed": 10041,
+      "attempt": 1,
+      "path": "assets/tracks/generated/train_041.json",
+      "geometry_hash": "ddf7134887aa033db15c054bdda25a48de872eca5d614bd60b45c3c8bedbf98c",
+      "length_m": 579.1942176473965,
+      "max_curvature": 0.06879395532455795
+    },
+    {
+      "track_id": "train_042",
+      "split": "train",
+      "seed": 10042,
+      "attempt": 6,
+      "path": "assets/tracks/generated/train_042.json",
+      "geometry_hash": "762effa3e2a98db9de8afdf4eea35814e1bc989513995a4e0cf0e65c89ccda8a",
+      "length_m": 591.9781567870327,
+      "max_curvature": 0.0778176636797988
+    },
+    {
+      "track_id": "train_043",
+      "split": "train",
+      "seed": 10043,
+      "attempt": 2,
+      "path": "assets/tracks/generated/train_043.json",
+      "geometry_hash": "ea188081dea53edbc39d1093817a151a9f5570fdf4fe58f0db3894bf9db4c010",
+      "length_m": 617.7970083458458,
+      "max_curvature": 0.059303265774465395
+    },
+    {
+      "track_id": "train_044",
+      "split": "train",
+      "seed": 10044,
+      "attempt": 7,
+      "path": "assets/tracks/generated/train_044.json",
+      "geometry_hash": "736402eea53d4b4bd810237e6bf122f857da6c7db1e4c2ef47f2ce980811e086",
+      "length_m": 596.0481878903773,
+      "max_curvature": 0.06998329595336451
+    },
+    {
+      "track_id": "train_045",
+      "split": "train",
+      "seed": 10045,
+      "attempt": 0,
+      "path": "assets/tracks/generated/train_045.json",
+      "geometry_hash": "14cbc20ef45bae7522e95589d6ae6ddd6691baa65ef76a332c9763435e5f1b05",
+      "length_m": 612.9337564601896,
+      "max_curvature": 0.06862883555359474
+    },
+    {
+      "track_id": "train_046",
+      "split": "train",
+      "seed": 10046,
+      "attempt": 2,
+      "path": "assets/tracks/generated/train_046.json",
+      "geometry_hash": "ef51d6578f1b52fa2cebc5614429645fa5092bd01ceeba508c765e9f1726334c",
+      "length_m": 626.2517447340896,
+      "max_curvature": 0.07640044055748753
+    },
+    {
+      "track_id": "train_047",
+      "split": "train",
+      "seed": 10047,
+      "attempt": 2,
+      "path": "assets/tracks/generated/train_047.json",
+      "geometry_hash": "ed01b2bbfe2a3ff02f6b9e5e21839c0a71366fcfe79b74bf776e536ea60c6617",
+      "length_m": 624.9333704220413,
+      "max_curvature": 0.08236153808453801
+    },
+    {
+      "track_id": "train_048",
+      "split": "train",
+      "seed": 10048,
+      "attempt": 0,
+      "path": "assets/tracks/generated/train_048.json",
+      "geometry_hash": "07b37ed8fabfb4359b3d90d16970d45108b41108aec959c93c756fd42815dcb2",
+      "length_m": 590.7394134312826,
+      "max_curvature": 0.07033394604165087
+    },
+    {
+      "track_id": "train_049",
+      "split": "train",
+      "seed": 10049,
+      "attempt": 7,
+      "path": "assets/tracks/generated/train_049.json",
+      "geometry_hash": "64b7c0ae54c70779347f65c915fb1cfa1befce914cd41e30f46fb67d059add2a",
+      "length_m": 595.6882014713035,
+      "max_curvature": 0.08729976057355686
+    },
+    {
+      "track_id": "train_050",
+      "split": "train",
+      "seed": 10050,
+      "attempt": 13,
+      "path": "assets/tracks/generated/train_050.json",
+      "geometry_hash": "c2837b1149f6ccdc2cbdc64fb77be5e3f2d235964baa3e6b835762ad5d9f5369",
+      "length_m": 559.5876864683446,
+      "max_curvature": 0.057251576635666955
+    },
+    {
+      "track_id": "train_051",
+      "split": "train",
+      "seed": 10051,
+      "attempt": 2,
+      "path": "assets/tracks/generated/train_051.json",
+      "geometry_hash": "ddf6ae8134ec46eaa6dfc5e9a3fe61774dca10cb02398b2f9ba481e281fd9073",
+      "length_m": 593.5259221959884,
+      "max_curvature": 0.0846654091189574
+    },
+    {
+      "track_id": "train_052",
+      "split": "train",
+      "seed": 10052,
+      "attempt": 0,
+      "path": "assets/tracks/generated/train_052.json",
+      "geometry_hash": "65fe621896a5f7f166bf60be69954c47c74ee2043153d035edcdbe35e35ecf6e",
+      "length_m": 590.7322845927929,
+      "max_curvature": 0.08403177201973264
+    },
+    {
+      "track_id": "train_053",
+      "split": "train",
+      "seed": 10053,
+      "attempt": 4,
+      "path": "assets/tracks/generated/train_053.json",
+      "geometry_hash": "34f3ed5356f30fe45ecfe9595917472a89e27f096a4ea83fcb6361b08954301f",
+      "length_m": 617.0512371245422,
+      "max_curvature": 0.07471423175286858
+    },
+    {
+      "track_id": "train_054",
+      "split": "train",
+      "seed": 10054,
+      "attempt": 2,
+      "path": "assets/tracks/generated/train_054.json",
+      "geometry_hash": "2e60efe17ca17f2849336315f7c2d7d23facc2353151cb6d285e2643693da28a",
+      "length_m": 616.3558235448863,
+      "max_curvature": 0.07481807784113553
+    },
+    {
+      "track_id": "train_055",
+      "split": "train",
+      "seed": 10055,
+      "attempt": 7,
+      "path": "assets/tracks/generated/train_055.json",
+      "geometry_hash": "cd7743f27d8d58122dbf9aed15798308bdb49744fa2f9276a7a72f84b54ed245",
+      "length_m": 613.3671737390205,
+      "max_curvature": 0.05668640201035281
+    },
+    {
+      "track_id": "train_056",
+      "split": "train",
+      "seed": 10056,
+      "attempt": 2,
+      "path": "assets/tracks/generated/train_056.json",
+      "geometry_hash": "48572415515d16556ad37466f562ad6a0fd0713c4d5782c63a03279d7eab7ec7",
+      "length_m": 615.9296368280899,
+      "max_curvature": 0.07321936273632643
+    },
+    {
+      "track_id": "train_057",
+      "split": "train",
+      "seed": 10057,
+      "attempt": 5,
+      "path": "assets/tracks/generated/train_057.json",
+      "geometry_hash": "7d204e44054251a1b6e2729fc2dea44169735833facab68e683811f4fe0e8c91",
+      "length_m": 611.4758396915468,
+      "max_curvature": 0.08539320363526723
+    },
+    {
+      "track_id": "train_058",
+      "split": "train",
+      "seed": 10058,
+      "attempt": 0,
+      "path": "assets/tracks/generated/train_058.json",
+      "geometry_hash": "fb8390af38abbedadbe64323e07d2565295374e3e17545de32582f9188ae75e2",
+      "length_m": 589.0323759644764,
+      "max_curvature": 0.058041801624525116
+    },
+    {
+      "track_id": "train_059",
+      "split": "train",
+      "seed": 10059,
+      "attempt": 2,
+      "path": "assets/tracks/generated/train_059.json",
+      "geometry_hash": "5701ca0aeb84358d01b1a559da5f0172c2faf8622c6aa67c78d37949545bbe4f",
+      "length_m": 598.2862703759408,
+      "max_curvature": 0.07821981937050325
+    },
+    {
+      "track_id": "validation_000",
+      "split": "validation",
+      "seed": 20000,
+      "attempt": 2,
+      "path": "assets/tracks/generated/validation_000.json",
+      "geometry_hash": "4bfc072cc9e7affc8a5da2256603cb2ea99be4e761ccaa5121dc40525cfe9738",
+      "length_m": 582.4730154798087,
+      "max_curvature": 0.06379374064329753
+    },
+    {
+      "track_id": "validation_001",
+      "split": "validation",
+      "seed": 20001,
+      "attempt": 6,
+      "path": "assets/tracks/generated/validation_001.json",
+      "geometry_hash": "c622f1426e56bb8527fd3d12cdc9c62846167462d9dd6c9340e46e1fe676c173",
+      "length_m": 591.5143128611127,
+      "max_curvature": 0.08616596223630643
+    },
+    {
+      "track_id": "validation_002",
+      "split": "validation",
+      "seed": 20002,
+      "attempt": 0,
+      "path": "assets/tracks/generated/validation_002.json",
+      "geometry_hash": "3b2040a84340b70ea6187dc110367b0d331eb2ef49e5f53408b61f9090ce7ffe",
+      "length_m": 567.6262170223467,
+      "max_curvature": 0.07451049662298077
+    },
+    {
+      "track_id": "validation_003",
+      "split": "validation",
+      "seed": 20003,
+      "attempt": 1,
+      "path": "assets/tracks/generated/validation_003.json",
+      "geometry_hash": "053056e95768601da0ddea18fc31d73ae1b2186e0d421d825e24aad3a15d710b",
+      "length_m": 612.2422741430976,
+      "max_curvature": 0.08303606208045365
+    },
+    {
+      "track_id": "validation_004",
+      "split": "validation",
+      "seed": 20004,
+      "attempt": 2,
+      "path": "assets/tracks/generated/validation_004.json",
+      "geometry_hash": "49f6a88f22a5a9003723c59b521450d2d0311fdc83ebcce9529ef97b8ad4e120",
+      "length_m": 609.8819026081064,
+      "max_curvature": 0.08450592551498684
+    },
+    {
+      "track_id": "validation_005",
+      "split": "validation",
+      "seed": 20005,
+      "attempt": 0,
+      "path": "assets/tracks/generated/validation_005.json",
+      "geometry_hash": "662f4fcc7ff9603ff0e6826c6527bffe2159c46f9ead5dd6dcc0f91e835885df",
+      "length_m": 583.383104900216,
+      "max_curvature": 0.07138556700646145
+    },
+    {
+      "track_id": "validation_006",
+      "split": "validation",
+      "seed": 20006,
+      "attempt": 8,
+      "path": "assets/tracks/generated/validation_006.json",
+      "geometry_hash": "7090ca3b1884c89590de0cad63bcb5ca758838bd729dea2faaea918fd406c32c",
+      "length_m": 586.1784828978643,
+      "max_curvature": 0.060541074273567405
+    },
+    {
+      "track_id": "validation_007",
+      "split": "validation",
+      "seed": 20007,
+      "attempt": 3,
+      "path": "assets/tracks/generated/validation_007.json",
+      "geometry_hash": "644d04f1ab050ad3bb978b60248e18b67a535e42c5c6803a7e80ba1185a21bf5",
+      "length_m": 582.076921069091,
+      "max_curvature": 0.06507519732643273
+    },
+    {
+      "track_id": "validation_008",
+      "split": "validation",
+      "seed": 20008,
+      "attempt": 0,
+      "path": "assets/tracks/generated/validation_008.json",
+      "geometry_hash": "55c3c869f0eae7152568b68847fc1183376399fabe068ebf9d98b385c7c5dda1",
+      "length_m": 594.9590345122483,
+      "max_curvature": 0.05660200047492507
+    },
+    {
+      "track_id": "validation_009",
+      "split": "validation",
+      "seed": 20009,
+      "attempt": 1,
+      "path": "assets/tracks/generated/validation_009.json",
+      "geometry_hash": "0d45ce8f9189f1bd9ed701af702eda8785c19259fd3490a7754aa4ecbf9cd9ff",
+      "length_m": 587.0467444028118,
+      "max_curvature": 0.08061277520550791
+    },
+    {
+      "track_id": "validation_010",
+      "split": "validation",
+      "seed": 20010,
+      "attempt": 10,
+      "path": "assets/tracks/generated/validation_010.json",
+      "geometry_hash": "9aba3340ef1c35d6f957d077a307e78b10b081f24025f28369a676527ec6770c",
+      "length_m": 582.2639855337279,
+      "max_curvature": 0.06255691032417121
+    },
+    {
+      "track_id": "validation_011",
+      "split": "validation",
+      "seed": 20011,
+      "attempt": 7,
+      "path": "assets/tracks/generated/validation_011.json",
+      "geometry_hash": "bc0cf808605963cb9a1dae525a4afdf3c4e1caecec636a59f16a36cac6362c9a",
+      "length_m": 605.1467283599069,
+      "max_curvature": 0.07390398336107741
+    },
+    {
+      "track_id": "validation_012",
+      "split": "validation",
+      "seed": 20012,
+      "attempt": 0,
+      "path": "assets/tracks/generated/validation_012.json",
+      "geometry_hash": "18b33470b775cd6e94954693f1bda56e74449ba7cb8249af605f390247e27512",
+      "length_m": 593.6849109184001,
+      "max_curvature": 0.051379283786063164
+    },
+    {
+      "track_id": "validation_013",
+      "split": "validation",
+      "seed": 20013,
+      "attempt": 1,
+      "path": "assets/tracks/generated/validation_013.json",
+      "geometry_hash": "eb3a7eb9b4a5f8d9e687710bb87e89b163fe1597892e09a63bff34a49c6a9b17",
+      "length_m": 601.7676833086945,
+      "max_curvature": 0.08217939530140352
+    },
+    {
+      "track_id": "validation_014",
+      "split": "validation",
+      "seed": 20014,
+      "attempt": 0,
+      "path": "assets/tracks/generated/validation_014.json",
+      "geometry_hash": "4001d9e1b830c5b7fbd21b0bd176da5f3e5e2db1ae82bbe5b0ad565794d200bd",
+      "length_m": 624.9271163483688,
+      "max_curvature": 0.06414708935825279
+    },
+    {
+      "track_id": "test_000",
+      "split": "test",
+      "seed": 30000,
+      "attempt": 3,
+      "path": "assets/tracks/generated/test_000.json",
+      "geometry_hash": "802c6948e98287956ff30833546e02aa836ac30e19a883f25ab47cb27339c366",
+      "length_m": 607.4614928313688,
+      "max_curvature": 0.08643186432205188
+    },
+    {
+      "track_id": "test_001",
+      "split": "test",
+      "seed": 30001,
+      "attempt": 6,
+      "path": "assets/tracks/generated/test_001.json",
+      "geometry_hash": "13cd0213f1b64a427c13cf5be163be66e573aa49a68792c6b576c1962c081bba",
+      "length_m": 614.6554810385394,
+      "max_curvature": 0.08445096198674973
+    },
+    {
+      "track_id": "test_002",
+      "split": "test",
+      "seed": 30002,
+      "attempt": 0,
+      "path": "assets/tracks/generated/test_002.json",
+      "geometry_hash": "e164625fb42e3fb9159302afec34868a3bc22df520787318cf012d9bdb51826c",
+      "length_m": 596.4840753725193,
+      "max_curvature": 0.08200167068371093
+    },
+    {
+      "track_id": "test_003",
+      "split": "test",
+      "seed": 30003,
+      "attempt": 14,
+      "path": "assets/tracks/generated/test_003.json",
+      "geometry_hash": "756cae948a38e20edcd102b6eba6abcc8f8c3780b25a9ed8b04b3b364ea3620f",
+      "length_m": 599.0107078822531,
+      "max_curvature": 0.07772950773977301
+    },
+    {
+      "track_id": "test_004",
+      "split": "test",
+      "seed": 30004,
+      "attempt": 0,
+      "path": "assets/tracks/generated/test_004.json",
+      "geometry_hash": "50b9376426ed6efcbdd86695c3efe5fd8f6744fb4a2b48ff3d4cb768b4492168",
+      "length_m": 609.822144862394,
+      "max_curvature": 0.068133833007327
+    },
+    {
+      "track_id": "test_005",
+      "split": "test",
+      "seed": 30005,
+      "attempt": 4,
+      "path": "assets/tracks/generated/test_005.json",
+      "geometry_hash": "c3ca4229b403d31f1fd341affc2f3741dd43ff5adf6dc180aab38d4d52f333db",
+      "length_m": 625.9400586690656,
+      "max_curvature": 0.08362935234748642
+    },
+    {
+      "track_id": "test_006",
+      "split": "test",
+      "seed": 30006,
+      "attempt": 1,
+      "path": "assets/tracks/generated/test_006.json",
+      "geometry_hash": "e2004f9504c1ec85cc41ec29d1ac9437d3d6e873f52165da40d737f9b11a17c4",
+      "length_m": 610.5137166644996,
+      "max_curvature": 0.07319320065602343
+    },
+    {
+      "track_id": "test_007",
+      "split": "test",
+      "seed": 30007,
+      "attempt": 1,
+      "path": "assets/tracks/generated/test_007.json",
+      "geometry_hash": "5f01c4b0f8878a5e9eea918530f2052a968953b92fc682b32312619f9ead3c2e",
+      "length_m": 591.6397572146095,
+      "max_curvature": 0.0834353081918387
+    },
+    {
+      "track_id": "test_008",
+      "split": "test",
+      "seed": 30008,
+      "attempt": 0,
+      "path": "assets/tracks/generated/test_008.json",
+      "geometry_hash": "46c4efddc8ee9122177b3931d2e5640054d4d0538e4578e939acb87782061e70",
+      "length_m": 600.0063858698788,
+      "max_curvature": 0.0853158093233188
+    },
+    {
+      "track_id": "test_009",
+      "split": "test",
+      "seed": 30009,
+      "attempt": 0,
+      "path": "assets/tracks/generated/test_009.json",
+      "geometry_hash": "1ccfce78c0d123fb9b4dd7b503d0b6a5bbc9fb68c96176efeec15d29fb984877",
+      "length_m": 575.5593259690363,
+      "max_curvature": 0.07451458650925699
+    },
+    {
+      "track_id": "test_010",
+      "split": "test",
+      "seed": 30010,
+      "attempt": 0,
+      "path": "assets/tracks/generated/test_010.json",
+      "geometry_hash": "15880adb328095618acfee932661b8f742702fbd0add73ee62706f54234c00d2",
+      "length_m": 630.0859975761496,
+      "max_curvature": 0.08683712887921215
+    },
+    {
+      "track_id": "test_011",
+      "split": "test",
+      "seed": 30011,
+      "attempt": 12,
+      "path": "assets/tracks/generated/test_011.json",
+      "geometry_hash": "10861b71dabb1a2c0a3efe588e8b26b9b3f105540976f327ab331626be9062b9",
+      "length_m": 584.5439097000713,
+      "max_curvature": 0.08276394244218604
+    },
+    {
+      "track_id": "test_012",
+      "split": "test",
+      "seed": 30012,
+      "attempt": 0,
+      "path": "assets/tracks/generated/test_012.json",
+      "geometry_hash": "89bdf58fcb022c11cb65389c6f4fd1fd51bcef101dce64a50532850b0b320bb6",
+      "length_m": 614.6025172047578,
+      "max_curvature": 0.07507170042538484
+    },
+    {
+      "track_id": "test_013",
+      "split": "test",
+      "seed": 30013,
+      "attempt": 0,
+      "path": "assets/tracks/generated/test_013.json",
+      "geometry_hash": "c8476aa9a72c9b1a15fc93b0df67ef59533b6071fe416c99d55967c97d0a6e05",
+      "length_m": 590.1143468698094,
+      "max_curvature": 0.0811179579631269
+    },
+    {
+      "track_id": "test_014",
+      "split": "test",
+      "seed": 30014,
+      "attempt": 0,
+      "path": "assets/tracks/generated/test_014.json",
+      "geometry_hash": "2b68501d352b351022be14c876f923c702d06e55bcca44807d14677340fa2dee",
+      "length_m": 607.7114824767199,
+      "max_curvature": 0.06055362252059482
+    },
+    {
+      "track_id": "test_015",
+      "split": "test",
+      "seed": 30015,
+      "attempt": 2,
+      "path": "assets/tracks/generated/test_015.json",
+      "geometry_hash": "b648752432808f5df01415b070e2fe09176fa9386e561e66f80069b83806343b",
+      "length_m": 596.189240724741,
+      "max_curvature": 0.07189533625095887
+    },
+    {
+      "track_id": "test_016",
+      "split": "test",
+      "seed": 30016,
+      "attempt": 2,
+      "path": "assets/tracks/generated/test_016.json",
+      "geometry_hash": "425b06ccf0056dc645015c841e6c63f6a7c5c29dbb04b9d1ee54b5aa71b51525",
+      "length_m": 618.5620027449359,
+      "max_curvature": 0.08673049172792544
+    },
+    {
+      "track_id": "test_017",
+      "split": "test",
+      "seed": 30017,
+      "attempt": 2,
+      "path": "assets/tracks/generated/test_017.json",
+      "geometry_hash": "4d70ead5a0aa313ad2d9137ea3d3d4d31b13244c1c934b75dd41f82e138e773b",
+      "length_m": 623.2404016657008,
+      "max_curvature": 0.07386215380998502
+    },
+    {
+      "track_id": "test_018",
+      "split": "test",
+      "seed": 30018,
+      "attempt": 7,
+      "path": "assets/tracks/generated/test_018.json",
+      "geometry_hash": "f2c5248355f6d94a6f73ff99bc83a8790975cff4519bdcd7c81c25a445e46433",
+      "length_m": 591.4345481899057,
+      "max_curvature": 0.07895718082046986
+    },
+    {
+      "track_id": "test_019",
+      "split": "test",
+      "seed": 30019,
+      "attempt": 8,
+      "path": "assets/tracks/generated/test_019.json",
+      "geometry_hash": "8eef89ef4d17a6f777863b679bce6a1e293e83cd9d0bba7517355e7d7b0de658",
+      "length_m": 584.3270619162164,
+      "max_curvature": 0.06332287876017856
+    },
+    {
+      "track_id": "test_020",
+      "split": "test",
+      "seed": 30020,
+      "attempt": 3,
+      "path": "assets/tracks/generated/test_020.json",
+      "geometry_hash": "b09f7f9973a75f65bfb52be4391e272883c8f74814592a635e3022d3ac1cc487",
+      "length_m": 598.1289356213019,
+      "max_curvature": 0.08675149328006555
+    },
+    {
+      "track_id": "test_021",
+      "split": "test",
+      "seed": 30021,
+      "attempt": 4,
+      "path": "assets/tracks/generated/test_021.json",
+      "geometry_hash": "d10034d435477ed7653211370d81486c0bf04f51f92504b6a52d5feabd335384",
+      "length_m": 586.6581686498689,
+      "max_curvature": 0.08136344130447386
+    },
+    {
+      "track_id": "test_022",
+      "split": "test",
+      "seed": 30022,
+      "attempt": 1,
+      "path": "assets/tracks/generated/test_022.json",
+      "geometry_hash": "dccc1a87e28fc8993cea9b0eea186d3d50130dc7b2be908ba7cfefb0482f4f87",
+      "length_m": 621.6776338701256,
+      "max_curvature": 0.07844953773486066
+    },
+    {
+      "track_id": "test_023",
+      "split": "test",
+      "seed": 30023,
+      "attempt": 4,
+      "path": "assets/tracks/generated/test_023.json",
+      "geometry_hash": "a3e6bd57751ffaae44c676e9ac2a6429381a07ab573051653e0668fa0fee072a",
+      "length_m": 608.164710865485,
+      "max_curvature": 0.07277875680183113
+    },
+    {
+      "track_id": "test_024",
+      "split": "test",
+      "seed": 30024,
+      "attempt": 3,
+      "path": "assets/tracks/generated/test_024.json",
+      "geometry_hash": "f5a4d3386ba937ec7997f8d7dfcc399ed0bf414fdd5270505673276d0d997d1c",
+      "length_m": 592.778765406055,
+      "max_curvature": 0.06679012433644524
+    }
+  ],
+  "manifest_sha256": "945d94b366116bf1764c583cdd7324d272916562e56e325d83a721887e9d37f2"
+}
