@@ -168,11 +168,13 @@ class TrackScene:
                 tile = self._tile(track, camera.scale, tx, ty)
                 surface.blit(tile, tuple(round(v) for v in camera.to_screen(
                     (tx * TILE / camera.scale, ty * TILE / camera.scale))))
-        self.draw_car(surface, snapshot.cars[0].state, camera)
+        for car in snapshot.cars:
+            color = (102, 195, 232) if len(snapshot.cars) > 1 and car.car_id == "ai" else P["accent"]
+            self.draw_car(surface, car.state, camera, color)
         if debug:
             self._debug(surface, track, snapshot, camera)
 
-    def draw_car(self, surface, state, camera):
+    def draw_car(self, surface, state, camera, body_color=None):
         # Vector artwork is clipped by the destination surface. No scale-sized
         # sprites are allocated, even at extreme user-configured zoom levels.
         factor = self.physics.car_radius_m / .8
@@ -192,7 +194,7 @@ class TrackScene:
         for x in (-.48, .38):
             for y in (-.41, .29):
                 box((17, 21, 24), x - .13, y, x + .13, y + .12)
-        polygon(P["accent"], ((-.70, -.27), (-.58, -.34), (.48, -.34),
+        polygon(body_color or P["accent"], ((-.70, -.27), (-.58, -.34), (.48, -.34),
                 (.72, -.21), (.72, .21), (.48, .34), (-.58, .34), (-.70, .27)))
         box((255, 174, 85), -.5, -.25, .52, -.20)
         polygon((35, 56, 66), ((-.36, -.24), (.15, -.24), (.28, -.17),

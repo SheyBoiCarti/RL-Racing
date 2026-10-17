@@ -56,6 +56,7 @@ class Application:
         self.running = True
         self.watch_mode = False
         self.selected_policy = None
+        self.selected_mode = None
         self.chooser = None
         self.choosing_track = False
         self.split_manifest = "experiments/splits/v1.json"
@@ -91,6 +92,9 @@ class Application:
                 self.choosing_track = False
             except (ValueError, OSError) as error:
                 self.chooser.error = f"{self.chooser.selected_id}.json: {error}"
+        elif action == "race" and self.state == AppState.MENU:
+            self.selected_mode = "race"
+            self.running = False
         elif action == "watch" and self.state == AppState.MENU:
             from tkinter import Tk, filedialog
 
@@ -214,7 +218,7 @@ class Application:
                         # Events in one batch may resize or change state before
                         # this click; the last drawn action map can be stale.
                         rects = layout(surface.get_size(), self.state.value, self.watch_mode)
-                        for action in ("reset", "watch", "resume", "menu", "quit"):
+                        for action in ("reset", "watch", "race", "resume", "menu", "quit"):
                             rect = rects.get(action)
                             if rect is None:
                                 continue
@@ -262,15 +266,21 @@ def main(argv=None):
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="Drive the deterministic Phase 1 circuit. Enter starts; Esc pauses."
+        description="Drive, watch a saved policy, race the AI, or play a verified action replay."
     )
     parser.add_argument(
         "--mode",
         default="drive",
-        choices=("drive", "watch"),
-        help="manual driving or a validated saved PPO policy",
+        choices=("drive", "watch", "race", "replay"),
+        help="desktop driving, policy viewing, human versus AI racing, or model-free replay",
     )
-    parser.add_argument("--model", help="Watch mode PPO zip with matching metadata sidecar")
+    parser.add_argument("--model", help="Watch/race PPO zip with matching metadata sidecar")
+    parser.add_argument("--laps", type=int, default=None, help="Race target laps (default 3)")
+    parser.add_argument("--replay-output", help="New race JSONL recording path")
+    parser.add_argument("--replay", help="Self-contained replay JSONL to play")
+    parser.add_argument("--swap-lanes", action="store_true", help="Swap human and AI grid lanes")
+    parser.add_argument("--tolerant-replay", action="store_true", help="Compare replay floats at absolute tolerance 1e-6")
+    parser.add_argument("--model-root", action="append", help="Race menu model search root (repeatable; default runs)")
     parser.add_argument(
         "--track", default="demo", help="track ID under assets/tracks (default: demo)"
     )
@@ -282,12 +292,30 @@ def main(argv=None):
         help="game configuration relative to project root",
     )
     args = parser.parse_args(argv)
+    if args.mode == "replay" and not args.replay:
+        parser.error("--mode replay requires --replay")
+    if args.replay and args.mode != "replay":
+        parser.error("--replay requires --mode replay")
+    if args.tolerant_replay and args.mode != "replay":
+        parser.error("--tolerant-replay requires --mode replay")
+    if (args.laps is not None or args.replay_output or args.swap_lanes or args.model_root) and args.mode != "race":
+        parser.error("--laps/--replay-output/--swap-lanes/--model-root require --mode race")
+    if args.laps is not None and args.laps < 1:
+        parser.error("--laps must be positive")
+    if args.model and args.mode not in ("watch", "race"):
+        parser.error("--model requires --mode watch or race")
     if not args.track or any(
         c not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-"
         for c in args.track
     ):
         parser.error("--track must be a track ID, without path separators")
     try:
+        if args.mode in ("race", "replay"):
+            from racing.render.race import run_from_args
+
+            args.laps = args.laps or 3
+            run_from_args(args)
+            return
         from racing.render.chooser import TrackChooser
 
         if args.mode == "watch" and not args.model:
@@ -315,7 +343,11 @@ def main(argv=None):
         app.split_manifest = args.split_manifest
         app.choosing_track = True
         app.run()
-        if app.selected_policy is not None:
+        if app.selected_mode == "race":
+            from racing.render.race import RaceApplication
+
+            RaceApplication(app.game, app.track).run()
+        elif app.selected_policy is not None:
             from racing.render.watch import WatchApplication
 
             WatchApplication(app.game, app.selected_policy, track=app.track).run()

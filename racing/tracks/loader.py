@@ -1,5 +1,6 @@
 """Validated closed road ring and its shared finite boundary segments."""
 
+import copy
 import math
 
 import numpy as np
@@ -30,6 +31,8 @@ class Track:
             raise ValueError(f"{path}: {error}") from error
 
     def __init__(self, data):
+        # Replay embeds the original validated asset, including its provenance.
+        self.source_payload = copy.deepcopy(data)
         # Geometry-only callers may omit provenance; catalog selection must
         # distinguish those tracks from explicitly classified demo tracks.
         self.split = data.get("split")

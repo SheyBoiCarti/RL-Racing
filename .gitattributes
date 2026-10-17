@@ -1,0 +1,3 @@
+# Keep retained replay byte hashes stable on Windows and Unix checkouts.
+docs/specs/fixtures/model_bytes.fixture text eol=lf
+docs/specs/fixtures/automated-race.jsonl text eol=lf

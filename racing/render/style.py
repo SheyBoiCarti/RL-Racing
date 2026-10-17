@@ -1,5 +1,6 @@
 """Shared daylight motorsport style and viewport geometry."""
 
+import math
 from dataclasses import dataclass
 
 import pygame
@@ -72,7 +73,7 @@ def layout(viewport, state, watch_mode=False):
             "hint": pygame.Rect(margin, height - 32, width - 2 * margin, 24),
         }
     actions = {
-        "MENU": ("reset", "quit") if watch_mode else ("reset", "watch", "quit"), "PAUSED": ("resume", "reset", "menu"),
+        "MENU": ("reset", "quit") if watch_mode else ("reset", "watch", "race", "quit"), "PAUSED": ("resume", "reset", "menu"),
         "ATTEMPT_FAILED": ("reset", "menu"),
         "ATTEMPT_FINISHED": ("reset", "menu"), "DRIVING": (),
     }[state]
@@ -84,9 +85,12 @@ def layout(viewport, state, watch_mode=False):
         rects["modal"] = panel
         if compact:
             for index, action in enumerate(actions):
-                rects[action] = pygame.Rect(panel.x + 20,
-                    panel.bottom - 20 - len(actions) * 48 + index * 48,
-                    panel.width - 40, 40)
+                columns = 2 if len(actions) == 4 else 1
+                rows = math.ceil(len(actions) / columns)
+                button_width = (panel.width - 40 - (columns - 1) * 8) // columns
+                rects[action] = pygame.Rect(panel.x + 20 + (index % columns) * (button_width + 8),
+                    panel.bottom - 20 - rows * 48 + (index // columns) * 48,
+                    button_width, 40)
         else:
             gap = 12
             action_width = (panel.width - 48 - gap * (len(actions) - 1)) // len(actions)

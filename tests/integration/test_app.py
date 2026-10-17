@@ -115,7 +115,7 @@ def test_renderer_resize_and_debug(track, monkeypatch):
                     track, app.simulation.snapshot(), state.value, True, None, 0
                 )
                 expected = {
-                    AppState.MENU: {"reset", "watch", "quit"},
+                    AppState.MENU: {"reset", "watch", "race", "quit"},
                     AppState.PAUSED: {"resume", "reset", "menu"},
                     AppState.ATTEMPT_FAILED: {"reset", "menu"},
                     AppState.ATTEMPT_FINISHED: {"reset", "menu"},

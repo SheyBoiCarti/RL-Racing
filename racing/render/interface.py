@@ -129,7 +129,7 @@ class RaceInterface:
                         f"{bindings['brake_override'][0].upper()} brake · C choose track"]
             for index, text in enumerate(controls):
                 self._text(surface, text, (panel.x + 20, panel.y + 105 + index * 23), 14, P["secondary"])
-        choices = {"MENU": [("reset", "Drive  [Enter]"), ("watch", "Watch AI"), ("quit", "Quit  [Q]")],
+        choices = {"MENU": [("reset", "Drive [Enter]"), ("watch", "Watch AI"), ("race", "Race AI"), ("quit", "Quit [Q]")],
                    "PAUSED": [("resume", "Resume  [Enter]"), ("reset", "Restart"), ("menu", "Menu")],
                    "ATTEMPT_FAILED": [("reset", "Restart"), ("menu", "Menu")],
                    "ATTEMPT_FINISHED": [("reset", "Restart"), ("menu", "Menu")]}[state]

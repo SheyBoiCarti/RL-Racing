@@ -11,7 +11,7 @@ from racing.render.interface import RaceInterface
 
 @pytest.mark.parametrize("size", [(1280, 720), (480, 360)])
 @pytest.mark.parametrize("state,actions", [
-    ("MENU", {"reset", "watch", "quit"}), ("PAUSED", {"resume", "reset", "menu"}),
+    ("MENU", {"reset", "watch", "race", "quit"}), ("PAUSED", {"resume", "reset", "menu"}),
     ("ATTEMPT_FAILED", {"reset", "menu"}),
     ("ATTEMPT_FINISHED", {"reset", "menu"}), ("DRIVING", set()),
 ])
