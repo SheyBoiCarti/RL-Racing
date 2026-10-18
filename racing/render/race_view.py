@@ -111,6 +111,9 @@ class RaceView:
                 ("main_menu", "Main menu"),
                 ("quit", "Quit"),
             ]
+        human = next(car for car in app.display_snapshot.cars if car.car_id == "human")
+        if app.state == "RUNNING" and human.status.value != "active":
+            return [("restart", "Restart [R]"), ("main_menu", "Main menu"), camera]
         return [camera]
 
     def draw(self, app):
@@ -209,6 +212,13 @@ class RaceView:
                 (self.world_rect.left + 6, self.world_rect.top + 4 + index * 19),
                 14,
             )
+        if app.state == "RUNNING" and human.status.value != "active":
+            reason = app.display_results["human"].reason.replace("_", " ")
+            if human.status.value == "timed_out":
+                reason += " timeout"
+            self._text(f"YOU: {reason}. Restart or return to main menu.",
+                       (self.world_rect.left + 6, self.world_rect.top + 4),
+                       13 if compact else 18, width=self.world_rect.width - 12)
         self.surface.set_clip(old_clip)
         line = 19 if compact else 27
         size = 13 if compact else 18

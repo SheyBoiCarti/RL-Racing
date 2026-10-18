@@ -635,3 +635,28 @@ def test_setup_back_and_chooser_keyboard_precedence(track, tmp_path, monkeypatch
     app.run()
     assert app.exit_to_menu == (not chooser_open)
     assert not app.choosing_track
+
+
+def test_human_only_timeout_shows_reason_and_exit_controls(track, tmp_path, pygame_env):
+    from racing.render.race_view import RaceView
+    app = application(track, tmp_path, rules=RaceRules(), config=RaceConfig(countdown_seconds=0))
+    app.action("start")
+    for _ in range(120):
+        app.frame(.05, CarControl(0, 0))
+    assert app.state == "RUNNING"
+    assert app.session.results["human"].reason == "no_progress"
+    assert app.session.results["ai"].status.value == "active"
+    view = RaceView(pygame_env.Surface((480, 360)), app.game, app.physics)
+    messages = []
+    original_text = view._text
+    def text(message, *args, **kwargs):
+        messages.append(message)
+        return original_text(message, *args, **kwargs)
+    view._text = text
+    view.draw(app)
+    assert {"restart", "main_menu"} <= view.buttons.keys()
+    assert any("no progress" in message.lower() for message in messages)
+    app.action("restart")
+    assert app.session.snapshot().tick == 0 and app.state == "RUNNING"
+    app.action("main_menu")
+    assert app.exit_to_menu and not app.running
