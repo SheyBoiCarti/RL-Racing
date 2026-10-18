@@ -45,3 +45,31 @@ def test_profile_moving_frames_and_validation(tmp_path):
     assert profile["median_draw_ms"] > 0
     assert profile["cache"]["tiles"] <= 32
     assert profile["video_driver"] == "dummy"
+
+
+def test_race_capture_records_actual_recovery_and_new_manifest(tmp_path, monkeypatch):
+    import pytest
+
+    from racing.agents import policy
+    from scripts import capture_race
+    from scripts.verify_race import ScriptedCar
+    def controller(path, *args):
+        if Path(path).name != "fixture.zip":
+            raise ValueError("missing model")
+        driver = ScriptedCar("ai")
+        driver.metadata = {"model_sha256": "a" * 64}
+        return driver
+    monkeypatch.setattr(policy, "PolicyController", controller)
+    output = tmp_path / "new-evidence"
+    capture_race.main(["--model", "fixture.zip", "--output", str(output), "--headless"])
+    manifest = json.loads((output / "manifest.json").read_text())
+    assert not manifest["human_acceptance"] and not manifest["native_display"]
+    assert manifest["model_sha256"] == "a" * 64
+    assert {"overhead", "follow", "recovery-countdown", "recovery-go", "menu-compact-debug",
+            "results-compact", "paused", "replay"} <= manifest["captures"].keys()
+    assert manifest["captures"]["recovery-countdown"]["recovery"]["human"]["remaining_ticks"] == 20
+    assert manifest["captures"]["recovery-go"]["recovery"]["human"]["held_ticks"] == 20
+    for name in manifest["captures"]:
+        assert (output / f"{name}.png").is_file()
+    with pytest.raises(FileExistsError):
+        capture_race.main(["--model", "fixture.zip", "--output", str(output), "--headless"])
