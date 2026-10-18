@@ -1,7 +1,8 @@
 """Multi-car ghost deterministic simulator; snapshots contain only immutable values."""
 
-from collections.abc import Mapping
+from collections.abc import Collection, Mapping
 from dataclasses import replace
+from math import isfinite
 
 from racing.core.models import (
     CarControl,
@@ -67,18 +68,35 @@ class Simulation:
             raise RuntimeError("reset required")
         return self._world
 
-    def step(self, controls):
+    def step(self, controls, *, held_ids: Collection[str] = ()):
         world = self.snapshot()
         ids = {car.car_id for car in world.cars}
         if not isinstance(controls, Mapping) or any(key not in ids for key in controls):
             raise ValueError("controls: unknown car ID or invalid mapping")
         for control in controls.values():
             validate_control(control)
+        if isinstance(held_ids, (str, bytes)) or not isinstance(held_ids, Collection):
+            raise ValueError("held_ids: collection of IDs required")
+        if any(not isinstance(key, str) or not key for key in held_ids):
+            raise ValueError("held_ids: nonempty string IDs required")
+        held_ids = frozenset(held_ids)
+        active_ids = {
+            car.car_id for car in world.cars if car.status == CarStatus.ACTIVE
+        }
+        if not held_ids <= active_ids or any(
+            key not in controls or controls[key] != CarControl(0.0, 0.0)
+            for key in held_ids
+        ):
+            raise ValueError(
+                "held_ids: active cars with explicit zero controls required"
+            )
         tick = world.tick + 1
         events = []
         cars = []
         for car in world.cars:
-            if car.status == CarStatus.ACTIVE:
+            if car.car_id in held_ids:
+                car = replace(car, signed_delta_m=0.0, rewardable_delta_m=0.0)
+            elif car.status == CarStatus.ACTIVE:
                 state = integrate_car(
                     car.state,
                     controls.get(car.car_id, CarControl(0.0, 0.0)),
@@ -133,6 +151,61 @@ class Simulation:
                 )
             ),
         )
+
+    def recover_car(self, safe: CarSnapshot, *, expected_tick: int) -> WorldSnapshot:
+        world = self.snapshot()
+        if type(expected_tick) is not int or expected_tick != world.tick:
+            raise ValueError("recovery: stale expected tick")
+        if not isinstance(safe, CarSnapshot) or safe.status != CarStatus.ACTIVE:
+            raise ValueError("recovery: active safe snapshot required")
+        current = next((car for car in world.cars if car.car_id == safe.car_id), None)
+        if current is None or current.status != CarStatus.DISQUALIFIED:
+            raise ValueError("recovery: disqualified matching car required")
+        history = (
+            "net_travel_m",
+            "high_water_m",
+            "approach_distance_m",
+            "completed_laps",
+            "finish_armed",
+            "next_checkpoint",
+            "lap_start_tick",
+            "completed_lap_times_s",
+        )
+        if any(getattr(current, key) != getattr(safe, key) for key in history):
+            raise ValueError("recovery: stale progress history")
+        values = (
+            safe.state.x_m,
+            safe.state.y_m,
+            safe.state.heading_rad,
+            safe.state.speed_mps,
+            safe.state.steering_rad,
+            safe.projection.tangent_heading,
+        )
+        if any(type(v) not in (int, float) or not isfinite(v) for v in values):
+            raise ValueError("recovery: finite pose required")
+        if not self.track.contains_disk(
+            safe.state.x_m, safe.state.y_m, self.config.car_radius_m
+        ):
+            raise ValueError("recovery: unsafe disk")
+        restored = replace(
+            safe,
+            state=replace(
+                safe.state,
+                heading_rad=safe.projection.tangent_heading,
+                speed_mps=0.0,
+                steering_rad=0.0,
+            ),
+            signed_delta_m=0.0,
+            rewardable_delta_m=0.0,
+            projection_discontinuity=False,
+        )
+        self._world = replace(
+            world,
+            cars=tuple(
+                restored if car.car_id == safe.car_id else car for car in world.cars
+            ),
+        )
+        return self._world
 
     def retire_car(self, car_id, status):
         world = self.snapshot()

@@ -24,3 +24,21 @@ class RaceConfig:
             object.__setattr__(self, name, float(value) if value else 0.0)
         if self.ghost is not True:
             raise ValueError("ghost: only ghost racing is supported")
+
+
+@dataclass(frozen=True, slots=True)
+class RaceRules:
+    version: str = "race-recovery-v1"
+    difficulty: str = "medium"
+    recovery_hold_ticks: int = 20
+    pace_adapter: str = "pace-governor-v1"
+
+    def __post_init__(self):
+        if self.version != "race-recovery-v1":
+            raise ValueError("version: unsupported race rules")
+        if self.difficulty not in ("easy", "medium", "hard"):
+            raise ValueError("difficulty: unsupported tier")
+        if type(self.recovery_hold_ticks) is not int or self.recovery_hold_ticks != 20:
+            raise ValueError("recovery_hold_ticks: integer 20 required")
+        if self.pace_adapter != "pace-governor-v1":
+            raise ValueError("pace_adapter: unsupported adapter")
