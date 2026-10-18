@@ -6,7 +6,7 @@ import pytest
 
 from racing.core.config import load_game
 from racing.core.models import CarControl
-from racing.race.config import RaceConfig
+from racing.race.config import RaceConfig, RaceRules
 from racing.race.replay import load_replay
 from racing.render.race import RaceApplication
 from racing.tracks import Track
@@ -21,7 +21,7 @@ class ConstantController:
 
     def act(self, observation, snapshot, track):
         self.calls += 1
-        return CarControl(0., .1)
+        return CarControl(0.0, 0.1)
 
 
 @pytest.fixture(scope="module")
@@ -30,59 +30,72 @@ def track():
 
 
 def application(track, tmp_path, **kwargs):
-    return RaceApplication(load_game(), track, controller=ConstantController(),
-                           config=kwargs.pop("config", RaceConfig(countdown_seconds=0, race_max_steps=4)),
-                           replay_output=tmp_path / "race.jsonl", **kwargs)
+    return RaceApplication(
+        load_game(),
+        track,
+        controller=ConstantController(),
+        config=kwargs.pop("config", RaceConfig(countdown_seconds=0, race_max_steps=4)),
+        replay_output=tmp_path / "race.jsonl",
+        rules=kwargs.pop("rules", None),
+        **kwargs,
+    )
 
 
 def test_countdown_pause_reset_and_abort_playback(track, tmp_path):
-    app = application(track, tmp_path, config=RaceConfig(countdown_seconds=3, race_max_steps=4))
+    app = application(
+        track, tmp_path, config=RaceConfig(countdown_seconds=3, race_max_steps=4)
+    )
     app.action("start")
     assert app.state == "COUNTDOWN"
     for _ in range(60):
-        app.frame(.05, CarControl(1., 1.))
+        app.frame(0.05, CarControl(1.0, 1.0))
     assert app.state == "RUNNING"
     assert app.session.snapshot().tick == 0
     assert app.controller.calls == 0
-    app.frame(.075, CarControl(0., .1))
+    app.frame(0.075, CarControl(0.0, 0.1))
     assert app.session.snapshot().tick == 1
     app.action("pause")
     assert app.scheduler.accumulator == 0
     before = app.session.snapshot()
-    app.frame(9, CarControl(1., 1.))
+    app.frame(9, CarControl(1.0, 1.0))
     assert app.session.snapshot() == before
     app.action("restart")
     assert load_replay(tmp_path / "race.jsonl").session.abort_reason == "restart"
     assert app.session.snapshot().tick == 0
     assert app.state == "COUNTDOWN"
     for _ in range(60):
-        app.frame(.05, CarControl(0., 0.))
+        app.frame(0.05, CarControl(0.0, 0.0))
     app.action("quit")
     assert not app.running
     assert len(list(tmp_path.glob("*.jsonl"))) == 2
-    assert all(load_replay(path).session.state == "RESULTS" for path in tmp_path.glob("*.jsonl"))
+    assert all(
+        load_replay(path).session.state == "RESULTS"
+        for path in tmp_path.glob("*.jsonl")
+    )
 
 
 def test_results_and_model_free_playback(track, tmp_path):
     app = application(track, tmp_path)
     app.action("start")
     for _ in range(4):
-        app.frame(.05, CarControl(0., .1))
+        app.frame(0.05, CarControl(0.0, 0.1))
     assert app.state == "RESULTS"
     result = app.session.snapshot()
     calls = app.controller.calls
     app.action("replay")
     assert app.state == "REPLAY"
     app.action("pause")
-    app.frame(8, CarControl(0., 1.))
+    app.frame(8, CarControl(0.0, 1.0))
     assert app.replay_index == 0
     app.action("resume")
     for _ in range(4):
-        app.frame(.05, CarControl(0., 1.))
+        app.frame(0.05, CarControl(0.0, 1.0))
     assert app.state == "RESULTS"
     assert app.display_snapshot == result
     assert app.controller.calls == calls
-    other = RaceApplication(load_game(), track=None, replay_path=tmp_path / "race.jsonl")
+    other = RaceApplication(
+        load_game(), track=None, replay_path=tmp_path / "race.jsonl"
+    )
     assert other.controller is None
     assert other.state == "REPLAY"
     other.action("quit")
@@ -92,10 +105,12 @@ def test_scheduler_invariance_and_model_error(track, tmp_path):
     snapshots = []
     for fps in (30, 60, 144):
         run = tmp_path / str(fps)
-        app = application(track, run, config=RaceConfig(countdown_seconds=0, race_max_steps=100))
+        app = application(
+            track, run, config=RaceConfig(countdown_seconds=0, race_max_steps=100)
+        )
         app.action("start")
         for _ in range(fps * 2):
-            app.frame(1 / fps, CarControl(0., .1))
+            app.frame(1 / fps, CarControl(0.0, 0.1))
         snapshots.append(app.session.snapshot())
         app.action("quit")
     assert snapshots[0] == snapshots[1] == snapshots[2]
@@ -118,7 +133,14 @@ def test_race_view_all_states_and_sizes(track, tmp_path, monkeypatch):
         for size in ((1280, 720), (640, 480), (480, 360)):
             surface = pygame.display.set_mode(size)
             view = RaceView(surface, app.game, app.physics)
-            for state in ("MENU", "COUNTDOWN", "RUNNING", "PAUSED", "RESULTS", "REPLAY"):
+            for state in (
+                "MENU",
+                "COUNTDOWN",
+                "RUNNING",
+                "PAUSED",
+                "RESULTS",
+                "REPLAY",
+            ):
                 app.state = state
                 before = app.session.snapshot()
                 view.draw(app)
@@ -135,7 +157,18 @@ def test_cli_race_and_replay_dispatch(track, tmp_path, monkeypatch):
 
     calls = []
     monkeypatch.setattr(RaceApplication, "run", lambda self: calls.append(self))
-    main(["--mode", "race", "--model", str(tmp_path / "missing.zip"), "--track", "demo", "--laps", "2"])
+    main(
+        [
+            "--mode",
+            "race",
+            "--model",
+            str(tmp_path / "missing.zip"),
+            "--track",
+            "demo",
+            "--laps",
+            "2",
+        ]
+    )
     assert len(calls) == 1 and calls[0].config.target_laps == 2
     with pytest.raises(SystemExit):
         main(["--mode", "race", "--laps", "0"])
@@ -177,17 +210,23 @@ def test_timestamped_physics_inputs_equal_across_render_rates(track, tmp_path):
     worlds = []
     actions = []
     for fps in (30, 60, 144):
-        app = application(track, tmp_path / str(fps),
-                          config=RaceConfig(countdown_seconds=0, race_max_steps=100))
+        app = application(
+            track,
+            tmp_path / str(fps),
+            config=RaceConfig(countdown_seconds=0, race_max_steps=100),
+        )
         app.action("start")
         seen = []
 
         def input_at_tick(tick):
-            control = CarControl(.07 if tick < 17 else -.04, .3 if tick < 29 else .1)
+            control = CarControl(
+                0.07 if tick < 17 else -0.04, 0.3 if tick < 29 else 0.1
+            )
             seen.append((tick, control))
             return control
 
         for _ in range(fps * 2):
+            app.action("toggle_camera")
             app.frame(1 / fps, input_at_tick)
         worlds.append(app.session.snapshot())
         actions.append(seen)
@@ -200,7 +239,7 @@ def test_timestamped_physics_inputs_equal_across_render_rates(track, tmp_path):
 def test_cancel_countdown_does_not_leave_incomplete_replay(track, tmp_path):
     app = application(track, tmp_path, config=RaceConfig(countdown_seconds=3))
     app.action("start")
-    app.frame(.05, CarControl(0., 0.))
+    app.frame(0.05, CarControl(0.0, 0.0))
     app.action("quit")
     assert not list(tmp_path.glob("*.jsonl"))
 
@@ -220,7 +259,7 @@ def test_playback_retains_recorded_lane_swap(track, tmp_path):
     app = application(track, tmp_path, lane_swap=True)
     app.action("start")
     for _ in range(4):
-        app.frame(.05, CarControl(0., .1))
+        app.frame(0.05, CarControl(0.0, 0.1))
     playback = RaceApplication(load_game(), None, replay_path=app.replay_path)
     assert playback.session.lane_swap is True
     assert playback.lane_swap is True
@@ -230,7 +269,7 @@ def test_menu_releases_playback_frames_and_preserves_loaded_policy(track, tmp_pa
     app = application(track, tmp_path)
     app.action("start")
     for _ in range(4):
-        app.frame(.05, CarControl(0., .1))
+        app.frame(0.05, CarControl(0.0, 0.1))
     app.action("replay")
     controller = app.controller
     app.action("menu")
@@ -246,8 +285,13 @@ def test_remapped_pause_key_is_respected(track, tmp_path, monkeypatch):
     import pygame
 
     app = application(track, tmp_path)
-    app.game = replace(app.game, bindings=tuple((action, ("e",) if action == "pause" else keys)
-                                               for action, keys in app.game.bindings))
+    app.game = replace(
+        app.game,
+        bindings=tuple(
+            (action, ("e",) if action == "pause" else keys)
+            for action, keys in app.game.bindings
+        ),
+    )
     actions = []
     original_action = app.action
 
@@ -270,7 +314,9 @@ def test_remapped_pause_key_is_respected(track, tmp_path, monkeypatch):
     assert ("pause", "PAUSED") in actions
 
 
-def test_debug_event_does_not_restore_elapsed_time_after_start(track, tmp_path, monkeypatch):
+def test_debug_event_does_not_restore_elapsed_time_after_start(
+    track, tmp_path, monkeypatch
+):
     monkeypatch.setenv("SDL_VIDEODRIVER", "dummy")
     monkeypatch.setenv("SDL_AUDIODRIVER", "dummy")
     import pygame
@@ -290,6 +336,236 @@ def test_debug_event_does_not_restore_elapsed_time_after_start(track, tmp_path, 
 
     monkeypatch.setattr(pygame.display, "set_mode", window)
     monkeypatch.setattr(pygame.time, "Clock", Clock)
-    monkeypatch.setattr(pygame.display, "flip", lambda: pygame.event.post(pygame.event.Event(pygame.QUIT)))
+    monkeypatch.setattr(
+        pygame.display,
+        "flip",
+        lambda: pygame.event.post(pygame.event.Event(pygame.QUIT)),
+    )
     app.run()
     assert app.session.snapshot().tick == 0
+
+
+def test_camera_toggle_preserves_scheduler_and_world(track, tmp_path):
+    app = application(track, tmp_path)
+    before = app.session.snapshot()
+    app.scheduler.accumulator = 0.025
+    app.action("toggle_camera")
+    assert app.preferences.camera_mode == "follow"
+    assert app.session.snapshot() == before
+    assert app.scheduler.accumulator == 0.025
+
+
+def test_difficulty_locks_after_start(track, tmp_path):
+    app = RaceApplication(
+        load_game(),
+        track,
+        controller=ConstantController(),
+        config=RaceConfig(countdown_seconds=0),
+        replay_output=tmp_path / "difficulty.jsonl",
+    )
+    app.action("difficulty_next")
+    assert app.preferences.difficulty == "hard"
+    app.action("start")
+    frozen = app.session.rules
+    app.action("difficulty_next")
+    assert app.session.rules == frozen
+    app.action("quit")
+
+
+def test_compact_setup_reserves_world_and_separates_labels(track, tmp_path, pygame_env):
+    from racing.render.race_view import RaceView
+
+    app = application(track, tmp_path)
+    app.debug = True
+    app.error = "A long setup error " * 20
+    app.model_path = tmp_path / ("long-model-name" * 10)
+    world = app.session.snapshot()
+    app.session.simulation._world = replace(
+        world, cars=(world.cars[0], replace(world.cars[1], state=world.cars[0].state))
+    )
+    surface = pygame_env.Surface((480, 360))
+    view = RaceView(surface, app.game, app.physics)
+    view.draw(app)
+    assert len(view.buttons) == 9
+    assert view.world_rect.height == 132
+    assert all(
+        surface.get_rect().contains(rect) and not rect.colliderect(view.world_rect)
+        for rect in view.buttons.values()
+    )
+    assert view.car_labels["human"] != view.car_labels["ai"]
+    assert view.recovery_messages == {}
+
+
+@pytest.mark.parametrize(
+    "keys,expected_tick,expected_state",
+    [
+        (["v"], 1, "RUNNING"),
+        (["v", "escape"], 0, "PAUSED"),
+        (["escape", "v"], 0, "PAUSED"),
+    ],
+)
+def test_camera_events_preserve_pending_time(
+    track, tmp_path, monkeypatch, keys, expected_tick, expected_state
+):
+    monkeypatch.setenv("SDL_VIDEODRIVER", "dummy")
+    monkeypatch.setenv("SDL_AUDIODRIVER", "dummy")
+    import pygame
+
+    app = application(track, tmp_path)
+    app.action("start")
+    app.scheduler.accumulator = 0.025
+    create = pygame.display.set_mode
+
+    def window(*args, **kwargs):
+        surface = create(*args, **kwargs)
+        for key in keys:
+            pygame.event.post(
+                pygame.event.Event(pygame.KEYDOWN, key=pygame.key.key_code(key))
+            )
+        return surface
+
+    class Clock:
+        def tick(self, fps):
+            return 50
+
+    seen = []
+
+    def flip():
+        seen.append((app.session.snapshot().tick, app.state))
+        pygame.event.post(pygame.event.Event(pygame.QUIT))
+
+    monkeypatch.setattr(pygame.display, "set_mode", window)
+    monkeypatch.setattr(pygame.time, "Clock", Clock)
+    monkeypatch.setattr(pygame.display, "flip", flip)
+    app.run()
+    assert seen == [(expected_tick, expected_state)]
+    assert app.preferences.camera_mode == "follow"
+
+
+def test_resize_then_camera_click_keeps_tick(track, tmp_path, monkeypatch):
+    monkeypatch.setenv("SDL_VIDEODRIVER", "dummy")
+    monkeypatch.setenv("SDL_AUDIODRIVER", "dummy")
+    import pygame
+
+    from racing.render.race_view import RaceView
+
+    app = application(track, tmp_path)
+    app.action("start")
+    create = pygame.display.set_mode
+    opened = False
+
+    def window(*args, **kwargs):
+        nonlocal opened
+        surface = create(*args, **kwargs)
+        if not opened:
+            opened = True
+            view = RaceView(pygame.Surface((480, 360)), app.game, app.physics)
+            view.draw(app)
+            pygame.event.post(pygame.event.Event(pygame.VIDEORESIZE, w=480, h=360))
+            pygame.event.post(
+                pygame.event.Event(
+                    pygame.MOUSEBUTTONDOWN,
+                    button=1,
+                    pos=view.buttons["toggle_camera"].center,
+                )
+            )
+        return surface
+
+    class Clock:
+        def tick(self, fps):
+            return 50
+
+    seen = []
+
+    def flip():
+        seen.append(app.session.snapshot().tick)
+        pygame.event.post(pygame.event.Event(pygame.QUIT))
+
+    monkeypatch.setattr(pygame.display, "set_mode", window)
+    monkeypatch.setattr(pygame.time, "Clock", Clock)
+    monkeypatch.setattr(pygame.display, "flip", flip)
+    app.run()
+    assert seen == [1]
+    assert app.preferences.camera_mode == "follow"
+
+
+def test_recovery_go_readout_freezes_and_replays_selected_frame(
+    track, tmp_path, pygame_env
+):
+    from racing.render.race_view import RaceView
+
+    app = application(
+        track, tmp_path, rules=RaceRules(), config=RaceConfig(countdown_seconds=0)
+    )
+    app.action("start")
+    for _ in range(200):
+        app.session.step({"human": CarControl(1, 1), "ai": CarControl(0, 0)})
+        if app.session.recovery_by_car["human"].count:
+            break
+    view = RaceView(pygame_env.Surface((480, 360)), app.game, app.physics)
+    view.draw(app)
+    assert "1.0 s" in view.recovery_messages["human"]
+    for _ in range(20):
+        app.session.step({"human": CarControl(0, 0), "ai": CarControl(0, 0)})
+    release = app.session.snapshot().tick
+    view.draw(app)
+    assert view.recovery_messages["human"] == "Go!"
+    app.action("pause")
+    app.frame(20, CarControl(0, 0))
+    view.draw(app)
+    assert view.recovery_messages["human"] == "Go!"
+    app.action("resume")
+    for _ in range(10):
+        app.session.step({"human": CarControl(0, 0), "ai": CarControl(0, 0)})
+    app.session.abort("user_exit")
+    app.state = "RESULTS"
+    app.action("replay")
+    app.replay_index = release + 9
+    view.draw(app)
+    assert view.recovery_messages["human"] == "Go!"
+    app.replay_index = release + 10
+    view.draw(app)
+    assert "human" not in view.recovery_messages
+    previous = app.preferences.difficulty
+    app.action("difficulty_next")
+    assert app.preferences.difficulty == previous
+    assert app.display_recovery == app.playback.frames[release + 10].recovery_by_car
+    app.action("quit")
+
+
+def test_no_progress_results_allow_restart_and_menu(track, tmp_path):
+    app = application(
+        track,
+        tmp_path,
+        rules=RaceRules(),
+        config=RaceConfig(countdown_seconds=0, no_progress_steps=2),
+    )
+    app.action("start")
+    for _ in range(2):
+        app.session.step({"human": CarControl(0, 0), "ai": CarControl(0, 0)})
+    app.state = app.session.state.value
+    assert (
+        app.state == "RESULTS" and app.display_results["human"].reason == "no_progress"
+    )
+    app.action("restart")
+    assert app.state == "RUNNING" and app.session.snapshot().tick == 0
+    app.action("menu")
+    assert app.state == "MENU" and app.recorder is None
+    app.action("quit")
+
+
+def test_default_rules_explicit_legacy_and_explicit_rules(track, tmp_path):
+    from racing.render.desktop import DesktopPreferences
+
+    preferences = DesktopPreferences(difficulty="easy", camera_mode="follow")
+    default = RaceApplication(load_game(), track, preferences=preferences)
+    assert default.session.rules == RaceRules(difficulty="easy")
+    legacy = RaceApplication(load_game(), track, rules=None)
+    assert legacy.session.rules is None
+    explicit = RaceApplication(
+        load_game(), track, rules=RaceRules(difficulty="hard"), preferences=preferences
+    )
+    assert explicit.session.rules.difficulty == "hard"
+    for kwargs in ({"difficulty": "bad"}, {"camera_mode": "bad"}):
+        with pytest.raises(ValueError):
+            DesktopPreferences(**kwargs)
