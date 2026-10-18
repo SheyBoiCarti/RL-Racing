@@ -1,9 +1,11 @@
 """Deterministically build specification schemas/examples, not application artifacts."""
-from pathlib import Path
-from copy import deepcopy
 import hashlib
 import json
 import math
+import sys
+from copy import deepcopy
+from pathlib import Path
+
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -126,6 +128,77 @@ def hexify(node):
     if node.get("type") == "number":
         return deepcopy(HEX)
     return {key: hexify(value) for key, value in node.items()}
+
+
+def build_recovery_assets():
+    """Extend retained v1 contracts without rewriting any historical assets."""
+    old_common = json.loads((ROOT / "schemas/common.schema.json").read_text())
+    old_replay = json.loads((ROOT / "schemas/replay.schema.json").read_text())
+    rules = obj({"version": {"const": "race-recovery-v1"},
+                 "difficulty": enum("easy", "medium", "hard"),
+                 "recovery_hold_ticks": {"const": 20, "type": "integer"},
+                 "pace_adapter": {"const": "pace-governor-v1"}})
+    recovery = obj({"safe": old_common["$defs"]["verification_state"]["properties"]["world"]["properties"]["cars"]["items"],
+                    "remaining_ticks": {"type": "integer", "minimum": 0, "maximum": 20},
+                    "count": I, "held_ticks": I, "last_release_tick": nullable(I)})
+    verification = deepcopy(old_common["$defs"]["verification_state"])
+    verification["properties"]["session"]["properties"]["race_rules"] = rules
+    verification["properties"]["session"]["properties"]["recovery_by_car"] = obj({key: recovery for key in ("ai", "human")})
+    verification["properties"]["session"]["required"] += ["race_rules", "recovery_by_car"]
+    verification["properties"]["session"]["properties"]["abort_reason"] = nullable(
+        enum("inference_error", "user_exit", "restart", "recovery_error"))
+    versions_v2 = deepcopy(old_common["$defs"]["versions"])
+    versions_v2["properties"]["rules"] = {"const": "race-recovery-v1"}
+    versions_v2["required"].append("rules")
+    common = schema("common-v2", {"$defs": {"race_rules": rules,
+        "recovery_state": recovery, "verification_state": verification,
+        "versions": versions_v2}})
+    def rewrite(node):
+        if isinstance(node, list):
+            return [rewrite(v) for v in node]
+        if not isinstance(node, dict):
+            return node
+        result = {key: rewrite(value) for key, value in node.items()}
+        if result.get("$ref") in (ref("verification_state")["$ref"], ref("versions")["$ref"]):
+            result["$ref"] = result["$ref"].replace("common.schema", "common-v2.schema")
+        if result.get("enum") == ["inference_error", "user_exit", "restart"]:
+            result["enum"].append("recovery_error")
+        return result
+    replay = rewrite(old_replay)
+    replay["$id"] = BASE + "replay-v2.schema.json"
+    header = replay["oneOf"][0]
+    header["properties"]["schema_version"] = {"const": "replay-v2"}
+    header["properties"]["race_rules"] = {"$ref": BASE + "common-v2.schema.json#/$defs/race_rules"}
+    header["properties"]["race_rules_sha256"] = H
+    header["required"] += ["race_rules", "race_rules_sha256"]
+    write("schemas/common-v2.schema.json", common)
+    write("schemas/replay-v2.schema.json", replay)
+    records = [json.loads(line) for line in (ROOT / "examples/replay_abort.jsonl").read_text().splitlines()]
+    rules_value = dict(version="race-recovery-v1", difficulty="medium", recovery_hold_ticks=20,
+                       pace_adapter="pace-governor-v1")
+    safe = {c["car_id"]: c for c in records[0]["initial_state"]["world"]["cars"]}
+    for record in records:
+        for key in ("initial_state", "verification_state", "final_state"):
+            if key in record:
+                value = record[key]
+                value["session"]["race_rules"] = rules_value
+                value["session"]["recovery_by_car"] = {car_id: dict(safe=car, remaining_ticks=0,
+                    count=0, held_ticks=0, last_release_tick=None) for car_id, car in safe.items()}
+                digest_key = {"initial_state": "initial_state_sha256",
+                              "verification_state": "state_sha256",
+                              "final_state": "final_state_sha256"}[key]
+                record[digest_key] = sha(value)
+    records[0].update(schema_version="replay-v2", race_rules=rules_value,
+                      race_rules_sha256=sha(rules_value))
+    records[0]["versions"]["rules"] = "race-recovery-v1"
+    target = ROOT / "fixtures/replay_v2/abort.jsonl"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text("".join(canonical(r).decode() + "\n" for r in records), encoding="utf-8")
+
+
+if "--recovery-only" in sys.argv:
+    build_recovery_assets()
+    raise SystemExit(0)
 
 
 defs["verification_state"] = obj({"world": hexify(world), "session": session})
@@ -396,3 +469,6 @@ write("fixtures/numeric_cases.json", {"projection_switch": {"previous": [-2.08, 
       "bootstrap": {"A": [[.1, .2, .3], [.4, .5, .6]], "B": [[.3, .4, .5], [.6, .7, .8]],
       "expected_B_minus_A": .2, "rng_seed": 12345, "replicates": 2000}})
 print("Built 7 schemas, fixture tracks, numeric cases, and fixture-only examples.")
+
+
+build_recovery_assets()

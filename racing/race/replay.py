@@ -2,15 +2,17 @@
 
 import copy
 import platform
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
+from types import MappingProxyType
 
 from racing.core.config import PhysicsConfig
 from racing.core.models import CarControl
-from racing.race.config import RaceConfig
+from racing.race.config import RaceConfig, RaceRules
 from racing.race.replay_state import (
     VERSIONS,
+    VERSIONS_V2,
     canonical_json,
     compare_state,
     parse_record,
@@ -46,6 +48,7 @@ class ReplayRecorder:
     def __init__(self, path, session, *, model_sha256=None, model_label=None):
         if session.snapshot().tick or session.state not in ("MENU", "COUNTDOWN", "RUNNING"):
             raise ValueError("replay recorder must attach before race start/tick zero")
+        self.schema_version = "replay-v2" if session.rules is not None else "replay-v1"
         self.path, self.session = Path(path), session
         self.model_sha256, self.model_label = model_sha256, model_label
         self.path.parent.mkdir(parents=True, exist_ok=True)
@@ -59,7 +62,7 @@ class ReplayRecorder:
 
     def _write(self, record):
         record = dict(record, seq=self.seq)
-        validate_record(record)
+        validate_record(record, schema_version=self.schema_version)
         self.file.write(canonical_json(record) + "\n")
         self.file.flush()
         self.seq += 1
@@ -75,14 +78,19 @@ class ReplayRecorder:
                          name=session.track.name, split=session.track.split or "demo", generator=None)
         initial = verification_state(session)
         try:
-            self._write(dict(record_type="header", schema_version="replay-v1", fixture_only=False,
-                             physics_config=physics, race_config=race, versions=VERSIONS,
+            header = dict(record_type="header", schema_version=self.schema_version, fixture_only=False,
+                             physics_config=physics, race_config=race,
+                             versions=VERSIONS if session.rules is None else VERSIONS_V2,
                              config_hashes=dict(physics=state_hash(physics), race=state_hash(race)),
                              track=track, track_geometry_sha256=state_hash(session.track.geometry_payload),
                              simulator_seed=session.seed, spawns=plain(session.spawns),
                              model_sha256=self.model_sha256, model_label=self.model_label,
                              dependencies=_dependencies(), hash_interval=100,
-                             initial_state=initial, initial_state_sha256=state_hash(initial)))
+                             initial_state=initial, initial_state_sha256=state_hash(initial))
+            if session.rules is not None:
+                header.update(race_rules=plain(session.rules),
+                              race_rules_sha256=state_hash(plain(session.rules)))
+            self._write(header)
         except Exception:
             self.file.close()
             self.closed = True
@@ -148,6 +156,7 @@ class ReplayFrame:
     results: dict
     position_by_car: dict
     gap_m: float
+    recovery_by_car: object = field(default_factory=lambda: MappingProxyType({}))
 
 
 @dataclass(frozen=True)
@@ -159,18 +168,22 @@ class ReplayPlayback:
 
 def _frame(session):
     return ReplayFrame(session.snapshot(), plain(session.state), dict(session.last_controls),
-                       dict(session.results), dict(session.position_by_car), session.gap_m)
+                       dict(session.results), dict(session.position_by_car), session.gap_m,
+                       MappingProxyType(dict(session.recovery_by_car)))
 
 
 def load_replay(path, *, tolerant=False):
     """Validate/reconstruct all records before playback, without policy inference."""
     records = []
+    schema_version = None
     with Path(path).open(encoding="utf-8") as file:
         for line_number, line in enumerate(file, 1):
             if not line.strip():
                 raise ValueError(f"replay line {line_number}: empty record")
             record = parse_record(line)
-            validate_record(record)
+            if schema_version is None:
+                schema_version = record.get("schema_version")
+            validate_record(record, schema_version=schema_version)
             if record["seq"] != len(records):
                 raise ValueError(f"replay line {line_number}: noncontiguous seq")
             records.append(record)
@@ -181,8 +194,16 @@ def load_replay(path, *, tolerant=False):
     header = records[0]
     if header["fixture_only"]:
         raise ValueError("replay: specification fixture is not a runnable recording")
-    if header["versions"] != VERSIONS or header["hash_interval"] != 100:
+    expected_versions = VERSIONS if schema_version == "replay-v1" else VERSIONS_V2
+    if header["versions"] != expected_versions or header["hash_interval"] != 100:
         raise ValueError("replay: unsupported versions/hash interval")
+    rules = None
+    if schema_version == "replay-v2":
+        rules = RaceRules(**header["race_rules"])
+        if header["versions"]["rules"] != rules.version:
+            raise ValueError("replay: rules version mismatch")
+        if state_hash(plain(rules)) != header["race_rules_sha256"]:
+            raise ValueError("replay: rules hash mismatch")
     physics = PhysicsConfig(**header["physics_config"])
     config = RaceConfig(**header["race_config"])
     for name, value in (("physics", physics), ("race", config)):
@@ -198,7 +219,7 @@ def load_replay(path, *, tolerant=False):
     if header["spawns"] not in (expected_spawns, swapped):
         raise ValueError("replay: ordered unique human/ai grid spawns required")
     session = RaceSession(track, physics=physics, config=config, seed=header["simulator_seed"],
-                          lane_swap=header["spawns"] == swapped)
+                          lane_swap=header["spawns"] == swapped, rules=rules)
     session.start()
     while session.state == "COUNTDOWN":
         session.countdown_tick()

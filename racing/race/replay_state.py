@@ -17,6 +17,8 @@ VERSIONS = dict(physics="physics-v1", track="track-v1", observation="obs-rays7-v
                 action="action-v1", reward="reward-v1", evaluation="evaluation-v1",
                 selection="selection-v1")
 
+VERSIONS_V2 = {**VERSIONS, "rules": "race-recovery-v1"}
+
 FLOAT_FIELDS = frozenset(("time_s", "x_m", "y_m", "heading_rad", "speed_mps", "steering_rad",
                           "segment_t", "s_m", "lateral_m", "tangent_heading", "distance_m",
                           "signed_delta_m", "rewardable_delta_m", "net_travel_m", "high_water_m",
@@ -53,24 +55,31 @@ def state_hash(value):
 
 
 def verification_state(session):
-    return dict(world=plain(session.snapshot(), hex_floats=True), session=dict(
+    state = dict(world=plain(session.snapshot(), hex_floats=True), session=dict(
         no_progress_by_car=dict(session.no_progress_by_car),
         finish_tick_by_car=dict(session.finish_tick_by_car),
         session_state=plain(session.state), winner=session.winner,
         abort_reason=session.abort_reason))
+    if session.rules is not None:
+        state["session"].update(race_rules=plain(session.rules),
+                                recovery_by_car=plain(session.recovery_by_car, hex_floats=True))
+    return state
 
 
-@lru_cache(maxsize=1)
-def record_validator():
+@lru_cache(maxsize=2)
+def record_validator(schema_version="replay-v1"):
+    if schema_version not in ("replay-v1", "replay-v2"):
+        raise ValueError("replay: unsupported schema version")
     root = project_path("docs/specs/schemas")
     schemas = [json.loads((root / name).read_text(encoding="utf-8"))
-               for name in ("common.schema.json", "track.schema.json", "replay.schema.json")]
+               for name in ("common.schema.json", "track.schema.json", "replay.schema.json",
+                            "common-v2.schema.json", "replay-v2.schema.json")]
     registry = Registry().with_resources((s["$id"], Resource.from_contents(s)) for s in schemas)
-    return Draft202012Validator(schemas[-1], registry=registry)
+    return Draft202012Validator(schemas[2 if schema_version == "replay-v1" else 4], registry=registry)
 
 
-def validate_record(record):
-    error = next(record_validator().iter_errors(record), None)
+def validate_record(record, *, schema_version="replay-v1"):
+    error = next(record_validator(schema_version).iter_errors(record), None)
     if error:
         # oneOf's top-level message prints the whole record; show a concise path instead.
         details = list(error.context)

@@ -1,12 +1,12 @@
 """Verify specification assets; does not test or implement the future racing app."""
-from copy import deepcopy
-from itertools import permutations
-from pathlib import Path
 import hashlib
 import json
 import math
 import re
 import sys
+from copy import deepcopy
+from itertools import permutations
+from pathlib import Path
 
 import numpy as np
 from jsonschema import Draft202012Validator
@@ -403,6 +403,27 @@ def replay_check():
     hex_values(reconstructed)
 
 
+def recovery_replay_check():
+    paths = sorted((ROOT / "fixtures/replay_v2").glob("*.jsonl"))
+    demand(bool(paths), "Missing recovery replay fixtures")
+    for path in paths:
+        records = [json.loads(line) for line in path.read_text().splitlines()]
+        demand(records[0]["fixture_only"], "Recovery fixture must be marked fixture-only")
+        for record in records:
+            validate("replay-v2", record)
+        header = records[0]
+        demand(sha(header["race_rules"]) == header["race_rules_sha256"], "Rules digest")
+        for mutation in ("missing", "extra", "unknown"):
+            bad = deepcopy(header)
+            if mutation == "missing":
+                bad["versions"].pop("rules")
+            elif mutation == "extra":
+                bad["versions"]["extra"] = "unknown"
+            else:
+                bad["versions"]["rules"] = "race-recovery-v99"
+            fails(lambda: validate("replay-v2", bad), "Invalid v2 rules versions")
+
+
 def markdown_check():
     count = 0
     for path in ROOT.rglob("*.md"):
@@ -425,6 +446,7 @@ def main():
                if p.name != "numeric_cases.json"]
     numeric = numeric_check()
     replay_check()
+    recovery_replay_check()
     markdown_count = markdown_check()
     print(json.dumps({"status": "PASS", "schemas": len(schemas), "markdown_documents": markdown_count,
                       "reference_tracks": reports, "numeric_checks": numeric,
