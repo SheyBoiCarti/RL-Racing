@@ -3,7 +3,6 @@
 import math
 from enum import Enum
 
-from racing.core.config import load_game, load_physics
 from racing.core.models import CarSpawn, CarStatus
 from racing.core.simulation import Simulation
 from racing.render.input import held_control, key_bindings
@@ -192,6 +191,12 @@ class Application:
                             self.action("choose_track")
                             transitioned = True
                             continue
+                        if self.watch_mode and self.state == AppState.MENU and (
+                            event.key == pygame.K_ESCAPE or event.key in bindings["pause"]
+                        ):
+                            self.action("back")
+                            transitioned = True
+                            continue
                         for action in ("pause", "reset", "debug"):
                             if event.key in bindings[action]:
                                 self.action(action)
@@ -218,7 +223,7 @@ class Application:
                         # Events in one batch may resize or change state before
                         # this click; the last drawn action map can be stale.
                         rects = layout(surface.get_size(), self.state.value, self.watch_mode)
-                        for action in ("reset", "watch", "race", "resume", "menu", "quit"):
+                        for action in ("reset", "watch", "race", "resume", "menu", "back", "quit"):
                             rect = rects.get(action)
                             if rect is None:
                                 continue
@@ -291,7 +296,13 @@ def main(argv=None):
         default="configs/game.yaml",
         help="game configuration relative to project root",
     )
+    parser.add_argument("--difficulty", choices=("easy", "medium", "hard"), default=None)
+    parser.add_argument("--camera", choices=("overhead", "follow"), default=None)
     args = parser.parse_args(argv)
+    if args.difficulty is not None and args.mode != "race":
+        parser.error("--difficulty requires --mode race")
+    if args.camera is not None and args.mode not in ("race", "replay"):
+        parser.error("--camera requires --mode race or replay")
     if args.mode == "replay" and not args.replay:
         parser.error("--mode replay requires --replay")
     if args.replay and args.mode != "replay":
@@ -309,47 +320,12 @@ def main(argv=None):
         for c in args.track
     ):
         parser.error("--track must be a track ID, without path separators")
+    if args.mode == "watch" and not args.model:
+        parser.error("--mode watch requires --model")
+    args.laps = args.laps or 3
     try:
-        if args.mode in ("race", "replay"):
-            from racing.render.race import run_from_args
+        from racing.render.desktop import run_desktop
 
-            args.laps = args.laps or 3
-            run_from_args(args)
-            return
-        from racing.render.chooser import TrackChooser
-
-        if args.mode == "watch" and not args.model:
-            parser.error("--mode watch requires --model")
-        if args.model and args.mode != "watch":
-            parser.error("--model requires --mode watch")
-        chooser = TrackChooser(args.split_manifest)
-        track = chooser.tracks.get(args.track, chooser.tracks["demo"])
-        if args.track not in chooser.tracks:
-            reason = f"; {chooser.error}" if chooser.error else ""
-            chooser.error = f"{args.track}.json: track unavailable in demo/train/validation catalog{reason}"
-        chooser.index = chooser.ids.index(track.track_id)
-        if args.mode == "watch":
-            from racing.agents.policy import PolicyController
-            from racing.render.watch import WatchApplication
-
-            try:
-                app = WatchApplication(load_game(args.config), PolicyController(args.model), track=track)
-            except (ValueError, OSError, ImportError) as error:
-                app = Application(load_game(args.config), load_physics(), track)
-                chooser.error = f"{args.model}: {error}"
-        else:
-            app = Application(load_game(args.config), load_physics(), track)
-        app.chooser = chooser
-        app.split_manifest = args.split_manifest
-        app.choosing_track = True
-        app.run()
-        if app.selected_mode == "race":
-            from racing.render.race import RaceApplication
-
-            RaceApplication(app.game, app.track).run()
-        elif app.selected_policy is not None:
-            from racing.render.watch import WatchApplication
-
-            WatchApplication(app.game, app.selected_policy, track=app.track).run()
+        run_desktop(args)
     except (ValueError, OSError) as error:
         parser.exit(1, f"Cannot start game: {error}\n")

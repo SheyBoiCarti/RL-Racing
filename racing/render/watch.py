@@ -24,6 +24,7 @@ class WatchApplication(Application):
         self.scheduler = FixedScheduler(self.physics.dt_s, game.catch_up_limit)
         self.state, self.debug, self.best_lap_s = AppState.MENU, game.debug, None
         self.running, self.watch_mode = True, True
+        self.exit_to_menu = False
         self.last_action = np.zeros(2, dtype=np.float32)
         self.model_label = f"PPO · step {controller.metadata['checkpoint_step']}"
         self.selected_policy = None
@@ -50,7 +51,10 @@ class WatchApplication(Application):
         self.state = AppState.MENU
 
     def action(self, action):
-        if action == "reset":
+        if action == "back" and self.state == AppState.MENU:
+            self.exit_to_menu, self.running = True, False
+            self.scheduler.clear()
+        elif action == "reset":
             self.observation, _ = self.env.reset(seed=9000)
             self.controller.reset(9000)
             self.scheduler.clear()

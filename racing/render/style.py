@@ -73,7 +73,7 @@ def layout(viewport, state, watch_mode=False):
             "hint": pygame.Rect(margin, height - 32, width - 2 * margin, 24),
         }
     actions = {
-        "MENU": ("reset", "quit") if watch_mode else ("reset", "watch", "race", "quit"), "PAUSED": ("resume", "reset", "menu"),
+        "MENU": ("reset", "back", "quit") if watch_mode else ("reset", "watch", "race", "quit"), "PAUSED": ("resume", "reset", "menu"),
         "ATTEMPT_FAILED": ("reset", "menu"),
         "ATTEMPT_FINISHED": ("reset", "menu"), "DRIVING": (),
     }[state]

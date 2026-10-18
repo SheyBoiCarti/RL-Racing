@@ -569,3 +569,69 @@ def test_default_rules_explicit_legacy_and_explicit_rules(track, tmp_path):
     for kwargs in ({"difficulty": "bad"}, {"camera_mode": "bad"}):
         with pytest.raises(ValueError):
             DesktopPreferences(**kwargs)
+
+
+def test_back_requests_root_without_starting_race(track, tmp_path):
+    app = application(track, tmp_path)
+    app.action("back")
+    assert app.exit_to_menu and not app.running and app.recorder is None
+
+
+@pytest.mark.parametrize("phase", ["countdown", "recovering", "replay", "quit"])
+def test_main_menu_cleans_race_resources(track, tmp_path, phase):
+    app = application(track, tmp_path, rules=RaceRules(), config=RaceConfig(
+        countdown_seconds=3 if phase == "countdown" else 0))
+    app.action("start")
+    recorder = app.recorder
+    if phase in ("recovering", "replay"):
+        for _ in range(200):
+            app.session.step({"human": CarControl(1, 1), "ai": CarControl(0, 0)})
+            if app.session.recovery_by_car["human"].count:
+                break
+    if phase == "replay":
+        app.session.abort("user_exit")
+        app.state = "RESULTS"
+        app.action("replay")
+    app.action("quit" if phase == "quit" else "main_menu")
+    assert recorder.closed
+    assert not app.running
+    assert app.exit_to_menu == (phase != "quit")
+    if phase == "countdown":
+        assert not recorder.path.exists()
+    if phase != "quit":
+        assert app.playback is app.recorder is None
+
+
+def test_cli_preferences_reach_new_race(track, tmp_path, monkeypatch):
+    from racing.render.app import main
+    seen = []
+    monkeypatch.setattr(RaceApplication, "run", lambda app: seen.append(app))
+    main(["--mode", "race", "--difficulty", "easy", "--camera", "follow"])
+    assert seen[0].preferences.difficulty == "easy"
+    assert seen[0].preferences.camera_mode == "follow"
+    assert seen[0].session.rules.difficulty == "easy"
+
+
+@pytest.mark.parametrize("chooser_open,key", [(False, "escape"), (False, "e"), (True, "escape")])
+def test_setup_back_and_chooser_keyboard_precedence(track, tmp_path, monkeypatch,
+                                                     chooser_open, key):
+    monkeypatch.setenv("SDL_VIDEODRIVER", "dummy")
+    monkeypatch.setenv("SDL_AUDIODRIVER", "dummy")
+    import pygame
+
+    from racing.render.chooser import TrackChooser
+    app = application(track, tmp_path)
+    app.game = replace(app.game, bindings=tuple((name, ("e",) if name == "pause" else keys)
+                                               for name, keys in app.game.bindings))
+    app.choosing_track = chooser_open
+    app.chooser = TrackChooser(catalog_loader=lambda *args: {})
+    create = pygame.display.set_mode
+    def window(*args, **kwargs):
+        surface = create(*args, **kwargs)
+        pygame.event.post(pygame.event.Event(pygame.KEYDOWN, key=pygame.key.key_code(key)))
+        return surface
+    monkeypatch.setattr(pygame.display, "set_mode", window)
+    monkeypatch.setattr(pygame.display, "flip", lambda: pygame.event.post(pygame.event.Event(pygame.QUIT)))
+    app.run()
+    assert app.exit_to_menu == (not chooser_open)
+    assert not app.choosing_track

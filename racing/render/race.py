@@ -503,7 +503,7 @@ class RaceApplication:
             pygame.quit()
 
 
-def run_from_args(args):
+def application_from_args(args, *, preferences):
     from racing.core.config import load_game
     from racing.render.chooser import TrackChooser
 
@@ -513,6 +513,7 @@ def run_from_args(args):
             None,
             replay_path=project_path(args.replay),
             tolerant=args.tolerant_replay,
+            preferences=preferences,
         )
     else:
         chooser = TrackChooser(args.split_manifest)
@@ -526,6 +527,7 @@ def run_from_args(args):
             if args.replay_output
             else None,
             lane_swap=args.swap_lanes,
+            preferences=preferences,
             model_roots=[project_path(root) for root in args.model_root]
             if args.model_root
             else None,
@@ -535,4 +537,10 @@ def run_from_args(args):
             app.error = f"{args.track}: unavailable in demo/train/validation catalog"
             app.choosing_track = True
             chooser.error = app.error
-    app.run()
+    return app
+
+
+def run_from_args(args):
+    from racing.render.desktop import run_desktop
+
+    return run_desktop(args)

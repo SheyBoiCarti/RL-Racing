@@ -134,7 +134,7 @@ class RaceInterface:
                    "ATTEMPT_FAILED": [("reset", "Restart"), ("menu", "Menu")],
                    "ATTEMPT_FINISHED": [("reset", "Restart"), ("menu", "Menu")]}[state]
         if self.watch_mode and state == "MENU":
-            choices = [("reset", "Watch AI  [Enter]"), ("quit", "Quit  [Q]")]
+            choices = [("reset", "Watch AI [Enter]"), ("back", "Back [Esc]"), ("quit", "Quit [Q]")]
         actions = {}
         for index, (action, label) in enumerate(choices):
             rect = rects[action]
