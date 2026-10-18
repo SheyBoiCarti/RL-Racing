@@ -49,3 +49,35 @@ def test_governor_rejects_invalid_inputs(speed, maximum, tier, control):
 
     with pytest.raises(ValueError):
         govern_ai(control, speed, maximum, tier)
+
+
+def test_live_governor_and_explicit_actions_are_distinct(demo_track):
+    from dataclasses import replace
+
+    from racing.race.config import RaceConfig, RaceRules
+    from racing.race.session import RaceSession
+    from tests.unit.test_race_session import Driver
+
+    ai, human = Driver(CarControl(0.3, 1)), Driver()
+    race = RaceSession(
+        demo_track,
+        config=RaceConfig(countdown_seconds=0),
+        rules=RaceRules(difficulty="easy"),
+        controllers={"ai": ai, "human": human},
+    )
+    race.start()
+    world = race.snapshot()
+    race.simulation._world = replace(
+        world,
+        cars=tuple(
+            replace(c, state=replace(c.state, speed_mps=14.2))
+            if c.car_id == "ai"
+            else c
+            for c in world.cars
+        ),
+    )
+    race.step()
+    assert race.last_controls["ai"].longitudinal == pytest.approx(-0.5)
+    assert race.last_controls["ai"].steering == 0.3
+    race.step({"ai": CarControl(0.3, 1), "human": CarControl(0, 1)})
+    assert race.last_controls["ai"] == CarControl(0.3, 1)

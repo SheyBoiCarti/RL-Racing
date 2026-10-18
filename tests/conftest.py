@@ -28,3 +28,15 @@ def demo_track():
 def world(demo_track):
     simulation = Simulation(PhysicsConfig())
     return simulation.reset(demo_track, 0, (CarSpawn("human", "solo"),))
+
+
+@pytest.fixture
+def recovery_race(demo_track):
+    from racing.race.config import RaceConfig, RaceRules
+    from racing.race.session import RaceSession
+
+    race = RaceSession(
+        demo_track, rules=RaceRules(), config=RaceConfig(countdown_seconds=0)
+    )
+    race.start()
+    return race

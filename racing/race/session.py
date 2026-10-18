@@ -1,6 +1,7 @@
 """Headless human/policy race and deterministic explicit-action reducer."""
 
 from collections.abc import Mapping
+from dataclasses import replace
 from enum import Enum
 from math import atan2, ceil, hypot
 
@@ -9,7 +10,9 @@ from racing.core.geometry import wrap
 from racing.core.models import CarControl, CarSpawn, CarStatus, StepResult
 from racing.core.physics import validate_control
 from racing.core.simulation import Simulation
-from racing.race.config import RaceConfig
+from racing.race.config import RaceConfig, RaceRules
+from racing.race.difficulty import govern_ai
+from racing.race.recovery import RecoveryState
 from racing.race.results import car_results, positions
 
 
@@ -30,7 +33,12 @@ class RaceSession:
         controllers=None,
         seed=0,
         lane_swap=False,
+        *,
+        rules: RaceRules | None = None,
     ):
+        if rules is not None and not isinstance(rules, RaceRules):
+            raise ValueError("rules: RaceRules or None required")
+        self.rules = rules
         self.track = track
         self.physics = physics or PhysicsConfig()
         self.config = config or RaceConfig()
@@ -85,6 +93,12 @@ class RaceSession:
 
     def _reset(self):
         self.simulation.reset(self.track, self.seed, self.spawns)
+        self.recovery_by_car = (
+            {car.car_id: RecoveryState(car) for car in self.snapshot().cars}
+            if self.rules is not None
+            else {}
+        )
+        self.error_message = ""
         self.no_progress_by_car = {s.car_id: 0 for s in self.spawns}
         self.finish_tick_by_car = {s.car_id: None for s in self.spawns}
         self.reason_by_car = {s.car_id: "running" for s in self.spawns}
@@ -104,6 +118,7 @@ class RaceSession:
             self.reason_by_car,
             self.finish_tick_by_car,
             self.physics.dt_s,
+            recovery_by_car=self.recovery_by_car,
         )
 
     @property
@@ -168,25 +183,43 @@ class RaceSession:
         before = self.snapshot()
         active = [c for c in before.cars if c.status == CarStatus.ACTIVE]
         active_ids = {c.car_id for c in active}
+        held = {
+            key
+            for key, recovery in self.recovery_by_car.items()
+            if recovery.remaining_ticks > 0 and key in active_ids
+        }
+        movable = [car for car in active if car.car_id not in held]
         if controls is None:
             try:
                 if self.observation_builder is None:
                     from racing.envs.config import RLConfig
                     from racing.envs.observation import ObservationBuilder
 
-                    self.observation_builder = ObservationBuilder(RLConfig(physics=self.physics))
+                    self.observation_builder = ObservationBuilder(
+                        RLConfig(physics=self.physics)
+                    )
                 observations = {
                     c.car_id: self.observation_builder.build(
                         before, self.track, c.car_id
                     )
-                    for c in active
+                    for c in movable
                 }
                 controls = {
                     c.car_id: self.controllers[c.car_id].act(
                         observations[c.car_id], before, self.track
                     )
-                    for c in active
+                    for c in movable
                 }
+                for key in held:
+                    controls[key] = CarControl(0.0, 0.0)
+                if self.rules is not None and "ai" in active_ids - held:
+                    ai = next(c for c in active if c.car_id == "ai")
+                    controls["ai"] = govern_ai(
+                        controls["ai"],
+                        ai.state.speed_mps,
+                        self.physics.max_speed_mps,
+                        self.rules.difficulty,
+                    )
                 clipped = self._validate_controls(controls, active_ids)
             except Exception:
                 self.abort("inference_error")
@@ -194,17 +227,54 @@ class RaceSession:
             self.last_observations = observations
         else:
             clipped = self._validate_controls(controls, active_ids)
-        result = self.simulation.step(clipped)
+        if any(clipped[key] != CarControl(0.0, 0.0) for key in held):
+            raise ValueError("recovery: held cars require zero controls")
+        result = self.simulation.step(clipped, held_ids=held)
         self.last_controls = clipped
         previous = {c.car_id: c for c in before.cars}
         for car in result.snapshot.cars:
             car_id = car.car_id
             if previous[car_id].status != CarStatus.ACTIVE:
                 continue
+            recovering = False
+            if self.rules is not None:
+                recovery = self.recovery_by_car[car_id]
+                if car_id in held:
+                    remaining = recovery.remaining_ticks - 1
+                    self.recovery_by_car[car_id] = replace(
+                        recovery,
+                        remaining_ticks=remaining,
+                        held_ticks=recovery.held_ticks + 1,
+                        safe=car if remaining == 0 else recovery.safe,
+                        last_release_tick=result.snapshot.tick
+                        if remaining == 0
+                        else recovery.last_release_tick,
+                    )
+                    recovering = True
+                elif car.status == CarStatus.DISQUALIFIED:
+                    try:
+                        restored = self.simulation.recover_car(
+                            recovery.safe, expected_tick=result.snapshot.tick
+                        )
+                    except ValueError as exc:
+                        self.error_message = f"Recovery failed for {car_id}: {exc}"
+                        self.reason_by_car[car_id] = "recovery_error"
+                        self._abort("recovery_error", notify=False)
+                        break
+                    car = next(c for c in restored.cars if c.car_id == car_id)
+                    self.recovery_by_car[car_id] = replace(
+                        recovery,
+                        remaining_ticks=self.rules.recovery_hold_ticks,
+                        count=recovery.count + 1,
+                        last_release_tick=None,
+                    )
+                    recovering = True
+                elif car.status == CarStatus.ACTIVE:
+                    self.recovery_by_car[car_id] = replace(recovery, safe=car)
             increment = car.high_water_m - previous[car_id].high_water_m
             self.no_progress_by_car[car_id] = (
                 0
-                if increment > self.config.progress_threshold_m
+                if recovering or increment > self.config.progress_threshold_m
                 else self.no_progress_by_car[car_id] + 1
             )
             if car.status == CarStatus.DISQUALIFIED:
@@ -224,7 +294,9 @@ class RaceSession:
             for key, tick in self.finish_tick_by_car.items()
             if tick is not None
         }
-        if finishes:
+        if self.abort_reason == "recovery_error":
+            pass
+        elif finishes:
             earliest = min(finishes.values())
             winners = [key for key, tick in finishes.items() if tick == earliest]
             self.winner = winners[0] if len(winners) == 1 else "draw"
@@ -248,9 +320,15 @@ class RaceSession:
         self._notify("resume")
 
     def abort(self, reason):
+        return self._abort(reason)
+
+    def _abort(self, reason, *, notify=True):
         if self.state not in (RaceState.RUNNING, RaceState.PAUSED):
             raise ValueError("abort: RUNNING or PAUSED required")
-        if reason not in ("inference_error", "user_exit", "restart"):
+        allowed = ("inference_error", "user_exit", "restart")
+        if self.rules is not None:
+            allowed += ("recovery_error",)
+        if reason not in allowed:
             raise ValueError("abort: expected inference_error, user_exit, or restart")
         for car in self.snapshot().cars:
             if car.status == CarStatus.ACTIVE:
@@ -261,7 +339,12 @@ class RaceSession:
             "no_winner",
             RaceState.RESULTS,
         )
-        self._notify("abort", reason=reason)
+        if reason == "recovery_error":
+            for car in self.snapshot().cars:
+                if car.status == CarStatus.DISQUALIFIED:
+                    self.reason_by_car[car.car_id] = reason
+        if notify:
+            self._notify("abort", reason=reason)
         return self.snapshot()
 
     def restart(self):

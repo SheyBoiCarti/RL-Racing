@@ -15,9 +15,11 @@ class CarResult:
     best_lap_s: float | None
     finish_tick: int | None
     finish_time_s: float | None
+    recovery_count: int = 0
+    recovery_held_ticks: int = 0
 
 
-def car_results(snapshot, reasons, finish_ticks, dt_s):
+def car_results(snapshot, reasons, finish_ticks, dt_s, *, recovery_by_car=None):
     return {
         car.car_id: CarResult(
             car.car_id,
@@ -30,6 +32,8 @@ def car_results(snapshot, reasons, finish_ticks, dt_s):
             finish_ticks[car.car_id] * dt_s
             if finish_ticks[car.car_id] is not None
             else None,
+            recovery_by_car[car.car_id].count if recovery_by_car else 0,
+            recovery_by_car[car.car_id].held_ticks if recovery_by_car else 0,
         )
         for car in snapshot.cars
     }
