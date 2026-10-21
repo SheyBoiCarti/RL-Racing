@@ -82,6 +82,8 @@ def test_restoration_retains_history(demo_track):
         safe,
         state=replace(
             safe.state,
+            x_m=demo_track.point_at(safe.projection.s_m)[0][0],
+            y_m=demo_track.point_at(safe.projection.s_m)[0][1],
             heading_rad=safe.projection.tangent_heading,
             speed_mps=0.0,
             steering_rad=0.0,
@@ -120,6 +122,12 @@ def crash(sim, monkeypatch):
 def test_real_offtrack_can_recover_without_advancing_time(demo_track, monkeypatch):
     sim = simulation(demo_track)
     safe = crash(sim, monkeypatch)
+    edge_state = demo_track.spawns["grid_left"]
+    safe = replace(
+        safe,
+        state=edge_state,
+        projection=demo_track.project(edge_state.x_m, edge_state.y_m),
+    )
     before = sim.snapshot()
     recovered = sim.recover_car(safe, expected_tick=before.tick)
     assert recovered.tick == before.tick
@@ -128,6 +136,8 @@ def test_real_offtrack_can_recover_without_advancing_time(demo_track, monkeypatc
         safe,
         state=replace(
             safe.state,
+            x_m=demo_track.point_at(safe.projection.s_m)[0][0],
+            y_m=demo_track.point_at(safe.projection.s_m)[0][1],
             heading_rad=safe.projection.tangent_heading,
             speed_mps=0.0,
             steering_rad=0.0,
@@ -352,6 +362,8 @@ def test_recovery_preserves_lap_history(recovery_race, monkeypatch, history):
             safe,
             state=replace(
                 safe.state,
+                x_m=race.track.point_at(safe.projection.s_m)[0][0],
+                y_m=race.track.point_at(safe.projection.s_m)[0][1],
                 heading_rad=safe.projection.tangent_heading,
                 speed_mps=0.0,
                 steering_rad=0.0,

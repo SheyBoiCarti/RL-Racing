@@ -30,10 +30,13 @@ def restored_snapshot(safe, track, physics):
         raise ValueError("recovery: finite pose required")
     if not track.contains_disk(safe.state.x_m, safe.state.y_m, physics.car_radius_m):
         raise ValueError("recovery: unsafe disk")
+    point, _ = track.point_at(safe.projection.s_m)
     return replace(
         safe,
         state=replace(
             safe.state,
+            x_m=float(point[0]),
+            y_m=float(point[1]),
             heading_rad=safe.projection.tangent_heading,
             speed_mps=0.0,
             steering_rad=0.0,

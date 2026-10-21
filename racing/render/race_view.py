@@ -70,13 +70,14 @@ class RaceView:
             self.buttons[action] = rect
 
     def _actions(self, app):
-        camera = ("toggle_camera", f"{app.preferences.camera_mode.title()} [V]")
+        camera = (
+            "toggle_camera",
+            f"Map {'On' if app.preferences.camera_mode == 'overhead' else 'Off'} [V]",
+        )
         if app.state == "MENU":
             return [
                 ("start", "Start"),
                 ("choose_track", "Track [C]"),
-                ("model_prev", "Previous model ["),
-                ("model_next", "Next model ]"),
                 ("swap_lanes", "Swap lanes [L]"),
                 camera,
                 ("difficulty_next", f"{app.preferences.difficulty.title()} [D]"),
@@ -116,6 +117,46 @@ class RaceView:
             return [("restart", "Restart [R]"), ("main_menu", "Main menu"), camera]
         return [camera]
 
+    def _draw_minimap(self, app, cars, compact):
+        """Draw a north-up circuit map without changing the driving camera."""
+        size = (128, 94) if compact else (190, 138)
+        self.minimap_rect = pygame.Rect(
+            self.world_rect.right - size[0] - 8,
+            self.world_rect.top + 8,
+            *size,
+        )
+        self.minimap_camera = overhead_camera(
+            app.track,
+            self.surface.get_size(),
+            self.minimap_rect.inflate(-12, -12),
+            margin_m=app.physics.car_radius_m,
+        )
+        panel = pygame.Surface(self.minimap_rect.size, pygame.SRCALPHA)
+        pygame.draw.rect(panel, (*P["panel"], 225), panel.get_rect(), border_radius=6)
+        self.surface.blit(panel, self.minimap_rect)
+        pygame.draw.rect(self.surface, P["secondary"], self.minimap_rect, 1, border_radius=6)
+
+        def screen(point):
+            return self.minimap_camera.to_screen(point)
+
+        old_clip = self.surface.get_clip()
+        self.surface.set_clip(self.minimap_rect)
+        pygame.draw.polygon(self.surface, P["secondary"], [screen(point) for point in app.track.outer])
+        pygame.draw.polygon(self.surface, P["panel"], [screen(point) for point in app.track.inner])
+        for car_id, car in cars.items():
+            color = P["accent"] if car_id == "human" else AI_COLOR
+            point = screen((car.state.x_m, car.state.y_m))
+            pygame.draw.circle(self.surface, color, point, 5 if compact else 6)
+            heading = car.state.heading_rad
+            pygame.draw.line(
+                self.surface,
+                P["ivory"],
+                point,
+                (point[0] + math.cos(heading) * 8, point[1] + math.sin(heading) * 8),
+                2,
+            )
+        self.surface.set_clip(old_clip)
+
     def draw(self, app):
         snapshot = app.display_snapshot
         cars = {car.car_id: car for car in snapshot.cars}
@@ -130,20 +171,10 @@ class RaceView:
             debug=app.debug,
         )
         self.physics = self.scene.physics = app.physics
-        overhead = app.preferences.camera_mode == "overhead"
-        camera = (
-            overhead_camera(
-                app.track,
-                (width, height),
-                self.world_rect,
-                margin_m=2.0 + app.physics.car_radius_m,
-            )
-            if overhead
-            else Camera(
-                (human.state.x_m, human.state.y_m),
-                self.game.pixels_per_metre,
-                (width, height),
-            )
+        camera = Camera(
+            (human.state.x_m, human.state.y_m),
+            self.game.pixels_per_metre,
+            (width, height),
         )
         self.camera = camera
         # World drawing is clipped to the reserved area; HUD/buttons own the rest.
@@ -159,13 +190,6 @@ class RaceView:
         for car_id, car in cars.items():
             point = camera.to_screen((car.state.x_m, car.state.y_m))
             color = P["accent"] if car_id == "human" else AI_COLOR
-            if overhead:
-                pygame.draw.circle(
-                    self.surface,
-                    color,
-                    point,
-                    max(5, int(app.physics.car_radius_m * camera.scale)),
-                )
             label = "YOU" if car_id == "human" else "AI"
             recovery = app.display_recovery.get(car_id)
             if recovery is not None:
@@ -194,18 +218,22 @@ class RaceView:
             label_rects.append(rect)
             self.car_labels[car_id] = rect.topleft
             self._text(label, rect.topleft, 14, color)
-        if not overhead:
-            indicator = opponent_indicator(camera, human.state, ai.state, world_rect=self.world_rect)
-            if indicator:
-                point, angle = indicator
-                vertices = [
-                    (
-                        point[0] + math.cos(angle + offset) * radius,
-                        point[1] + math.sin(angle + offset) * radius,
-                    )
-                    for offset, radius in ((0, 13), (2.5, 9), (-2.5, 9))
-                ]
-                pygame.draw.polygon(self.surface, AI_COLOR, vertices)
+        indicator = opponent_indicator(camera, human.state, ai.state, world_rect=self.world_rect)
+        if indicator:
+            point, angle = indicator
+            vertices = [
+                (
+                    point[0] + math.cos(angle + offset) * radius,
+                    point[1] + math.sin(angle + offset) * radius,
+                )
+                for offset, radius in ((0, 13), (2.5, 9), (-2.5, 9))
+            ]
+            pygame.draw.polygon(self.surface, AI_COLOR, vertices)
+        if app.preferences.camera_mode == "overhead":
+            self._draw_minimap(app, cars, compact)
+        else:
+            self.minimap_rect = None
+            self.minimap_camera = None
         for index, (car_id, message) in enumerate(self.recovery_messages.items()):
             self._text(
                 f"{'YOU' if car_id == 'human' else 'AI'}: {message}",

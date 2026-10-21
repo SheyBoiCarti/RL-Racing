@@ -28,6 +28,9 @@ class WatchApplication(Application):
         self.last_action = np.zeros(2, dtype=np.float32)
         self.model_label = f"PPO · step {controller.metadata['checkpoint_step']}"
         self.selected_policy = None
+        self.selected_mode = None
+        self.model_chooser = None
+        self.choosing_model = False
         self.chooser = None
         self.choosing_track = False
         self.split_manifest = "experiments/splits/v1.json"

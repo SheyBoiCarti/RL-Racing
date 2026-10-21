@@ -3,6 +3,7 @@
 import math
 from enum import Enum
 
+from racing.core.config import project_path
 from racing.core.models import CarSpawn, CarStatus
 from racing.core.simulation import Simulation
 from racing.render.input import held_control, key_bindings
@@ -58,6 +59,8 @@ class Application:
         self.selected_mode = None
         self.chooser = None
         self.choosing_track = False
+        self.model_chooser = None
+        self.choosing_model = False
         self.split_manifest = "experiments/splits/v1.json"
 
     def select_track(self, track):
@@ -95,22 +98,28 @@ class Application:
             self.selected_mode = "race"
             self.running = False
         elif action == "watch" and self.state == AppState.MENU:
-            from tkinter import Tk, filedialog
+            from racing.render.model_chooser import ModelChooser
 
+            self.model_chooser = ModelChooser(project_path("runs"))
+            self.choosing_model = True
+            self.scheduler.clear()
+        elif action == "model_back":
+            self.choosing_model = False
+        elif action in ("model_prev", "model_next") and self.choosing_model and self.model_chooser.entries:
+            self.model_chooser.move(-1 if action == "model_prev" else 1)
+        elif action.startswith("model:") and self.choosing_model:
+            index = int(action.split(":", 1)[1])
+            if 0 <= index < len(self.model_chooser.entries):
+                self.model_chooser.index = index
+        elif action == "select_model" and self.choosing_model and self.model_chooser.entries:
             from racing.agents.policy import PolicyController
 
-            dialog = Tk()
-            dialog.withdraw()
             try:
-                path = filedialog.askopenfilename(title="Choose trained PPO model", filetypes=[("PPO model", "*.zip")])
-                if path:
-                    self.selected_policy = PolicyController(path)
-                    self.running = False
+                self.selected_policy = PolicyController(self.model_chooser.selected.path)
+                self.choosing_model = False
+                self.running = False
             except (ValueError, OSError, ImportError) as error:
-                self.action("choose_track")
-                self.chooser.error = f"{path}: {error}"
-            finally:
-                dialog.destroy()
+                self.model_chooser.error = str(error)
         elif action == "quit":
             self.running = False
         elif action == "debug":
@@ -180,6 +189,15 @@ class Application:
                     elif event.type == pygame.KEYDOWN and not getattr(
                         event, "repeat", False
                     ):
+                        if self.choosing_model:
+                            actions = {
+                                pygame.K_LEFT: "model_prev", pygame.K_UP: "model_prev",
+                                pygame.K_RIGHT: "model_next", pygame.K_DOWN: "model_next",
+                                pygame.K_RETURN: "select_model", pygame.K_ESCAPE: "model_back",
+                            }
+                            self.action(actions.get(event.key, "noop"))
+                            transitioned = True
+                            continue
                         if self.choosing_track:
                             actions = {pygame.K_LEFT: "chooser_prev", pygame.K_UP: "chooser_prev",
                                        pygame.K_RIGHT: "chooser_next", pygame.K_DOWN: "chooser_next",
@@ -213,6 +231,13 @@ class Application:
                         if event.key == pygame.K_q and self.state == AppState.MENU:
                             self.action("quit")
                     elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                        if self.choosing_model:
+                            for action, rect in self.model_chooser.draw(surface).items():
+                                if rect.collidepoint(event.pos):
+                                    self.action(action)
+                                    transitioned = True
+                                    break
+                            continue
                         if self.choosing_track:
                             for action, rect in self.chooser.draw(surface).items():
                                 if rect.collidepoint(event.pos):
@@ -253,7 +278,9 @@ class Application:
                     self.best_lap_s,
                     self.scheduler.dropped_time_s,
                 )
-                if self.choosing_track:
+                if self.choosing_model:
+                    renderer.buttons = self.model_chooser.draw(surface)
+                elif self.choosing_track:
                     renderer.buttons = self.chooser.draw(surface)
                 hovered = any(rect.collidepoint(renderer.pointer)
                               for rect in renderer.buttons.values())

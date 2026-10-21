@@ -78,6 +78,32 @@ def test_chooser_renders_clickable_cards_at_small_sizes(pygame_env):
         assert all(surface.get_rect().contains(rect) for rect in buttons.values())
 
 
+def test_model_chooser_labels_training_progress(tmp_path):
+    from racing.render.model_chooser import ModelChooser
+
+    run = tmp_path / "runs" / "example-run"
+    paths = [
+        run / "best_model.zip",
+        run / "final_model.zip",
+        run / "checkpoints" / "step_000010000_update_000005" / "model.zip",
+        run / "checkpoints" / "step_000050000_update_000025" / "model.zip",
+        run / "checkpoints" / "step_000100000_update_000050" / "model.zip",
+    ]
+    for path in paths:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.touch()
+        path.with_suffix(".metadata.json").write_text("{}", encoding="utf-8")
+
+    chooser = ModelChooser(tmp_path / "runs")
+    assert [entry.label for entry in chooser.entries] == [
+        "Best model · example-run",
+        "Final model · example-run",
+        "Early training · 10,000 steps · example-run",
+        "Mid training · 50,000 steps · example-run",
+        "Late training · 100,000 steps · example-run",
+    ]
+
+
 def test_debug_readout_includes_shared_projection_and_curvature():
     from racing.render.renderer import debug_readout
 

@@ -12,5 +12,12 @@ __pycache__/
 *.egg-info/
 build/
 dist/
-runs/
 *.zip
+
+# Keep playable policies and metadata; ignore training state and exports.
+runs/**
+!runs/**/
+!runs/**/*.metadata.json
+!runs/**/model.zip
+!runs/**/best_model.zip
+!runs/**/final_model.zip

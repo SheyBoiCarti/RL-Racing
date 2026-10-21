@@ -23,6 +23,12 @@ def track():
 def test_application_lifecycle(track):
     app = Application(load_game(), PhysicsConfig(), track)
     assert app.state == AppState.MENU
+
+
+def test_watch_opens_the_in_app_model_browser(track):
+    app = Application(load_game(), PhysicsConfig(), track)
+    app.action("watch")
+    assert app.choosing_model and app.running
     assert app.frame(10, CarControl(0.0, 1.0)) == 0
     app.action("reset")
     app.frame(0.075, CarControl(0.0, 1.0))

@@ -12,6 +12,7 @@ from racing.render.app import FixedScheduler
 from racing.render.desktop import DesktopPreferences
 
 _DEFAULT_RULES = object()
+_CURATED_POLICY = "runs/kaggle-phase04-single-full-import/phase04-single/best_model.zip"
 
 
 class RaceApplication:
@@ -64,9 +65,9 @@ class RaceApplication:
         self.model_roots = tuple(
             Path(root) for root in (model_roots or (project_path("runs"),))
         )
-        self.models = self._find_models()
-        if self.controller is None and self.model_path is None and self.models:
-            self.model_path = self.models[0]
+        self.models = ()
+        if self.controller is None and self.model_path is None:
+            self.model_path = project_path(_CURATED_POLICY)
         if self.replay_path:
             self.open_replay(self.replay_path)
         else:
@@ -109,6 +110,8 @@ class RaceApplication:
     def model_label(self):
         if self.playback and self.state in ("REPLAY", "RESULTS"):
             return self.playback.header["model_label"] or "Recorded controllers"
+        if self.model_path == project_path(_CURATED_POLICY):
+            return "Curated race policy"
         return (
             str(self.model_path)
             if self.model_path
@@ -292,20 +295,6 @@ class RaceApplication:
             except (ValueError, OSError) as error:
                 self.error = str(error)
             self._clear_time()
-        elif (
-            action in ("model_prev", "model_next")
-            and self.state == "MENU"
-            and self.models
-        ):
-            index = (
-                self.models.index(self.model_path)
-                if self.model_path in self.models
-                else 0
-            )
-            self.model_path = self.models[
-                (index + (-1 if action == "model_prev" else 1)) % len(self.models)
-            ]
-            self.error = ""
         elif action == "swap_lanes" and self.state == "MENU":
             self.lane_swap = not self.lane_swap
             self.session = RaceSession(
@@ -439,8 +428,6 @@ class RaceApplication:
                                 else "pause",
                                 pygame.K_c: "choose_track",
                                 pygame.K_p: "replay",
-                                pygame.K_LEFTBRACKET: "model_prev",
-                                pygame.K_RIGHTBRACKET: "model_next",
                                 pygame.K_l: "swap_lanes",
                                 pygame.K_q: "quit",
                                 pygame.K_v: "toggle_camera",

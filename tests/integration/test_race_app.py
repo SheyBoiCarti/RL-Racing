@@ -152,6 +152,21 @@ def test_race_view_all_states_and_sizes(track, tmp_path, monkeypatch):
         pygame.quit()
 
 
+def test_race_view_keeps_follow_camera_and_draws_track_map(track, tmp_path, pygame_env):
+    from racing.render.race_view import RaceView
+
+    app = application(track, tmp_path)
+    app.action("start")
+    surface = pygame_env.Surface((1280, 720))
+    view = RaceView(surface, app.game, app.physics)
+    view.draw(app)
+    human = next(car for car in app.display_snapshot.cars if car.car_id == "human")
+    assert view.camera.center == (human.state.x_m, human.state.y_m)
+    assert view.minimap_rect.width > 0
+    assert view.minimap_rect.height > 0
+    assert view.minimap_camera != view.camera
+
+
 def test_cli_race_and_replay_dispatch(track, tmp_path, monkeypatch):
     from racing.render.app import main
 
@@ -372,6 +387,21 @@ def test_difficulty_locks_after_start(track, tmp_path):
     app.action("quit")
 
 
+def test_race_uses_curated_policy_and_hides_model_picker(track, tmp_path, pygame_env):
+    from racing.core.config import project_path
+    from racing.render.race_view import RaceView
+
+    app = RaceApplication(load_game(), track, replay_output=tmp_path / "race.jsonl")
+    expected = project_path(
+        "runs/kaggle-phase04-single-full-import/phase04-single/best_model.zip"
+    )
+    assert app.model_path == expected
+    assert app.model_label == "Curated race policy"
+    view = RaceView(pygame_env.Surface((1280, 720)), app.game, app.physics)
+    assert "model_prev" not in dict(view._actions(app))
+    assert "model_next" not in dict(view._actions(app))
+
+
 def test_compact_setup_reserves_world_and_separates_labels(track, tmp_path, pygame_env):
     from racing.render.race_view import RaceView
 
@@ -386,8 +416,8 @@ def test_compact_setup_reserves_world_and_separates_labels(track, tmp_path, pyga
     surface = pygame_env.Surface((480, 360))
     view = RaceView(surface, app.game, app.physics)
     view.draw(app)
-    assert len(view.buttons) == 9
-    assert view.world_rect.height == 132
+    assert len(view.buttons) == 7
+    assert view.world_rect.height == 172
     assert all(
         surface.get_rect().contains(rect) and not rect.colliderect(view.world_rect)
         for rect in view.buttons.values()
