@@ -13,24 +13,28 @@
 ## Screenshots & Previews
 
 <div align="center">
-  <h3>Human vs AI Race Mode</h3>
-  <img src="assets/screenshots/race_opponent.png" alt="Human vs AI Racing" width="750"/>
-  <br/><br/>
-  
-  <h3>Real-Time LiDAR Raycast Sensors & Telemetry</h3>
-  <img src="assets/screenshots/sensors_lidar.png" alt="Raycast Sensors and Driving" width="750"/>
-  <br/><br/>
-
   <table align="center">
     <tr>
-      <td align="center"><b>Interactive Main Menu</b></td>
+      <td align="center"><b>Human vs AI (Ghost Race / Follow Cam)</b></td>
+      <td align="center"><b>Full Track View (Overhead Mode)</b></td>
+    </tr>
+    <tr>
+      <td><img src="assets/screenshots/follow_cam_race.jpg" alt="Human vs AI Ghost Race Follow Cam" width="460"/></td>
+      <td><img src="assets/screenshots/race_opponent.png" alt="Full Track Overhead Mode" width="460"/></td>
+    </tr>
+    <tr>
+      <td align="center"><b>Real-Time LiDAR Raycast Sensors & Telemetry</b></td>
       <td align="center"><b>Race Results & Lap Telemetry</b></td>
     </tr>
     <tr>
-      <td><img src="assets/screenshots/main_menu.png" alt="Main Menu" width="380"/></td>
-      <td><img src="assets/screenshots/race_results.png" alt="Race Results" width="380"/></td>
+      <td><img src="assets/screenshots/sensors_lidar.png" alt="Raycast Sensors and Driving" width="460"/></td>
+      <td><img src="assets/screenshots/race_results.png" alt="Race Results" width="460"/></td>
     </tr>
   </table>
+
+  <br/>
+  <h3>Interactive Desktop Launcher & Menu</h3>
+  <img src="assets/screenshots/main_menu.png" alt="Main Menu" width="600"/>
 </div>
 
 ---
