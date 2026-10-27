@@ -1,6 +1,7 @@
 docs/*
 !docs/specs/
 *.md
+!README.md
 docs/phase_reports/
 docs/superpowers/
 .venv/
